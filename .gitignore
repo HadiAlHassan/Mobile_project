@@ -1,0 +1,77 @@
+# Gradle files
+.gradle/
+**/build/
+**/out/
+**/generated/
+
+# Local configuration files
+/local.properties
+/.idea/caches/
+/.idea/libraries/
+/.idea/modules.xml
+/.idea/workspace.xml
+/.idea/navEditor.xml
+/.idea/assetWizardSettings.xml
+/.idea/misc.xml
+
+# Keystore files (important for security)
+*.jks
+*.keystore
+
+# Android Studio and IntelliJ settings
+/.idea/
+/*.iml
+/.vscode/
+
+# Log files
+*.log
+
+# NDK
+/.cxx/
+
+# MacOS and Linux system files
+.DS_Store
+*.swp
+*.swo
+
+# Windows system files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# APKs and other packaged/binary files
+*.apk
+*.ap_
+*.aab
+
+# Gradle wrapper and caches
+gradle/wrapper/gradle-wrapper.properties
+gradle/wrapper/gradle-wrapper.jar
+.gradle/
+gradlew
+gradlew.bat
+
+# Local gradle properties
+/local.properties
+
+# Node modules (if using React Native/Node.js within the project)
+node_modules/
+package-lock.json
+yarn.lock
+
+# JetBrains project-specific files
+.idea/
+
+# Test results
+/test-output/
+*.ec
+*.hprof
+
+# Firebase and Google Services (Make sure to ignore sensitive keys)
+/app/google-services.json
+/app/firebase.json
+
+# CI/CD files
+/.github/
+.fastlane/
+.ci/
