@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">Mobile_Project_HZA2M</string>
+    <string name="slogan">All your payments\nin one app</string>
+    <string name="AboutUs">Khadamati is a fast, secure, and user-friendly platform that connects
+        users with trusted service providers to simplify daily payments.</string>
+
+    <string name="AboutUsTitle">About Us</string>
+    <string name="AppTitle">Khadamati</string>
+    <string name="btnSignUp">Sign Up</string>
+    <string name="btnLogin">Login</string>
+    <string name="subheader">Info about the app</string>
+    <string name="action_settings">settings\n</string>
+
 </resources>
