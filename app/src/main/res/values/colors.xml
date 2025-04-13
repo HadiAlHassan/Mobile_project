@@ -9,8 +9,5 @@
     <color name="white">#FFFFFFFF</color>
     <color name="WhiteSmoke">#F5F5F5</color>
     <color name="UseBlue">#4B6EA9</color>
-
-
-    <string name="app_name">Khadamati</string>
     <string name="content_description_splashscreen">Khadamati Logo</string>
 </resources>
