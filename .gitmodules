@@ -1,0 +1,3 @@
+[submodule "Scripts"]
+	path = Scripts
+	url = https://github.com/zeina-merchad/Mobile_submodule_backend.git
