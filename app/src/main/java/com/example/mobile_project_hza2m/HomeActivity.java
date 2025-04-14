@@ -1,5 +1,6 @@
 package com.example.mobile_project_hza2m;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -28,7 +29,5 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         setSupportActionBar(binding.toolbar);
-
-
-
+        Intent in=getIntent();
 }}

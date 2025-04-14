@@ -1,6 +1,8 @@
 package com.example.mobile_project_hza2m;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,5 +22,14 @@ public class SplashActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        /// Hello guys so I'm just gonna leave a comment before coding anything
+        ///  This is to ensure accountability and integrity haha (i'm mimi)
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Intent i= new Intent(SplashActivity.this, HomeActivity.class);
+                startActivity(i);
+            }
+        }, 2000);
     }
 }

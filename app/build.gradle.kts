@@ -1,3 +1,6 @@
+buildscript {
+    val agp_version by extra("8.8.2")
+}
 plugins {
     alias(libs.plugins.android.application)
 }
