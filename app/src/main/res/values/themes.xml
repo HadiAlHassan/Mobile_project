@@ -1,7 +1,11 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Barebones app theme with no Material color interference -->
-    <style name="Theme.Mobile_Project_HZA2M" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="Theme.Mobile_Project_HZA2M" parent="Theme.AppCompat.Light.NoActionBar"></style>
+    <!-- Base application theme. -->
+    <style name="Base.Theme.Mobile_Project_HZA2M" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
 
 
