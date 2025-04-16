@@ -7,6 +7,7 @@ import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.view.View;
+import android.widget.Button;
 
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -16,7 +17,7 @@ import androidx.navigation.ui.NavigationUI;
 import com.example.mobile_project_hza2m.databinding.ActivityHomeBinding;
 
 public class HomeActivity extends AppCompatActivity {
-
+    Button btnSignUp;
     private AppBarConfiguration appBarConfiguration;
     private ActivityHomeBinding binding;
 
@@ -27,7 +28,16 @@ public class HomeActivity extends AppCompatActivity {
         binding = ActivityHomeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        setSupportActionBar(binding.toolbar);
+        Intent in=getIntent();
+        Button btnSignUp= findViewById(R.id.btnSignUp);
+
+        btnSignUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent in2= new Intent(HomeActivity.this,UserOrProvider.class);
+                startActivity(in2);
+            }
+        });
 
 
 
