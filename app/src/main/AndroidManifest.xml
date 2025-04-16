@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -13,11 +14,23 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Mobile_Project_HZA2M">
         <activity
-            android:name=".MyProfileActivity"
-            android:exported="false" />
-        <activity
             android:name=".MyWalletActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".DisplayServicesActivity"
+            android:theme="@style/Theme.Mobile_Project_HZA2M" />
+        <activity
+            android:name=".MyProfileActivity"
+            android:exported="false"
+            android:parentActivityName=".DisplayServicesActivity"
+            android:theme="@style/Theme.Mobile_Project_HZA2M" />
+        <activity
+            android:name=".MyProfileActivity2"
+            android:exported="false"
+            android:parentActivityName=".DisplayServicesActivity" />
+        <activity
+            android:name=".MyWalletActivity2"
+            android:exported="false"
+            android:parentActivityName=".DisplayServicesActivity" />
         <activity
             android:name=".DisplayServicesActivity"
             android:exported="false"
