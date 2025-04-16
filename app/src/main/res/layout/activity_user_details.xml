@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/WhiteSmoke"
+    android:stretchColumns="1"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+
+
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="50dp"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="sans-serif-medium"
+            android:text="@string/name"
+            android:textColor="@color/UseBlue"
+            android:textStyle="bold"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/white_border"
+            android:gravity="center"/>
+
+        <EditText
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:backgroundTint="@color/UseBlue"
+            android:layout_marginTop="15dp"/>
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="sans-serif-medium"
+            android:text="@string/phone"
+            android:textColor="@color/UseBlue"
+            android:textStyle="bold"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/white_border"
+            android:gravity="center"/>
+
+        <EditText
+            android:id="@+id/phone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:backgroundTint="@color/UseBlue"
+            android:inputType="phone"
+            android:layout_marginTop="15dp"/>
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="sans-serif-medium"
+            android:text="@string/address"
+            android:textColor="@color/UseBlue"
+            android:textStyle="bold"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/white_border"
+            android:gravity="center"/>
+
+        <EditText
+            android:id="@+id/address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:backgroundTint="@color/UseBlue"
+            android:inputType="textEmailAddress"
+            android:layout_marginTop="15dp"/>
+    </TableRow>
+
+
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="sans-serif-medium"
+            android:text="@string/age"
+            android:textColor="@color/UseBlue"
+            android:textStyle="bold"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/white_border"
+            android:gravity="center"
+            />
+
+        <RadioGroup
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp">
+
+            <RadioButton
+                android:id="@+id/radioButton6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/below"
+                android:textColor="@color/UseBlue"
+                android:textStyle="bold"/>
+
+            <RadioButton
+                android:id="@+id/radioButton5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/above"
+                android:textColor="@color/UseBlue"
+                android:textStyle="bold"/>
+
+        </RadioGroup>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="sans-serif-medium"
+            android:text=""
+            android:textColor="@color/UseBlue"
+            android:textStyle="bold" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="sans-serif-medium"
+            android:text=""
+            android:textColor="@color/UseBlue"
+            android:textStyle="bold" />
+
+
+    </TableRow>
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="sans-serif-medium"
+            android:text="@string/username"
+            android:textColor="@color/UseBlue"
+            android:textStyle="bold"
+            android:background="@drawable/white_border"
+            android:gravity="center"
+            android:layout_marginTop="15dp"/>
+
+        <EditText
+            android:id="@+id/username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:backgroundTint="@color/UseBlue"
+            android:layout_marginTop="15dp"
+             />
+    </TableRow>
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="sans-serif-medium"
+            android:text="@string/pass"
+            android:textColor="@color/UseBlue"
+            android:textStyle="bold"
+            android:background="@drawable/white_border"
+            android:gravity="center"
+            android:layout_marginTop="15dp"/>
+
+        <EditText
+            android:id="@+id/pass"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:backgroundTint="@color/UseBlue"
+            android:inputType="textPassword"
+            android:layout_marginTop="15dp"/>
+    </TableRow>
+
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="sans-serif-medium"
+            android:text="@string/pass1"
+            android:textColor="@color/UseBlue"
+            android:textStyle="bold"
+            android:background="@drawable/white_border"
+            android:gravity="center"
+            android:layout_marginTop="15dp"/>
+
+        <EditText
+            android:id="@+id/pass1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:backgroundTint="@color/UseBlue"
+            android:inputType="textPassword"
+            android:layout_marginTop="15dp"/>
+
+    </TableRow>
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="sans-serif-medium"
+            android:text=""
+            android:textColor="@color/UseBlue"
+            android:textStyle="bold"
+            android:layout_marginTop="15dp"/>
+
+        <Button
+            android:layout_width="223dp"
+            android:layout_height="102dp"
+            android:layout_marginTop="30dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/UseBlue"
+            android:fontFamily="sans-serif-medium"
+            android:text="@string/btnSignUp"
+            android:textColor="@color/WhiteSmoke"
+            android:textSize="26dp"
+            android:textStyle="bold" />
+
+
+
+    </TableRow>
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="sans-serif-medium"
+            android:text=""
+            android:textColor="@color/UseBlue"
+            android:textStyle="bold"
+            android:layout_marginTop="15dp"/>
+
+        <TextView
+            android:layout_width="263dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:fontFamily="sans-serif-medium"
+            android:text=""
+            android:layout_marginTop="15dp"
+            android:textColor="@android:color/holo_red_light"
+            android:textStyle="bold"
+            android:textSize="20dp"/>
+
+
+
+
+    </TableRow>
+
+</TableLayout>
