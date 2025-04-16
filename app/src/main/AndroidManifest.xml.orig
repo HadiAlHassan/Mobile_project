@@ -11,7 +11,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Mobile_Project_HZA2M">
         <activity
-            android:name=".MainActivity"
+<<<<<<< HEAD
+            android:name=".UsersDetails"
+            android:exported="false" />
+        <activity
+            android:name=".UserDetails"
+=======
+            android:name=".DisplayServicesActivity"
+>>>>>>> origin/develop_zeer
             android:exported="false"
             android:theme="@style/Theme.Mobile_Project_HZA2M" />
         <activity
