@@ -2,6 +2,7 @@ package com.example.mobile_project_hza2m;
 
 import android.os.Bundle;
 
+import com.example.mobile_project_hza2m.databinding.ActivityTuitionServiceProviderBinding;
 import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,18 +14,20 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import com.example.mobile_project_hza2m.databinding.ActivityTuitionServiceBinding;
+
+import com.example.mobile_project_hza2m.databinding.ActivityTuitionServiceProviderBinding;
+
 
 public class TuitionServiceProviderActivity extends AppCompatActivity {
 
     private AppBarConfiguration appBarConfiguration;
-    private ActivityTuitionServiceBinding binding;
+    private ActivityTuitionServiceProviderBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        binding = ActivityTuitionServiceBinding.inflate(getLayoutInflater());
+        binding = ActivityTuitionServiceProviderBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         setSupportActionBar(binding.toolbar);

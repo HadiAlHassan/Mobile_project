@@ -27,7 +27,7 @@
             android:layout_height="180dp"
             android:background="@drawable/image_border"
             android:scaleType="centerCrop"
-            android:src="@drawable/ic_launcher_foreground"
+            android:src=""
             android:contentDescription="Service Image"
             android:layout_marginBottom="12dp" />
 
