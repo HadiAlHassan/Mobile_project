@@ -14,6 +14,22 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Mobile_Project_HZA2M">
         <activity
+            android:name=".OgeroServiceUserActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Mobile_Project_HZA2M" />
+        <activity
+            android:name=".OgeroServiceProviderActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Mobile_Project_HZA2M" />
+        <activity
+            android:name=".TuitionServiceUserActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Mobile_Project_HZA2M" />
+        <activity
+            android:name=".TuitionServiceProviderActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Mobile_Project_HZA2M" />
+        <activity
             android:name=".AddServiceActivity"
             android:exported="false" />
         <activity

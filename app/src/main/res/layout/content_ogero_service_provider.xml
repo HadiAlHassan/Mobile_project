@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="24dp"
+    android:background="@color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Offer Ogero Bill Payment Service"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Provider Logo / Proof Image -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Upload Service Proof / Logo"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp" />
+
+        <FrameLayout
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            android:layout_marginBottom="16dp">
+
+            <ImageView
+                android:id="@+id/imageViewProviderLogo"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/khadmatiico"
+                android:scaleType="centerCrop"
+                android:background="@color/UseBlue"
+                android:padding="4dp" />
+
+            <ImageView
+                android:id="@+id/imageViewUpload"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@android:drawable/ic_input_add"
+                android:background="@android:color/white"
+                android:layout_gravity="bottom|end"
+                android:layout_margin="4dp"
+                android:padding="4dp"
+                android:elevation="4dp" />
+        </FrameLayout>
+
+        <!-- Ogero Landline Number -->
+        <EditText
+            android:id="@+id/editTextOgeroNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Ogero Hotline Number"
+            android:inputType="phone" />
+
+        <!-- Bank Account -->
+        <EditText
+            android:id="@+id/editTextBankAccount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Bank Account Number for Payments"
+            android:inputType="number"
+            android:layout_marginTop="12dp" />
+
+        <!-- Referral Client -->
+        <EditText
+            android:id="@+id/editTextReferralClient"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Referral Customer Service"
+            android:inputType="textCapWords"
+            android:layout_marginTop="12dp" />
+
+        <!-- Submit Button -->
+        <Button
+            android:id="@+id/buttonSubmitOgero"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Submit Service"
+            android:layout_marginTop="24dp"
+            android:backgroundTint="@color/UseBlue"
+            android:textColor="@android:color/white" />
+    </LinearLayout>
+</ScrollView>
