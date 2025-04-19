@@ -1,8 +1,13 @@
 package com.example.mobile_project_hza2m;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,6 +16,8 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 public class ServiceProviderSignIn extends AppCompatActivity {
+    Spinner spinner;
+
 
     EditText editServiceProviderUsername, editServiceProviderEmail, editServiceProviderPassword;
     Button btnServiceProviderSignUp;
@@ -28,6 +35,7 @@ public class ServiceProviderSignIn extends AppCompatActivity {
         editServiceProviderEmail = findViewById(R.id.editServiceProviderEmail);
         editServiceProviderPassword = findViewById(R.id.editServiceProviderPassword);
         btnServiceProviderSignUp = findViewById(R.id.btnServiceProviderSignUp);
+
         btnServiceProviderSignUp.setOnClickListener(v -> {
             String username = editServiceProviderUsername.getText().toString();
             String email = editServiceProviderEmail.getText().toString();
@@ -41,6 +49,50 @@ public class ServiceProviderSignIn extends AppCompatActivity {
             }
             else if (password.isEmpty()) {
                 editServiceProviderPassword.setError("Password is required");
+            }
+        });
+
+        spinner = findViewById(R.id.spinnerServiceType);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                this,
+                android.R.layout.simple_spinner_dropdown_item,
+                new String[] {
+                        "Streaming Services",
+                        "Telecom Services",
+                        "Ogero Service",
+                        "Tuition Payment Services"
+                }
+        );
+
+        spinner.setAdapter(adapter);
+
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedService = parent.getItemAtPosition(position).toString();
+
+                if (selectedService.equals("Streaming Services")) {
+                    // Handle Streaming Services
+                    Toast.makeText(getApplicationContext(), "Streaming Services selected", Toast.LENGTH_SHORT).show();
+
+                } else if (selectedService.equals("Telecom Services")) {
+                    // Handle Telecom Services
+                    Toast.makeText(getApplicationContext(), "Telecom Services selected", Toast.LENGTH_SHORT).show();
+
+                } else if (selectedService.equals("Ogero Service")) {
+                    // Handle Ogero Service
+                    Toast.makeText(getApplicationContext(), "Ogero Service selected", Toast.LENGTH_SHORT).show();
+
+                } else if (selectedService.equals("Tuition Payment Services")) {
+                    // Handle Tuition Payment Services
+                    Toast.makeText(getApplicationContext(), "Tuition Payment Services selected", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
             }
         });
     }

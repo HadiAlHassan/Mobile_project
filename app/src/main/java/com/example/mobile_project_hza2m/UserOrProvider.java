@@ -40,33 +40,10 @@ public class UserOrProvider extends AppCompatActivity {
         setContentView(binding.getRoot());
 
 
-        binding.fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
-                builder.setTitle("Personal Inquires");
 
-                // Set your message here
-                builder.setMessage("Shall you have any concern or question, feel free to contact us on our hotline 1297 ");
-
-                // Add OK button
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss(); // just dismiss the dialog
-                    }
-                });
-
-                // Show the dialog
-                AlertDialog dialog = builder.create();
-                dialog.show();
-            }
-        });
-
-
-        ImageView back= findViewById(R.id.back);
-        RadioButton rb1= findViewById(R.id.rb1);
-        RadioButton rb2= findViewById(R.id.rb2);
+         back= findViewById(R.id.back);
+         rb1= findViewById(R.id.rb1);
+         rb2= findViewById(R.id.rb2);
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,13 +54,6 @@ public class UserOrProvider extends AppCompatActivity {
 
 
         });
-        /*.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent in4= new Intent(UserOrProvider.this, UserDetails.class);
-                startActivity(in4);
-            }
-        });*/
 
         rb1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -92,6 +62,15 @@ public class UserOrProvider extends AppCompatActivity {
                 startActivity(in4);
             }
         });
+
+        rb2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent in4= new Intent(UserOrProvider.this, ServiceProviderSignIn.class);
+                startActivity(in4);
+            }
+        });
+
 
 
 

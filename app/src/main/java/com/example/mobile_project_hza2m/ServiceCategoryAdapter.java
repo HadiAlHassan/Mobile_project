@@ -34,9 +34,14 @@ public class ServiceCategoryAdapter extends RecyclerView.Adapter<ServiceCategory
         ServiceCategory category = categoryList.get(position);
         holder.categoryTitle.setText(category.getCategoryName());
 
-        // Set up the horizontal company RecyclerView
-        CompanyAdapter companyAdapter = new CompanyAdapter(category.getCompanies());
-        holder.companyRecyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
+        CompanyAdapter companyAdapter = new CompanyAdapter(
+                category.getCompanies(),
+                category.getServiceType() // ✅ Pass serviceType
+        );
+
+        holder.companyRecyclerView.setLayoutManager(
+                new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        );
         holder.companyRecyclerView.setAdapter(companyAdapter);
     }
 

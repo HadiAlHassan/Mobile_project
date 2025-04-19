@@ -12,7 +12,6 @@
         android:layout_height="0dp"
         android:layout_marginStart="45dp"
         android:layout_marginTop="42dp"
-        android:layout_marginBottom="31dp"
         android:fontFamily="sans-serif-condensed-medium"
         android:gravity="center"
         android:text="@string/AppTitle"
@@ -28,7 +27,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="33dp"
-        android:layout_marginBottom="35dp"
+        android:layout_marginBottom="36dp"
         android:fontFamily="sans-serif-condensed-medium"
         android:text="@string/AboutUsTitle"
         android:textColor="@color/UseBlue"
@@ -44,7 +43,7 @@
         android:layout_height="0dp"
         android:layout_marginStart="19dp"
         android:layout_marginEnd="19dp"
-        android:layout_marginBottom="66dp"
+        android:layout_marginBottom="65dp"
         android:fontFamily="sans-serif-condensed-medium"
         android:scrollbars="vertical"
         android:text="@string/AboutUs"
@@ -59,7 +58,7 @@
         android:id="@+id/btnSignUp"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="62dp"
+        android:layout_marginBottom="63dp"
         android:background="@drawable/button_signup_border"
         android:backgroundTint="@color/UseBlue"
         android:fontFamily="sans-serif-condensed-medium"
@@ -79,7 +78,7 @@
         android:layout_width="250dp"
         android:layout_height="0dp"
         android:layout_marginStart="57dp"
-        android:layout_marginBottom="115dp"
+        android:layout_marginBottom="20dp"
         android:background="@drawable/button_login_border"
         android:backgroundTint="@color/UseBlue"
         android:fontFamily="sans-serif-condensed-medium"
@@ -89,9 +88,21 @@
         android:textAllCaps="false"
         android:textColor="#4B6EA9"
         android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/btntest"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnSignUp" />
+
+    <Button
+        android:id="@+id/btntest"
+        android:layout_width="121dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="30dp"
+        android:background="@color/UseBlue"
+        android:text="Button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnLogin" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

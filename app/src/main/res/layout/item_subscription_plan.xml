@@ -2,6 +2,7 @@
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_marginBottom="12dp"
     android:layout_marginHorizontal="4dp"
     app:cardCornerRadius="12dp"
@@ -31,7 +32,7 @@
                 android:id="@+id/textViewPlanTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Premium Plan"
+                android:text="@string/premium_plan"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:textColor="@color/black" />
@@ -40,7 +41,7 @@
                 android:id="@+id/textViewPlanPrice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="$5 / month"
+                android:text="@string/_5_month"
                 android:textSize="16sp"
                 android:textColor="@color/dark_gray"
                 android:layout_marginTop="4dp" />
@@ -49,7 +50,7 @@
                 android:id="@+id/textViewMaxUsers"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Up to 4 users"
+                android:text="@string/up_to_4_users"
                 android:textSize="14sp"
                 android:textColor="@color/gray"
                 android:layout_marginTop="2dp" />
@@ -58,7 +59,7 @@
                 android:id="@+id/buttonSubscribe"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Subscribe"
+                android:text="@string/subscribe"
                 android:textColor="@android:color/white"
                 android:layout_marginTop="12dp"
                 android:backgroundTint="@color/UseBlue"/>
