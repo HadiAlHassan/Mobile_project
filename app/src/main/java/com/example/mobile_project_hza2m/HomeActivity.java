@@ -20,7 +20,7 @@ import com.example.mobile_project_hza2m.databinding.ActivityHomeBinding;
 public class HomeActivity extends AppCompatActivity {
     Button btnSignUp;
     Button btnLogin;
-//    Button btnTest;
+   Button btnTest;
     private AppBarConfiguration appBarConfiguration;
     private ActivityHomeBinding binding;
     int SignUpRequestCode= 10;
@@ -35,7 +35,7 @@ public class HomeActivity extends AppCompatActivity {
 
         btnLogin = findViewById(R.id.btnLogin);
         btnSignUp= findViewById(R.id.btnSignUp);
-        //btnTest = findViewById(R.id.btntest);
+        btnTest = findViewById(R.id.btntest);
 
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,13 +55,13 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-//        btnTest.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(HomeActivity.this, DisplayServicesActivity.class);
-//                startActivity(intent);
-//            }
-//        });
+      btnTest.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               Intent intent = new Intent(HomeActivity.this, DisplayServicesActivity.class);
+               startActivity(intent);
+           }
+        });
 
 
 

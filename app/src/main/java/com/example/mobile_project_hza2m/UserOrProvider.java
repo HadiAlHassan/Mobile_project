@@ -1,7 +1,5 @@
 package com.example.mobile_project_hza2m;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -17,8 +15,6 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.navigation.ui.AppBarConfiguration;
 
 import com.example.mobile_project_hza2m.databinding.ActivityUserOrProviderBinding;
-import com.google.android.material.radiobutton.MaterialRadioButton;
-import com.google.android.material.snackbar.Snackbar;
 
 public class UserOrProvider extends AppCompatActivity {
     ImageView back;
@@ -66,7 +62,7 @@ public class UserOrProvider extends AppCompatActivity {
         rb2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent in4= new Intent(UserOrProvider.this, ServiceProviderSignIn.class);
+                Intent in4= new Intent(UserOrProvider.this, ServiceProviderSignInActivity.class);
                 startActivity(in4);
             }
         });

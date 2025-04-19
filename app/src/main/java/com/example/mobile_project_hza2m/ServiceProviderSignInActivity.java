@@ -15,7 +15,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-public class ServiceProviderSignIn extends AppCompatActivity {
+public class ServiceProviderSignInActivity extends AppCompatActivity {
     Spinner spinner;
 
 

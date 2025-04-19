@@ -31,7 +31,7 @@
         <activity android:name=".UserDetails" android:exported="false" />
 
         <!-- Service Provider Signup -->
-        <activity android:name=".ServiceProviderSignIn" android:exported="false" />
+        <activity android:name=".ServiceProviderSignInActivity" android:exported="false" />
 
         <!-- Admin Activities -->
         <activity android:name=".AdminAddServiceActivity" android:exported="false" android:theme="@style/Theme.Mobile_Project_HZA2M" />
