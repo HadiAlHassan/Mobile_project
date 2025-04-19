@@ -13,7 +13,9 @@
     <string name="chooser">Join Khadamati as</string>
     <string name="user"> User</string>
     <string name="provider"> Service Provider</string>
-    <string name="name">  Full Name</string>
+    <string name="fname">  First Name</string>
+    <string name="mname">  Father Name</string>
+    <string name="lname">  Last Name</string>
     <string name="address">  Email Address</string>
     <string name="phone"> Phone Number</string>
     <string name="age"> Age</string>
@@ -22,4 +24,15 @@
     <string name="username"> Preferred Username</string>
     <string name="pass"> Password</string>
     <string name="pass1"> Confirm Password</string>
+    <string name="upload"> Upload Profile Picture</string>
+    <string name="upload2"> Upload </string>
+    <string name="hint">Enter here</string>
+    <string name="welcome">Welcome!</string>
+    <string name="userr">Username</string>
+
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+
+
 </resources>
