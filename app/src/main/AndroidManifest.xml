@@ -14,10 +14,12 @@
         android:supportsRtl="true"
         android:theme="@style/Base.Theme.Mobile_Project_HZA2M">
         <activity
+            android:name=".InsuranceServiceUserActivity"
+            android:exported="false" />
+        <activity
             android:name=".ContactUsActivity"
             android:exported="false"
-            android:theme="@style/Base.Theme.Mobile_Project_HZA2M" />
-        <!-- Core Activities -->
+            android:theme="@style/Base.Theme.Mobile_Project_HZA2M" /> <!-- Core Activities -->
         <activity
             android:name=".AddServiceItemActivity"
             android:exported="false" />
