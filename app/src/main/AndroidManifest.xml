@@ -14,6 +14,30 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Mobile_Project_HZA2M">
         <activity
+            android:name=".AdminInsertAdminActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Mobile_Project_HZA2M" />
+        <activity
+            android:name=".AdminViewProviderActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Mobile_Project_HZA2M" />
+        <activity
+            android:name=".AdminViewUserActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Mobile_Project_HZA2M" />
+        <activity
+            android:name=".AdminAddServiceActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Mobile_Project_HZA2M" />
+        <activity
+            android:name=".AdminDashboardActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Mobile_Project_HZA2M" />
+        <activity
+            android:name=".MyServicesActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Mobile_Project_HZA2M" />
+        <activity
             android:name=".OgeroServiceUserActivity"
             android:exported="false"
             android:theme="@style/Theme.Mobile_Project_HZA2M" />
@@ -42,14 +66,6 @@
             android:exported="false"
             android:parentActivityName=".DisplayServicesActivity"
             android:theme="@style/Theme.Mobile_Project_HZA2M" />
-        <activity
-            android:name=".MyProfileActivity2"
-            android:exported="false"
-            android:parentActivityName=".DisplayServicesActivity" />
-        <activity
-            android:name=".MyWalletActivity2"
-            android:exported="false"
-            android:parentActivityName=".DisplayServicesActivity" />
         <activity
             android:name=".DisplayServicesActivity"
             android:exported="false"

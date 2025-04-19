@@ -13,22 +13,21 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import com.example.mobile_project_hza2m.databinding.ActivityTuitionServiceProviderBinding;
+import com.example.mobile_project_hza2m.databinding.ActivityAdminAddServiceBinding;
 
-public class TuitionServiceProviderActivity extends AppCompatActivity {
+public class AdminAddServiceActivity extends AppCompatActivity {
 
     private AppBarConfiguration appBarConfiguration;
-    private ActivityTuitionServiceProviderBinding binding;
+    private ActivityAdminAddServiceBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        binding = ActivityTuitionServiceProviderBinding.inflate(getLayoutInflater());
+        binding = ActivityAdminAddServiceBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         setSupportActionBar(binding.toolbar);
-
 
         binding.fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -39,5 +38,6 @@ public class TuitionServiceProviderActivity extends AppCompatActivity {
             }
         });
     }
+
 
 }

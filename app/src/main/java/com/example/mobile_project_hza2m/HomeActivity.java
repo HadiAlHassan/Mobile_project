@@ -12,6 +12,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 public class HomeActivity extends AppCompatActivity {
     Button btnSignUp;
+    Button btnLogin;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,10 +24,17 @@ public class HomeActivity extends AppCompatActivity {
             return insets;
         });
         btnSignUp = findViewById(R.id.btnSignUp);
+        btnLogin = findViewById(R.id.btnLogin);
         btnSignUp.setOnClickListener(v -> {
-           Intent i = new Intent(this, DisplayServicesActivity.class);
+           Intent i = new Intent(this, MyServicesActivity.class);
            startActivity(i);
         });
+        btnLogin.setOnClickListener(v -> {
+            Intent i = new Intent(this, AdminDashboardActivity.class);
+            startActivity(i);
+        });
+
+
 
     }
 }

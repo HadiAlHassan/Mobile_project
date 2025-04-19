@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="24dp"
+    android:background="@color/white">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/tvadmin_dashboard"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="24dp"
+        android:textColor="@android:color/black" />
+
+    <Button
+        android:id="@+id/btnAdminAddServiceType"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:background="@color/UseBlue"
+        android:text="@string/btnadd_new_service_category" />
+
+    <Button
+        android:id="@+id/btnAdminViewUsers"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:background="@color/UseBlue"
+        android:text="@string/btnview_delete_users" />
+
+    <Button
+        android:id="@+id/btnAdminViewProviders"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:background="@color/UseBlue"
+        android:text="@string/btnview_delete_service_providers" />
+
+    <Button
+        android:id="@+id/btnAdminInsertAdmin"
+        android:layout_marginBottom="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/UseBlue"
+        android:text="@string/btninsert_admin" />
+</LinearLayout>
