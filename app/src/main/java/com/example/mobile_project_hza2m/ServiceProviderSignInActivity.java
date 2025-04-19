@@ -1,5 +1,6 @@
 package com.example.mobile_project_hza2m;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -93,6 +94,14 @@ public class ServiceProviderSignInActivity extends AppCompatActivity {
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
+            }
+        });
+        btnServiceProviderSignUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), MyServicesActivity.class);
+                i.putExtra("service", spinner.getSelectedItem().toString());
+                startActivity(i);
             }
         });
     }

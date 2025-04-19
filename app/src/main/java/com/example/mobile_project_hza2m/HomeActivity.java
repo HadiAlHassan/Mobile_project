@@ -16,6 +16,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.mobile_project_hza2m.databinding.ActivityHomeBinding;
+import com.google.android.material.snackbar.Snackbar;
 
 public class HomeActivity extends AppCompatActivity {
     Button btnSignUp;
@@ -32,6 +33,15 @@ public class HomeActivity extends AppCompatActivity {
 
         binding = ActivityHomeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+
+        binding.fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(HomeActivity.this, ContactUsActivity.class);
+                startActivity(i);
+            }
+        });
 
         btnLogin = findViewById(R.id.btnLogin);
         btnSignUp= findViewById(R.id.btnSignUp);
