@@ -47,7 +47,7 @@
             android:name=".UserDetails"
             android:exported="false" /> <!-- Service Provider Signup -->
         <activity
-            android:name=".ServiceProviderSignInActivity"
+            android:name=".ServiceProviderSignUpActivity"
             android:exported="false" /> <!-- Admin Activities -->
         <activity
             android:name=".AdminAddServiceActivity"

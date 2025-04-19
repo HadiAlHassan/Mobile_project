@@ -1,5 +1,8 @@
 package com.example.mobile_project_hza2m;
 
+import static androidx.core.content.ContextCompat.startActivity;
+
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
+import java.util.Objects;
 
 public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.CompanyViewHolder> {
 
@@ -39,11 +43,29 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.CompanyV
 
         // Example usage: show toast when clicked
         holder.itemView.setOnClickListener(v -> {
-            Toast.makeText(
-                    v.getContext(),
-                    "Clicked: " + company.getName() + "\nService Type: " + serviceType,
-                    Toast.LENGTH_SHORT
-            ).show();
+            if(Objects.equals(serviceType, "Ogero Phone Bills")){
+                Toast.makeText(holder.itemView.getContext(), "Ogero Phone Bills", Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(holder.itemView.getContext(), OgeroServiceUserActivity.class);
+                holder.itemView.getContext().startActivity(i);
+
+            }
+            else if(Objects.equals(serviceType, "Insurance")){
+                Toast.makeText(holder.itemView.getContext(), "Insurance", Toast.LENGTH_SHORT).show();
+               /* Intent i = new Intent(holder.itemView.getContext(), InsuranceServiceUserActivity.class);
+                holder.itemView.getContext().startActivity(i); */
+            }
+            else if(serviceType == "Tuition Fees"){
+                Toast.makeText(holder.itemView.getContext(), "Tuition Fees", Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(holder.itemView.getContext(), TuitionServiceUserActivity.class);
+                holder.itemView.getContext().startActivity(i);
+            }
+            else if(serviceType == "Streaming Services"){
+                Toast.makeText(holder.itemView.getContext(), "Streaming Services", Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(holder.itemView.getContext(), StreamingServiceUserActivity.class);
+                holder.itemView.getContext().startActivity(i);
+            }
+
+
         });
     }
 
