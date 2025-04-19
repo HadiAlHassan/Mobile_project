@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:background="@android:color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Payment Gateway"
+            android:textStyle="bold"
+            android:textSize="24sp"
+            android:gravity="center"
+            android:padding="16dp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#DDD" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Billing Information"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:padding="16dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="* Required field"
+            android:gravity="end"
+            android:textSize="12sp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="8dp" />
+
+        <!-- First Name -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputFirstName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="First Name *"
+            android:padding="16dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editFirstName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Last Name -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLastName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Last Name *"
+            android:paddingHorizontal="16dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editLastName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Address Line 1 -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputAddressLine"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Address Line 1 *"
+            android:padding="16dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editAddressLine1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- City -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputCity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="City *"
+            android:paddingHorizontal="16dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editCity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Country/Region -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputCountry"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Country/Region *"
+            android:padding="16dp">
+
+            <AutoCompleteTextView
+                android:id="@+id/editCountry"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:inputType="none" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Zip/Postal Code -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputZip"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Zip/Postal Code"
+            android:paddingHorizontal="16dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editZipCode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Phone Number -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputPhoneNb"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Phone Number *"
+            android:padding="16dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editPhoneNb"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Email -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Email *"
+            android:paddingHorizontal="16dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Payment Details Title -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Payment Details 🔒"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:padding="16dp" />
+
+        <!-- Card Type (RadioGroup) -->
+        <RadioGroup
+            android:id="@+id/radioGroupCardType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingHorizontal="16dp"
+            android:paddingBottom="16dp">
+
+            <RadioButton
+                android:id="@+id/radioButtonCardTypeVisa"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Visa" />
+
+            <RadioButton
+                android:id="@+id/radioButtonCardTypeMastercard"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mastercard"
+                android:layout_marginStart="24dp" />
+
+            <RadioButton
+                android:id="@+id/radioButtonCardTypeAmex"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Amex" />
+
+        </RadioGroup>
+
+        <!-- Card Number -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Card Number *"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/editCardNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter card number"
+            android:inputType="number"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Expiration Fields -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="16dp">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Expiration Month *"
+                    android:textStyle="bold" />
+
+                <Spinner
+                    android:id="@+id/spinnerExpirationMonth"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:entries="@array/months_array"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Expiration Year *"
+                    android:textStyle="bold" />
+
+                <Spinner
+                    android:id="@+id/spinnerExpirationYear"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:entries="@array/years_array"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- CVN -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="CVN *"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="This code is a three or four digit number printed on the back or front of credit cards."
+            android:textSize="12sp"
+            android:layout_marginBottom="8dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="24dp">
+
+            <EditText
+                android:id="@+id/editCvn"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:hint="CVN" />
+
+            <ImageView
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@android:drawable/ic_menu_info_details"
+                android:contentDescription="CVN Help"
+                android:layout_marginStart="8dp" />
+        </LinearLayout>
+
+        <!-- Your Order -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Your Order"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Amount Box -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="#93C3F0"
+            android:padding="12dp"
+            android:layout_marginBottom="24dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="Total amount"
+                android:textStyle="bold"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/textViewAmountValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="$0.00"
+                android:textStyle="bold"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <!-- Buttons -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/btnCancel"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="Cancel"
+                android:layout_marginEnd="8dp"
+                android:backgroundTint="@android:color/darker_gray"
+                android:textColor="@android:color/black" />
+
+            <Button
+                android:id="@+id/btnSave"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="Save"
+                android:layout_marginStart="8dp"
+                android:backgroundTint="@color/UseBlue"
+                android:textColor="@android:color/white" />
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

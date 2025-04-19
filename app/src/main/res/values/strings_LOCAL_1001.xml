@@ -25,7 +25,6 @@
     <string name="btnedit"> Edit</string>
     <string name="edAdminHints"> e.g. Water Bills, Tutoring</string>
     <string name="tvadminmmanageservices"> Manage Service Category</string>
-    <string name="tvadminmmanageservices"> Manage Service Category</string>
     <string name="tv_subheader">Existing Categories</string>
     <string name="txtbtnaddservice">Add Category</string>
     <string name="name">Name</string>

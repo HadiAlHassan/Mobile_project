@@ -25,7 +25,7 @@ public class ServiceProviderSignIn extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        editServiceProviderBusinessName = findViewById(R.id.editServiceProviderBusinessName);)
+        editServiceProviderBusinessName = findViewById(R.id.editServiceProviderBusinessName);
         editServiceProviderEmail = findViewById(R.id.editServiceProviderEmail);
         editServiceProviderPassword = findViewById(R.id.editServiceProviderPassword);
         btnServiceProviderSignUp = findViewById(R.id.btnServiceProviderSignUp);

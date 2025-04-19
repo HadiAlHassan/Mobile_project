@@ -25,7 +25,6 @@
     <string name="btnedit"> Edit</string>
     <string name="edAdminHints"> e.g. Water Bills, Tutoring</string>
     <string name="tvadminmmanageservices"> Manage Service Category</string>
-    <string name="tvadminmmanageservices"> Manage Service Category</string>
     <string name="tv_subheader">Existing Categories</string>
     <string name="txtbtnaddservice">Add Category</string>
     <string name="name">Name</string>
@@ -50,17 +49,16 @@
     <string name="btnview_delete_users">View/Delete Users</string>
     <string name="btnview_delete_service_providers">View /Delete Service Providers</string>
     <string name="btninsert_admin">Insert Admin</string>
-<<<<<<< HEAD
+
     <string-array name="spinner_service_type">
         <item>Ogero Phone Bills</item>
         <item>Insurance</item>
         <item>Tuition Fees</item>
         <item>Streaming Services</item>
     </string-array>
-=======
+
     <string name="continue_as">Continue As...</string>
     <string name="i_m_a_user">I\'m a User</string>
     <string name="i_m_a_service_provider">I\'m a Service Provider</string>
->>>>>>> origin/develop_zeer
 
 </resources>
