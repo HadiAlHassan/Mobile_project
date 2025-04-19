@@ -51,8 +51,8 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.CompanyV
             }
             else if(Objects.equals(serviceType, "Insurance")){
                 Toast.makeText(holder.itemView.getContext(), "Insurance", Toast.LENGTH_SHORT).show();
-               /* Intent i = new Intent(holder.itemView.getContext(), InsuranceServiceUserActivity.class);
-                holder.itemView.getContext().startActivity(i); */
+               Intent i = new Intent(holder.itemView.getContext(), InsuranceServiceUserActivity.class);
+                holder.itemView.getContext().startActivity(i);
             }
             else if(serviceType == "Tuition Fees"){
                 Toast.makeText(holder.itemView.getContext(), "Tuition Fees", Toast.LENGTH_SHORT).show();
