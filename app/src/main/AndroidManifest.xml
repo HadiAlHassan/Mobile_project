@@ -12,7 +12,19 @@
         android:label="@string/app_name"
         android:roundIcon="@drawable/khadamatlogo"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Mobile_Project_HZA2M">
+        android:theme="@style/Base.Theme.Mobile_Project_HZA2M">
+        <activity
+            android:name=".TelecomServiceProviderActivity"
+            android:exported="false" />
+        <activity
+            android:name=".TelecomServiceUserActivity"
+            android:exported="false" />
+        <activity
+            android:name=".StreamingServiceUserActivity"
+            android:exported="false" />
+        <activity
+            android:name=".StreamingServiceProviderActivity"
+            android:exported="false" />
         <activity
             android:name=".AdminInsertAdminActivity"
             android:exported="false"
