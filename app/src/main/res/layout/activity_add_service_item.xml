@@ -15,7 +15,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Service Icon *"
+            android:text="@string/service_icon"
             android:textSize="14sp"
             android:textColor="#555555"
             android:layout_marginBottom="6dp"/>
@@ -27,8 +27,7 @@
             android:layout_height="180dp"
             android:background="@drawable/image_border"
             android:scaleType="centerCrop"
-            android:src="@drawable/ic_launcher_foreground"
-            android:contentDescription="Service Image"
+            android:contentDescription="@string/service_image"
             android:layout_marginBottom="12dp" />
 
 
@@ -36,7 +35,7 @@
             android:id="@+id/btnUploadIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Upload Image"
+            android:text="@string/upload_image"
             android:layout_marginBottom="24dp"
             android:textAllCaps="false"/>
 
@@ -44,7 +43,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Service Name *"
+            android:text="@string/service_name"
             android:textSize="14sp"
             android:textColor="#555555"/>
 
@@ -53,7 +52,7 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:background="@drawable/edittext_rounded_bg"
-            android:hint="e.g. Pay Wi-Fi Bill"
+            android:hint="@string/e_g_pay_wi_fi_bill"
             android:paddingHorizontal="16dp"
             android:textColor="#000000"
             android:layout_marginTop="6dp"
@@ -63,7 +62,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Price *"
+            android:text="@string/price"
             android:textSize="14sp"
             android:textColor="#555555"/>
 
@@ -72,7 +71,7 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:background="@drawable/edittext_rounded_bg"
-            android:hint="$ e.g. 20"
+            android:hint="@string/e_g_20"
             android:inputType="numberDecimal"
             android:paddingHorizontal="16dp"
             android:textColor="#000000"
@@ -83,7 +82,7 @@
             android:id="@+id/btnSubmitService"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Add Service"
+            android:text="@string/add_service"
             android:layout_marginTop="32dp"
             android:textAllCaps="false"
             android:backgroundTint="#4B6EA9"

@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,7 +16,7 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.CompanyV
 
     private List<Company> companies;
 
-    public CompanyAdapter(List<Company> companies) {
+    public CompanyAdapter(List<Company> companies, String serviceType) {
         this.companies = companies;
     }
 
@@ -32,6 +33,18 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.CompanyV
         Company company = companies.get(position);
         holder.companyName.setText(company.getName());
         holder.companyIcon.setImageResource(company.getIconResId());
+
+        // ✅ Access the serviceType per company
+        String serviceType = company.getServiceType();
+
+        // Example usage: show toast when clicked
+        holder.itemView.setOnClickListener(v -> {
+            Toast.makeText(
+                    v.getContext(),
+                    "Clicked: " + company.getName() + "\nService Type: " + serviceType,
+                    Toast.LENGTH_SHORT
+            ).show();
+        });
     }
 
     @Override

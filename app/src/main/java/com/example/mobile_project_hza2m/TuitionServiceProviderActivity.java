@@ -2,6 +2,7 @@ package com.example.mobile_project_hza2m;
 
 import android.os.Bundle;
 
+import com.example.mobile_project_hza2m.databinding.ActivityTuitionServiceProviderBinding;
 import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,7 +14,9 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+
 import com.example.mobile_project_hza2m.databinding.ActivityTuitionServiceProviderBinding;
+
 
 public class TuitionServiceProviderActivity extends AppCompatActivity {
 

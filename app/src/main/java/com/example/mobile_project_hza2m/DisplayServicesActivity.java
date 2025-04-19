@@ -4,13 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.view.Menu;
-import android.view.MenuItem;
-
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.example.mobile_project_hza2m.databinding.ActivityDisplayServicesBinding;
 
@@ -42,59 +41,56 @@ public class DisplayServicesActivity extends AppCompatActivity {
 
     private void loadServiceData() {
         // 🧾 Ogero Phone Bills
+        String ogeroType = "Ogero Phone Bills";
         List<Company> ogeroCompanies = new ArrayList<>();
-        ogeroCompanies.add(new Company("Ogero", R.drawable.ogero));
-        categoryList.add(new ServiceCategory("Ogero Phone Bills", ogeroCompanies));
+        ogeroCompanies.add(new Company("Ogero", R.drawable.ogero, ogeroType));
+        categoryList.add(new ServiceCategory(ogeroType, ogeroCompanies));
 
         // 🛡️ Insurance
+        String insuranceType = "Insurance";
         List<Company> insuranceCompanies = new ArrayList<>();
-        insuranceCompanies.add(new Company("Bankers", R.drawable.insurance));
-        insuranceCompanies.add(new Company("Allianz", R.drawable.insurance));
-        categoryList.add(new ServiceCategory("Insurance", insuranceCompanies));
+        insuranceCompanies.add(new Company("Bankers", R.drawable.insurance, insuranceType));
+        insuranceCompanies.add(new Company("Allianz", R.drawable.insurance, insuranceType));
+        categoryList.add(new ServiceCategory(insuranceType, insuranceCompanies));
 
         // 🎓 Tuition Fees
+        String tuitionType = "Tuition Fees";
         List<Company> tuitionCompanies = new ArrayList<>();
-        tuitionCompanies.add(new Company("LAU", R.drawable.tuitionfees));
-        tuitionCompanies.add(new Company("AUB", R.drawable.tuitionfees));
-        categoryList.add(new ServiceCategory("Tuition Fees", tuitionCompanies));
+        tuitionCompanies.add(new Company("LAU", R.drawable.tuitionfees, tuitionType));
+        tuitionCompanies.add(new Company("AUB", R.drawable.tuitionfees, tuitionType));
+        categoryList.add(new ServiceCategory(tuitionType, tuitionCompanies));
 
         // 📺 Streaming Services
+        String streamingType = "Streaming Services";
         List<Company> streamingCompanies = new ArrayList<>();
-        streamingCompanies.add(new Company("Netflix", R.drawable.streaming));
-        streamingCompanies.add(new Company("Shahid", R.drawable.streaming));
-        streamingCompanies.add(new Company("OSN+", R.drawable.streaming));
-        categoryList.add(new ServiceCategory("Streaming Services", streamingCompanies));
+        streamingCompanies.add(new Company("Netflix", R.drawable.streaming, streamingType));
+        streamingCompanies.add(new Company("Shahid", R.drawable.streaming, streamingType));
+        streamingCompanies.add(new Company("OSN+", R.drawable.streaming, streamingType));
+        categoryList.add(new ServiceCategory(streamingType, streamingCompanies));
     }
 
-
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
 
-        if (id==R.id.action_mywallet){
-            Intent i= new Intent(DisplayServicesActivity.this, MyWalletActivity.class);
-            startActivity(i);
+        if (id == R.id.action_mywallet) {
+            startActivity(new Intent(this, MyWalletActivity.class));
         }
-        if (id==R.id.action_myprofile){
-            Intent i= new Intent(DisplayServicesActivity.this, MyProfileActivity.class);
-            startActivity(i);
+
+        if (id == R.id.action_myprofile) {
+            startActivity(new Intent(this, MyProfileActivity.class));
         }
 
         return super.onOptionsItemSelected(item);
     }
-
 }

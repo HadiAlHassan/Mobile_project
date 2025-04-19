@@ -1,117 +1,119 @@
-<LinearLayout android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/WhiteSmoke"
+    android:id="@+id/main"
+    android:padding="24dp">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Business Name *"
-        android:textSize="14sp"
-        android:layout_marginTop="90dp"
-        android:textColor="#555555"/>
-
-    <EditText
-        android:id="@+id/editServiceProviderBusinessName"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@drawable/edittext_rounded_bg"
-        android:hint="e.g. LAU"
-        android:paddingHorizontal="16dp"
-        android:textColor="#000000"
-        android:layout_marginTop="6dp"
-        android:layout_marginBottom="16dp"
-        android:textSize="16sp"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Email *"
-        android:textSize="14sp"
-        android:textColor="#555555"/>
-
-    <EditText
-        android:id="@+id/editServiceProviderEmail"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@drawable/edittext_rounded_bg"
-        android:hint="e.g. randomaddress@gmail.com"
-        android:inputType="textEmailAddress"
-        android:paddingHorizontal="16dp"
-        android:textColor="#000000"
-        android:layout_marginTop="6dp"
-        android:layout_marginBottom="16dp"
-        android:textSize="16sp"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Password *"
-        android:textSize="14sp"
-        android:textColor="#555555"/>
-
-    <EditText
-        android:id="@+id/editServiceProviderPassword"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@drawable/edittext_rounded_bg"
-        android:hint="e.g. aB5*j4Xb+9"
-        android:inputType="textPassword"
-        android:paddingHorizontal="16dp"
-        android:textColor="#000000"
-        android:layout_marginTop="6dp"
-        android:layout_marginBottom="16dp"
-        android:textSize="16sp"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Phone Number *"
-        android:textSize="14sp"
-        android:textColor="#555555"/>
-
-    <EditText
-        android:id="@+id/editServiceProviderPhoneNb"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@drawable/edittext_rounded_bg"
-        android:hint="e.g. +961 77 777 777"
-        android:inputType="phone"
-        android:paddingHorizontal="16dp"
-        android:textColor="#000000"
-        android:layout_marginTop="6dp"
-        android:layout_marginBottom="16dp"
-        android:textSize="16sp"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Address *"
-        android:textSize="14sp"
-        android:textColor="#555555"/>
-
-    <EditText
-        android:id="@+id/editServiceProviderAddress"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@drawable/edittext_rounded_bg"
-        android:hint="e.g. Hamra, Beirut"
-        android:inputType="text"
-        android:paddingHorizontal="16dp"
-        android:textColor="#000000"
-        android:layout_marginTop="6dp"
-        android:layout_marginBottom="16dp"
-        android:textSize="16sp"/>
-
-    <Button
-        android:id="@+id/btnServiceProviderSignUp"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Sign Up"
-        android:layout_marginTop="32dp"
-        android:textAllCaps="false"
-        android:backgroundTint="#4B6EA9"
-        android:textColor="#FFF"/>
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
 
+        <!-- Username Label -->
+        <TextView
+            android:id="@+id/textUsernameLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/username"
+            android:textColor="#555555"
+            android:textSize="14sp"
+            android:layout_marginTop="48dp" />
 
-</LinearLayout>
+        <!-- Username Input -->
+        <EditText
+            android:id="@+id/editServiceProviderUsername"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/UseBlue"
+            android:hint="@string/e_g_pierre_maalouf"
+            android:paddingHorizontal="16dp"
+            android:textColor="#000000"
+            android:textSize="16sp"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Email Label -->
+        <TextView
+            android:id="@+id/textEmailLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/email"
+            android:textColor="#555555"
+            android:textSize="14sp" />
+
+        <!-- Email Input -->
+        <EditText
+            android:id="@+id/editServiceProviderEmail"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/UseBlue"
+            android:hint="@string/e_g_randomaddress_gmail_com"
+            android:inputType="textEmailAddress"
+            android:paddingHorizontal="16dp"
+            android:textColor="#000000"
+            android:textSize="16sp"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Password Label -->
+        <TextView
+            android:id="@+id/textPasswordLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/password"
+            android:textColor="#555555"
+            android:textSize="14sp" />
+
+        <!-- Password Input -->
+        <EditText
+            android:id="@+id/editServiceProviderPassword"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/UseBlue"
+            android:hint="@string/e_g_ab5_j4xb_9"
+            android:inputType="textPassword"
+            android:paddingHorizontal="16dp"
+            android:textColor="#000000"
+            android:textSize="16sp"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Service Category Label -->
+        <TextView
+            android:id="@+id/textServiceLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/service_category"
+            android:textColor="#555555"
+            android:textSize="14sp" />
+
+        <!-- Spinner -->
+        <Spinner
+            android:id="@+id/spinnerServiceType"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/UseBlue"
+            android:padding="12dp"
+            android:spinnerMode="dropdown"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="24dp" />
+
+        <!-- Sign Up Button -->
+        <Button
+            android:id="@+id/btnServiceProviderSignUp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/UseBlue"
+            android:backgroundTint="#4B6EA9"
+            android:text="@string/sign_up"
+            android:textAllCaps="false"
+            android:textColor="#FFF"
+            android:textSize="20sp"
+            android:paddingHorizontal="24dp"
+            android:paddingVertical="10dp"
+            android:layout_marginTop="24dp" />
+    </LinearLayout>
+</ScrollView>

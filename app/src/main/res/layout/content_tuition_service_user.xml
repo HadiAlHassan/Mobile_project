@@ -14,7 +14,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Pay Tuition Fee"
+            android:text="@string/pay_tuition_fee"
             android:textSize="20sp"
             android:textStyle="bold"
             android:textColor="@color/black"
@@ -25,7 +25,7 @@
             android:id="@+id/editTextUniversity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="University Name"
+            android:hint="@string/university_name"
             android:inputType="textCapWords" />
 
         <!-- Reference Number -->
@@ -33,7 +33,7 @@
             android:id="@+id/editTextReference"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Bank Reference Number"
+            android:hint="@string/bank_reference_number"
             android:inputType="text"
             android:layout_marginTop="12dp" />
 
@@ -41,7 +41,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Upload Payment Screenshot"
+            android:text="@string/upload_payment_screenshot"
             android:textSize="16sp"
             android:textStyle="bold"
             android:layout_marginTop="16dp"
