@@ -62,7 +62,7 @@ public class UserOrProvider extends AppCompatActivity {
         rb2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent in4= new Intent(UserOrProvider.this, ServiceProviderSignInActivity.class);
+                Intent in4= new Intent(UserOrProvider.this, ServiceProviderSignUpActivity.class);
                 startActivity(in4);
             }
         });

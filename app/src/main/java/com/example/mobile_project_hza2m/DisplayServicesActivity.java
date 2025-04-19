@@ -67,6 +67,12 @@ public class DisplayServicesActivity extends AppCompatActivity {
         streamingCompanies.add(new Company("Shahid", R.drawable.streaming, streamingType));
         streamingCompanies.add(new Company("OSN+", R.drawable.streaming, streamingType));
         categoryList.add(new ServiceCategory(streamingType, streamingCompanies));
+
+        String TelecomType = "Telecommunication Services";
+        List<Company> telecomCompanies = new ArrayList<>();
+        telecomCompanies.add(new Company("Touch", R.drawable.touch, TelecomType));
+        telecomCompanies.add(new Company("Alfa", R.drawable.alfa, TelecomType));
+        categoryList.add(new ServiceCategory(TelecomType, telecomCompanies));
     }
 
     @Override
