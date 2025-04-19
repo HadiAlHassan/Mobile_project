@@ -50,5 +50,8 @@
     <string name="btnview_delete_users">View/Delete Users</string>
     <string name="btnview_delete_service_providers">View /Delete Service Providers</string>
     <string name="btninsert_admin">Insert Admin</string>
+    <string name="continue_as">Continue As...</string>
+    <string name="i_m_a_user">I\'m a User</string>
+    <string name="i_m_a_service_provider">I\'m a Service Provider</string>
 
 </resources>
