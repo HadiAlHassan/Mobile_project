@@ -50,5 +50,11 @@
     <string name="btnview_delete_users">View/Delete Users</string>
     <string name="btnview_delete_service_providers">View /Delete Service Providers</string>
     <string name="btninsert_admin">Insert Admin</string>
+    <string-array name="spinner_service_type">
+        <item>Ogero Phone Bills</item>
+        <item>Insurance</item>
+        <item>Tuition Fees</item>
+        <item>Streaming Services</item>
+    </string-array>
 
 </resources>

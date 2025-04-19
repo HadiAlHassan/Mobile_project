@@ -14,6 +14,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Mobile_Project_HZA2M">
         <activity
+            android:name=".ServiceProviderSignIn"
+            android:exported="false" />
+        <activity
             android:name=".AdminInsertAdminActivity"
             android:exported="false"
             android:theme="@style/Theme.Mobile_Project_HZA2M" />
