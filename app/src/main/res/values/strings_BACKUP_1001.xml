@@ -1,0 +1,66 @@
+<resources>
+    <string name="app_name">Khadamati</string>
+    <string name="slogan">All your payments\nin one app</string>
+    <string name="AboutUs">Khadamati is a fast, secure, and user-friendly platform that connects
+        users with trusted service providers to simplify daily payments.</string>
+
+    <string name="AboutUsTitle">About Us</string>
+    <string name="AppTitle">Khadamati</string>
+    <string name="btnSignUp">Sign Up</string>
+    <string name="btnLogin">Login</string>
+    <string name="subheader">Info about the app</string>
+    <string name="action_settings">settings\n</string>
+    <string name="action_profile">my_profile</string>
+    <string name="action_mywallet">mywallet</string>
+    <string name="Activites">Activities</string>
+    <string name="DisplayServicesTitle">Available Services</string>
+    <string name="hintName">Full Name</string>
+    <string name="hintMail">Email</string>
+    <string name="hintPhone">Phone Number</string>
+    <string name="hintAge">Age</string>
+    <string name="hintGender">Gender</string>
+    <string name="TranscationHistory">Transaction History</string>
+    <string name="MySubscriptions"> My Subscriptions</string>
+    <string name="btnsave"> Save</string>
+    <string name="btnedit"> Edit</string>
+    <string name="edAdminHints"> e.g. Water Bills, Tutoring</string>
+    <string name="tvadminmmanageservices"> Manage Service Category</string>
+    <string name="tvadminmmanageservices"> Manage Service Category</string>
+    <string name="tv_subheader">Existing Categories</string>
+    <string name="txtbtnaddservice">Add Category</string>
+    <string name="name">Name</string>
+    <string name="txtemailplaceholder">email@example.com</string>
+    <string name="service_title">Service Title</string>
+    <string name="tvservicepriceplaceholdrr">$50</string>
+    <string name="txtdeleteservice">Delete</string>
+    <string name="delete">Delete</string>
+    <string name="category_name">Category Name</string>
+    <string name="no_services_found">No services found.</string>
+    <string name="search_services">Search services...</string>
+    <string name="my_services">My Services</string>
+    <string name="tvregistered">Registered Users</string>
+    <string name="tvregisteredprovider">Registered Providers</string>
+    <string name="tvaddnewadmin">Add New Admin</string>
+    <string name="edfull_name">Full Name</string>
+    <string name="edemail">Email</string>
+    <string name="edpassword">Password</string>
+    <string name="btnadd_admin">Add Admin</string>
+    <string name="tvadmin_dashboard">Admin Dashboard</string>
+    <string name="btnadd_new_service_category">Add New Service Category</string>
+    <string name="btnview_delete_users">View/Delete Users</string>
+    <string name="btnview_delete_service_providers">View /Delete Service Providers</string>
+    <string name="btninsert_admin">Insert Admin</string>
+<<<<<<< HEAD
+    <string-array name="spinner_service_type">
+        <item>Ogero Phone Bills</item>
+        <item>Insurance</item>
+        <item>Tuition Fees</item>
+        <item>Streaming Services</item>
+    </string-array>
+=======
+    <string name="continue_as">Continue As...</string>
+    <string name="i_m_a_user">I\'m a User</string>
+    <string name="i_m_a_service_provider">I\'m a Service Provider</string>
+>>>>>>> origin/develop_zeer
+
+</resources>
