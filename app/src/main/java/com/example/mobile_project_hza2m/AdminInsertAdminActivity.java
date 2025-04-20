@@ -1,21 +1,26 @@
 package com.example.mobile_project_hza2m;
 
 import android.os.Bundle;
-
-import com.google.android.material.snackbar.Snackbar;
-
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.ui.AppBarConfiguration;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.mobile_project_hza2m.databinding.ActivityAdminInsertAdminBinding;
+import com.google.android.material.snackbar.Snackbar;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class AdminInsertAdminActivity extends AppCompatActivity {
+
     EditText editTextName, editTextEmail, editTextPassword;
     Button buttonInsert;
     private AppBarConfiguration appBarConfiguration;
@@ -30,16 +35,9 @@ public class AdminInsertAdminActivity extends AppCompatActivity {
 
         setSupportActionBar(binding.toolbar);
 
-
-        binding.fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAnchorView(R.id.fab)
-                        .setAction("Action", null).show();
-            }
-        });
-
+        binding.fab.setOnClickListener(view -> Snackbar.make(view, "Admin Tools", Snackbar.LENGTH_LONG)
+                .setAnchorView(R.id.fab)
+                .setAction("Action", null).show());
 
         editTextName = findViewById(R.id.editTextAdminName);
         editTextEmail = findViewById(R.id.editTextAdminEmail);
@@ -56,13 +54,36 @@ public class AdminInsertAdminActivity extends AppCompatActivity {
                 return;
             }
 
-            // TODO: Insert into DB or send to server
-            Toast.makeText(this, "Admin " + name + " added!", Toast.LENGTH_SHORT).show();
-            editTextName.setText("");
-            editTextEmail.setText("");
-            editTextPassword.setText("");
+            insertAdmin(name, email, password);
         });
     }
 
+    private void insertAdmin(String name, String email, String password) {
+        String url = "http://192.168.0.104/Mobile_submodule_backend/PHP/admin/admin_add_admin.php";
 
+        RequestQueue queue = Volley.newRequestQueue(this);
+
+        StringRequest request = new StringRequest(Request.Method.POST, url,
+                response -> {
+                    Toast.makeText(this, "Admin added successfully!", Toast.LENGTH_SHORT).show();
+                    editTextName.setText("");
+                    editTextEmail.setText("");
+                    editTextPassword.setText("");
+                },
+                error -> {
+                    Toast.makeText(this, "Failed to add admin", Toast.LENGTH_SHORT).show();
+                }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("name", name);
+                params.put("email", email);
+                params.put("password", password);
+                return params;
+            }
+        };
+
+        queue.add(request);
+    }
 }

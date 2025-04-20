@@ -27,7 +27,7 @@ public class AdminProviderAdapter extends RecyclerView.Adapter<AdminProviderAdap
 
     private final Context context;
     private final List<Provider> providerList;
-    private final String deleteUrl = "https://yourdomain.com/api/admin_delete_provider.php"; // 🔄 Change to your actual URL
+    private final String deleteUrl = "http://192.168.0.104/Mobile_submodule_backend/PHP/admin/admin_delete_provider.php";
 
     public AdminProviderAdapter(Context context, List<Provider> providerList) {
         this.context = context;

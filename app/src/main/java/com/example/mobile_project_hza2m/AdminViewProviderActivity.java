@@ -1,22 +1,20 @@
 package com.example.mobile_project_hza2m;
 
 import android.os.Bundle;
-
-import com.google.android.material.snackbar.Snackbar;
-
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.view.View;
 import android.widget.Toast;
 
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.Request;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.mobile_project_hza2m.databinding.ActivityAdminViewProviderBinding;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,8 +25,8 @@ public class AdminViewProviderActivity extends AppCompatActivity {
     private ActivityAdminViewProviderBinding binding;
 
     RecyclerView recyclerView;
-    SimpleUserAdapter adapter;
-    List<User> userList;
+    AdminProviderAdapter adapter;
+    List<Provider> providerList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,32 +37,37 @@ public class AdminViewProviderActivity extends AppCompatActivity {
 
         setSupportActionBar(binding.toolbar);
 
-
-        binding.fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAnchorView(R.id.fab)
-                        .setAction("Action", null).show();
-            }
-        });
-
         recyclerView = findViewById(R.id.recyclerViewUsers);
-        userList = new ArrayList<>();
-
-        // Sample data
-        userList.add(new User("Ali", "ali@gmail.com"));
-        userList.add(new User("Rana", "rana@hotmail.com"));
-
-        adapter = new SimpleUserAdapter(userList, position -> {
-            userList.remove(position);
-            adapter.notifyItemRemoved(position);
-            Toast.makeText(this, "User deleted", Toast.LENGTH_SHORT).show();
-        });
-
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new AdminProviderAdapter(this, providerList);
         recyclerView.setAdapter(adapter);
+
+        fetchProviders();
     }
 
+    private void fetchProviders() {
+        String url = "http://192.168.0.104/Mobile_submodule_backend/PHP/admin/admin_get_all_providers.php";
 
+        providerList.clear();
+
+        StringRequest request = new StringRequest(Request.Method.GET, url,
+                response -> {
+                    try {
+                        JSONArray array = new JSONArray(response);
+                        for (int i = 0; i < array.length(); i++) {
+                            JSONObject obj = array.getJSONObject(i);
+                            int id = obj.getInt("id");
+                            String name = obj.getString("business_name");
+                            providerList.add(new Provider(id, name));
+                        }
+                        adapter.notifyDataSetChanged();
+                    } catch (Exception e) {
+                        Toast.makeText(this, "Parse error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                },
+                error -> Toast.makeText(this, "Network error", Toast.LENGTH_SHORT).show()
+        );
+
+        Volley.newRequestQueue(this).add(request);
+    }
 }

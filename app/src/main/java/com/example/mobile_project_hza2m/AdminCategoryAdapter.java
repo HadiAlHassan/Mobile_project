@@ -71,7 +71,7 @@ public class AdminCategoryAdapter extends RecyclerView.Adapter<AdminCategoryAdap
     }
 
     private void deleteCategory(int categoryId) {
-        String url = "https://yourdomain.com/api/admin_delete_category.php";
+        String url = "http://192.168.0.104/Mobile_submodule_backend/PHP/admin/admin_delete_category.php";
 
         StringRequest request = new StringRequest(Request.Method.POST, url,
                 response -> {
@@ -99,4 +99,5 @@ public class AdminCategoryAdapter extends RecyclerView.Adapter<AdminCategoryAdap
 
         Volley.newRequestQueue(context).add(request);
     }
+
 }
