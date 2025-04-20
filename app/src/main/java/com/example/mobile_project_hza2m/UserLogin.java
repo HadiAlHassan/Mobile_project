@@ -71,14 +71,21 @@ public class UserLogin extends AppCompatActivity {
 
         StringRequest request = new StringRequest(Request.Method.POST, LOGIN_URL,
                 response -> {
-                    Log.e("RAW_LOGIN_RESPONSE", "[" + response + "]"); // Log it clearly with brackets
+                    Log.e("RAW_LOGIN_RESPONSE", response); // raw clean log
+
                     try {
                         JSONObject json = new JSONObject(response);
+
                         if (json.getBoolean("success")) {
                             String role = json.getString("role");
+
+                            // Optional: Store user info if needed
+                            // String userId = json.optString("user_id", "");
+                            // String name = json.optString("username", json.optString("full_name", ""));
+
                             Toast.makeText(this, "Login successful as " + role, Toast.LENGTH_SHORT).show();
 
-                            // 🔄 Redirect based on role
+                            // 🔁 Redirect based on role
                             switch (role) {
                                 case "user":
                                     startActivity(new Intent(this, DisplayServicesActivity.class));
@@ -89,31 +96,36 @@ public class UserLogin extends AppCompatActivity {
                                 case "admin":
                                     startActivity(new Intent(this, AdminDashboardActivity.class));
                                     break;
+                                default:
+                                    Toast.makeText(this, "Unknown role: " + role, Toast.LENGTH_SHORT).show();
                             }
-                            finish(); // optional: close login screen
+
+                            finish(); // close login activity
+                        } else {
+                            Toast.makeText(this, json.getString("message"), Toast.LENGTH_LONG).show();
                         }
 
                     } catch (JSONException e) {
                         e.printStackTrace();
-                        Toast.makeText(this, "Error parsing response: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Error parsing server response", Toast.LENGTH_SHORT).show();
                     }
-                }
-                ,
+                },
                 error -> {
                     error.printStackTrace();
-                    Toast.makeText(this, "Network error: " + error.toString(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "Network error: " + error.getMessage(), Toast.LENGTH_LONG).show();
                 }
         ) {
             @Override
             protected Map<String, String> getParams() {
-                Map<String, String> map = new HashMap<>();
-                map.put("email", email);
-                map.put("password", password);
-                return map;
+                Map<String, String> params = new HashMap<>();
+                params.put("email", email);
+                params.put("password", password);
+                return params;
             }
         };
 
         RequestQueue queue = Volley.newRequestQueue(this);
         queue.add(request);
     }
+
 }
