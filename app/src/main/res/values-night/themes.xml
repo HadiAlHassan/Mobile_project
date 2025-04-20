@@ -15,6 +15,9 @@
     <style name="Base.Base.Theme.Mobile_Project_HZA2M" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your dark theme here. -->
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+        <item name="colorPrimary">#4B6EA9</item> <!-- Example: Deep Orange -->
+        <item name="colorPrimaryContainer">#ffffff</item>
+        <item name="colorOnPrimary">#FFFFFF</item>
     </style>
 
     <style name="FormLabel">

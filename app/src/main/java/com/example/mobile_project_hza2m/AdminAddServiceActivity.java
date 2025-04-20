@@ -1,5 +1,6 @@
 package com.example.mobile_project_hza2m;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -12,11 +13,12 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mobile_project_hza2m.databinding.ActivityAdminAddServiceBinding;
 
 public class AdminAddServiceActivity extends AppCompatActivity {
-
+RecyclerView recyclerViewCategories;
     private AppBarConfiguration appBarConfiguration;
     private ActivityAdminAddServiceBinding binding;
 
@@ -37,6 +39,10 @@ public class AdminAddServiceActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
+       /* AdminCategoryAdapter adapter = new AdminCategoryAdapter(this, categoryList, this::fetchCategories);
+        recyclerViewCategories.setAdapter(adapter); */
+
     }
 
 

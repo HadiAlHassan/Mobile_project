@@ -64,6 +64,11 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.CompanyV
                 Intent i = new Intent(holder.itemView.getContext(), StreamingServiceUserActivity.class);
                 holder.itemView.getContext().startActivity(i);
             }
+            else{
+                Toast.makeText(holder.itemView.getContext(), "Telecommunication Services", Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(holder.itemView.getContext(), TelecomServiceUserActivity.class);
+                holder.itemView.getContext().startActivity(i);
+            }
 
 
         });

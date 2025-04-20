@@ -107,6 +107,15 @@
                 android:text="@string/btnsave"
                 android:visibility="visible" />
         </LinearLayout>
+        <Button
+            android:id="@+id/buttonLogout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="Logout"
+            android:backgroundTint="@color/gray"
+            android:textColor="@android:color/white"/>
+
     </LinearLayout>
 </ScrollView>
 
