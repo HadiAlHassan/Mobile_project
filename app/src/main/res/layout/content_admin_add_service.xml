@@ -13,21 +13,6 @@
         android:textStyle="bold"
         android:layout_marginBottom="16dp" />
 
-    <!-- Add New Category -->
-    <EditText
-        android:id="@+id/editTextCategoryName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/edAdminHints" />
-
-    <Button
-        android:id="@+id/buttonSaveCategory"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/txtbtnaddservice"
-        android:layout_marginTop="12dp"
-        android:layout_marginBottom="24dp" />
-
     <!-- Existing Categories List -->
     <TextView
         android:layout_width="match_parent"

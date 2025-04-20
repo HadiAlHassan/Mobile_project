@@ -105,12 +105,19 @@ public class AdminAddServiceActivity extends AppCompatActivity {
 
         StringRequest request = new StringRequest(Request.Method.POST, url,
                 response -> {
-                    Toast.makeText(this, "Category added", Toast.LENGTH_SHORT).show();
-                    fetchCategories();
+                    try {
+                        JSONObject json = new JSONObject(response);
+                        if (json.getBoolean("success")) {
+                            Toast.makeText(this, json.getString("message"), Toast.LENGTH_SHORT).show();
+                            fetchCategories(); // refresh list
+                        } else {
+                            Toast.makeText(this, json.getString("message"), Toast.LENGTH_LONG).show();
+                        }
+                    } catch (Exception e) {
+                        Toast.makeText(this, "Error parsing server response", Toast.LENGTH_SHORT).show();
+                    }
                 },
-                error -> {
-                    Toast.makeText(this, "Failed to add category", Toast.LENGTH_SHORT).show();
-                }
+                error -> Toast.makeText(this, "Network error: " + error.getMessage(), Toast.LENGTH_LONG).show()
         ) {
             @Override
             protected Map<String, String> getParams() {
@@ -122,4 +129,5 @@ public class AdminAddServiceActivity extends AppCompatActivity {
 
         Volley.newRequestQueue(this).add(request);
     }
+
 }
