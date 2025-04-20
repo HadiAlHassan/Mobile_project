@@ -37,7 +37,7 @@ public class AdminViewProviderActivity extends AppCompatActivity {
 
         setSupportActionBar(binding.toolbar);
 
-        recyclerView = findViewById(R.id.recyclerViewUsers);
+        recyclerView = findViewById(R.id.recyclerViewProviders);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new AdminProviderAdapter(this, providerList);
         recyclerView.setAdapter(adapter);
@@ -60,14 +60,23 @@ public class AdminViewProviderActivity extends AppCompatActivity {
                             String name = obj.getString("business_name");
                             providerList.add(new Provider(id, name));
                         }
+                        if (providerList.isEmpty()) {
+                            Toast.makeText(this, "No service providers yet.", Toast.LENGTH_SHORT).show();
+                        }
                         adapter.notifyDataSetChanged();
                     } catch (Exception e) {
-                        Toast.makeText(this, "Parse error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        e.printStackTrace(); // Debug
+                        Toast.makeText(this, "Parse error: " + e.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 },
-                error -> Toast.makeText(this, "Network error", Toast.LENGTH_SHORT).show()
+                error -> {
+                    error.printStackTrace(); // Debug
+                    Toast.makeText(this, "Network error: " + error.getMessage(), Toast.LENGTH_LONG).show();
+                }
+
         );
 
         Volley.newRequestQueue(this).add(request);
     }
 }
+

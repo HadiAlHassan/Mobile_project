@@ -77,7 +77,7 @@ public class AdminInsertAdminActivity extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
-                params.put("name", name);
+                params.put("full_name", name); // match PHP
                 params.put("email", email);
                 params.put("password", password);
                 return params;
