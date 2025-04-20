@@ -129,6 +129,7 @@
                 "4. Fees may apply for specific transactions, transfers, or account services. These will be disclosed when applicable.\n\n" +
                 "5. We may suspend or terminate your account for policy violations or suspicious activity.\n\n"</string>
     <string name="info3">Write here. Press enter after you finish.</string>
+    <string name="please_enter_your_credentials">Please enter your credentials.</string>
 
     <string-array name="months_array">
         <item>01</item>
