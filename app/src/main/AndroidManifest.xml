@@ -11,6 +11,7 @@
         android:icon="@drawable/khadamatlogo"
         android:label="@string/app_name"
         android:roundIcon="@drawable/khadamatlogo"
+        android:usesCleartextTraffic="true"
         android:supportsRtl="true"
         android:theme="@style/Base.Theme.Mobile_Project_HZA2M">
         <activity

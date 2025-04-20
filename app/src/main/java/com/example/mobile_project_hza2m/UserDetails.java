@@ -15,20 +15,16 @@ import android.widget.RadioButton;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.activity.result.ActivityResultLauncher;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.navigation.ui.AppBarConfiguration;
-
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.android.material.snackbar.Snackbar;
 
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONException;
@@ -41,50 +37,47 @@ import java.util.Map;
 
 public class UserDetails extends AppCompatActivity {
 
-
-    String Base_Url = "C:\\xampp\\htdocs\\Mobile_submodule_backend\\PHP";
-
     private static final int PICK_IMAGE_REQUEST = 100;
-    private ActivityResultLauncher<Intent> galleryLauncher;
+
     private ImageView imageView;
     private Bitmap selectedBitmap = null;
+
     private EditText fname, mname, lname, phone, address, username, pass, pass1;
     private RadioButton rb1, rb2;
+    private Button btnSignUp, btnUploadIcon;
 
-    Button btnSignUp, btnUploadIcon;
+    private final String Base_Url = "http://192.168.0.101/Mobile_submodule_backend/PHP/auth/register_user.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_user_details);
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        // Binding UI elements
         imageView = findViewById(R.id.imageView);
         btnUploadIcon = findViewById(R.id.btnUploadIcon);
         btnSignUp = findViewById(R.id.btnsignup);
-
         fname = findViewById(R.id.fname);
         mname = findViewById(R.id.mname);
         lname = findViewById(R.id.lname);
         phone = findViewById(R.id.phone);
-        address = findViewById(R.id.address);
+        address = findViewById(R.id.address); // used as email
         username = findViewById(R.id.username);
         pass = findViewById(R.id.pass);
         pass1 = findViewById(R.id.pass1);
         rb1 = findViewById(R.id.rb1);
         rb2 = findViewById(R.id.rb2);
 
-
-        btnSignUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
+        // Events
+        btnUploadIcon.setOnClickListener(v -> openGallery());
+        btnSignUp.setOnClickListener(v -> validateInputs());
     }
 
     private void openGallery() {
@@ -98,7 +91,7 @@ public class UserDetails extends AppCompatActivity {
         String mnameStr = mname.getText().toString().trim();
         String lnameStr = lname.getText().toString().trim();
         String phoneStr = phone.getText().toString().trim();
-        String emailStr = address.getText().toString().trim(); // using address as email
+        String emailStr = address.getText().toString().trim(); // used as email
         String usernameStr = username.getText().toString().trim();
         String passStr = pass.getText().toString();
         String pass1Str = pass1.getText().toString();
@@ -107,18 +100,14 @@ public class UserDetails extends AppCompatActivity {
         if (mnameStr.isEmpty()) { mname.setError("Required"); return; }
         if (lnameStr.isEmpty()) { lname.setError("Required"); return; }
         if (phoneStr.isEmpty()) { phone.setError("Required"); return; }
-        if (!phoneStr.matches("^\\d{8}$")) {
-            phone.setError("Must be 8 digits"); return;
-        }
+        if (!phoneStr.matches("^\\d{8}$")) { phone.setError("Must be 8 digits"); return; }
         if (emailStr.isEmpty()) { address.setError("Required"); return; }
         String emailPattern = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
-        if (!emailStr.matches(emailPattern)) {
-            address.setError("Invalid email format"); return;
-        }
+        if (!emailStr.matches(emailPattern)) { address.setError("Invalid email format"); return; }
         if (usernameStr.isEmpty()) { username.setError("Required"); return; }
         if (passStr.isEmpty()) { pass.setError("Required"); return; }
         if (!passStr.matches("^(?=.*[A-Z])(?=.*[a-zA-Z0-9]).{6,}$")) {
-            pass.setError("Min 6 chars with 1 uppercase"); return;
+            pass.setError("Min 6 chars, 1 uppercase"); return;
         }
         if (pass1Str.isEmpty() || !passStr.equals(pass1Str)) {
             pass1.setError("Passwords don't match"); return;
@@ -146,8 +135,6 @@ public class UserDetails extends AppCompatActivity {
     }
 
     private void registerUser() {
-        String url = Base_Url+ "//register_user.php";
-
         String profileImageEncoded = "";
         if (selectedBitmap != null) {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -159,7 +146,7 @@ public class UserDetails extends AppCompatActivity {
         String ageGroup = rb2.isChecked() ? "above" : "below";
 
         String finalProfileImageEncoded = profileImageEncoded;
-        StringRequest request = new StringRequest(Request.Method.POST, url,
+        StringRequest request = new StringRequest(Request.Method.POST, Base_Url,
                 response -> {
                     try {
                         JSONObject json = new JSONObject(response);
