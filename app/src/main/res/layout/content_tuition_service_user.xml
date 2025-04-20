@@ -15,47 +15,71 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/pay_tuition_fee"
+            android:text="Submit Tuition Payment Request"
             android:textSize="20sp"
             android:textStyle="bold"
             android:textColor="@color/black"
             android:layout_marginBottom="16dp" />
 
-        <!-- University Name -->
+        <!-- Service Name: University -->
         <EditText
             android:id="@+id/editTextUniversity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/university_name"
+            android:hint="University Name"
             android:inputType="textCapWords" />
 
-        <!-- Reference Number -->
+        <!-- Reference Number / Description -->
         <EditText
             android:id="@+id/editTextReference"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/bank_reference_number"
+            android:hint="Reference / Notes"
             android:inputType="text"
+            android:layout_marginTop="12dp" />
+
+        <!-- Tuition Amount -->
+        <EditText
+            android:id="@+id/editTextAmount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Tuition Amount"
+            android:inputType="numberDecimal"
             android:layout_marginTop="12dp" />
 
         <!-- Upload Screenshot -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/upload_payment_screenshot"
+            android:text="Upload Payment Screenshot"
             android:textSize="16sp"
             android:textStyle="bold"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="8dp" />
 
+        <ImageView
+            android:id="@+id/imageViewProof"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:scaleType="centerCrop"
+            android:background="@drawable/img"
+            android:contentDescription="Uploaded Screenshot" />
 
+        <Button
+            android:id="@+id/btnUploadScreenshot"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Upload Screenshot"
+            android:layout_marginTop="10dp"
+            android:backgroundTint="@color/UseBlue"
+            android:textColor="@android:color/white" />
 
-        <!-- Pay It Button -->
+        <!-- Submit -->
         <Button
             android:id="@+id/buttonPayIt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Pay It"
+            android:text="Send Request"
             android:layout_marginTop="20dp"
             android:backgroundTint="@color/UseBlue"
             android:textColor="@android:color/white" />

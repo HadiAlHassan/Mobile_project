@@ -30,6 +30,8 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+import android.content.SharedPreferences;
+
 
 public class UserLogin extends AppCompatActivity {
     private ActivityUserOrProviderBinding binding;
@@ -71,34 +73,57 @@ public class UserLogin extends AppCompatActivity {
 
         StringRequest request = new StringRequest(Request.Method.POST, LOGIN_URL,
                 response -> {
-                    Log.e("RAW_LOGIN_RESPONSE", "[" + response + "]"); // Log it clearly with brackets
+                    Log.e("RAW_LOGIN_RESPONSE", "[" + response + "]");
+
                     try {
                         JSONObject json = new JSONObject(response);
-                        if (json.getBoolean("success")) {
+
+                        if (json.has("success") && json.getBoolean("success")) {
                             String role = json.getString("role");
                             Toast.makeText(this, "Login successful as " + role, Toast.LENGTH_SHORT).show();
 
-                            // 🔄 Redirect based on role
+                            SharedPreferences prefs = getSharedPreferences("AppPrefs", MODE_PRIVATE);
+                            SharedPreferences.Editor editor = prefs.edit();
+
                             switch (role) {
                                 case "user":
+                                    int userId = json.getInt("user_id");
+                                    editor.putInt("user_id", userId);
+                                    editor.putString("role", role);
+                                    editor.apply();
+                                    createWallet(userId);
                                     startActivity(new Intent(this, DisplayServicesActivity.class));
                                     break;
+
                                 case "provider":
+                                    int providerId = json.getInt("provider_id");
+                                    editor.putInt("provider_id", providerId);
+                                    editor.putString("role", role);
+                                    editor.apply();
                                     startActivity(new Intent(this, MyServicesActivity.class));
                                     break;
+
                                 case "admin":
+                                    int adminId = json.getInt("admin_id");
+                                    editor.putInt("admin_id", adminId);
+                                    editor.putString("role", role);
+                                    editor.apply();
                                     startActivity(new Intent(this, AdminDashboardActivity.class));
                                     break;
                             }
-                            finish(); // optional: close login screen
+
+                            finish();
+                        } else {
+                            // ❌ Login failed — show backend message
+                            String msg = json.optString("message", "Login failed");
+                            Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
                         }
 
                     } catch (JSONException e) {
                         e.printStackTrace();
                         Toast.makeText(this, "Error parsing response: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
-                }
-                ,
+                },
                 error -> {
                     error.printStackTrace();
                     Toast.makeText(this, "Network error: " + error.toString(), Toast.LENGTH_LONG).show();
@@ -113,7 +138,28 @@ public class UserLogin extends AppCompatActivity {
             }
         };
 
+
         RequestQueue queue = Volley.newRequestQueue(this);
         queue.add(request);
     }
+
+    private void createWallet(int userId) {
+        String url = "http://192.168.0.101/Mobile_submodule_backend/PHP/wallet/create_wallet.php";
+
+        StringRequest walletRequest = new StringRequest(Request.Method.POST, url,
+                response -> Log.d("WALLET_RESPONSE", response),
+                error -> Log.e("WALLET_ERROR", "Error creating wallet: " + error.getMessage())
+        ) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> map = new HashMap<>();
+                map.put("user_id", String.valueOf(userId));
+                return map;
+            }
+        };
+
+        RequestQueue queue = Volley.newRequestQueue(this);
+        queue.add(walletRequest);
+    }
+
 }

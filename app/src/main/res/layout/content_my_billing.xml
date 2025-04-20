@@ -321,22 +321,24 @@
             android:layout_marginBottom="24dp"
             android:gravity="center_vertical">
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_weight="1"
+            <!-- Amount to Add -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputAmount"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Total amount"
-                android:textStyle="bold"
-                android:textSize="16sp" />
+                android:hint="Amount to Add (USD)"
+                android:padding="16dp">
 
-            <TextView
-                android:id="@+id/textViewAmountValue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="$0.00"
-                android:textStyle="bold"
-                android:textSize="16sp" />
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editAmount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal" />
+            </com.google.android.material.textfield.TextInputLayout>
+
         </LinearLayout>
+
+
 
         <!-- Buttons -->
         <LinearLayout

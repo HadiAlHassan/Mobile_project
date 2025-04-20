@@ -85,7 +85,7 @@
             android:name=".MyWalletActivity"
             android:exported="false"
             android:parentActivityName=".DisplayServicesActivity"
-            android:theme="@style/Theme.Mobile_Project_HZA2M" /> <!-- My Services -->
+           /> <!-- My Services -->
         <activity
             android:name=".MyServicesActivity"
             android:exported="false"
@@ -112,6 +112,11 @@
             android:exported="false" /> <!-- Tuition -->
         <activity
             android:name=".TuitionServiceProviderActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Mobile_Project_HZA2M" />
+
+        <activity
+            android:name=".MyBillingActivity"
             android:exported="false"
             android:theme="@style/Theme.Mobile_Project_HZA2M" />
         <activity

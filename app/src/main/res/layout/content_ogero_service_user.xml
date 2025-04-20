@@ -1,62 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+    android:padding="20dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/WhiteSmoke">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
 
-<LinearLayout
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginTop="60dp"
-            android:gravity="center_horizontal">
+            android:text="Add New Service"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="24dp"
+            android:textColor="@color/black" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Request Ogero Landline Bill Payment"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:textColor="@color/black"
-                android:layout_marginBottom="16dp" />
+        <!-- Service Name -->
+        <EditText
+            android:id="@+id/editTextServiceName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Service Name"
+            android:inputType="textPersonName" />
 
-            <!-- Ogero Number -->
-            <EditText
-                android:id="@+id/editTextOgeroUserNumber"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Your Ogero Landline Number"
-                android:inputType="phone" />
+        <!-- Category -->
+        <EditText
+            android:id="@+id/editTextCategory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Category"
+            android:inputType="text" />
 
-            <!-- Upload Bill Screenshot -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Upload Ogero Bill Screenshot"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="8dp" />
+        <!-- Description -->
+        <EditText
+            android:id="@+id/editTextDescription"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:hint="Service Description"
+            android:inputType="textMultiLine"
+            android:gravity="top" />
 
-            <!-- Note to Provider -->
-            <EditText
-                android:id="@+id/editTextNote"
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:hint="Note to Provider (optional)"
-                android:inputType="textMultiLine"
-                android:gravity="top" />
+        <!-- Price -->
+        <EditText
+            android:id="@+id/editTextPrice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Price (USD)"
+            android:inputType="numberDecimal" />
 
-            <!-- Submit Button -->
-            <Button
-                android:id="@+id/buttonRequestPayment"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Send Request"
-                android:layout_marginTop="24dp"
-                android:backgroundTint="@color/UseBlue"
-                android:textColor="@android:color/white" />
-        </LinearLayout>
-    </ScrollView>
+        <!-- Upload Image -->
+        <Button
+            android:id="@+id/btnUploadImage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Upload Service Image"
+            android:layout_marginTop="16dp"
+            android:backgroundTint="@color/UseBlue"
+            android:textColor="@android:color/white" />
+
+        <!-- Submit Button -->
+        <Button
+            android:id="@+id/btnSubmitService"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Add Service"
+            android:layout_marginTop="24dp"
+            android:backgroundTint="@color/UseBlue"
+            android:textColor="@android:color/white" />
+    </LinearLayout>
+</ScrollView>

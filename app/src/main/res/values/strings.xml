@@ -85,7 +85,7 @@
     <string name="bank_account_number_for_payment">Bank Account Number for Payment</string>
     <string name="save_service">Save Service</string>
     <string name="enter_amount">Enter amount</string>
-    <string name="add">Add</string>
+    <string name="add">Top Up Wallet</string>
     <string name="service_category">Service Category *</string>
     <string name="sign_up">Sign Up</string>
     <string name="e_g_ab5_j4xb_9">e.g. aB5*j4Xb+9</string>
@@ -130,6 +130,8 @@
                 "5. We may suspend or terminate your account for policy violations or suspicious activity.\n\n"</string>
     <string name="info3">Write here. Press enter after you finish.</string>
     <string name="please_enter_your_credentials">Please enter your credentials.</string>
+    <string name="my_wallet">My Wallet</string>
+    <string name="balance_0_00">Balance: $0.00</string>
 
     <string-array name="months_array">
         <item>01</item>

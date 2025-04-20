@@ -1,0 +1,24 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:padding="12dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView android:id="@+id/txnType"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:text="Type"/>
+
+    <TextView android:id="@+id/txnAmount"
+        android:textSize="15sp"
+        android:text="Amount"/>
+
+    <TextView android:id="@+id/txnDesc"
+        android:textSize="14sp"
+        android:text="Description"/>
+
+    <TextView android:id="@+id/txnDate"
+        android:textSize="12sp"
+        android:textColor="#666"/>
+
+</LinearLayout>
