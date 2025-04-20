@@ -2,33 +2,32 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@drawable/khadamatlogo"
-        android:label="@string/app_name"
-        android:roundIcon="@drawable/khadamatlogo"
+        android:icon="@mipmap/ic_launcher"
+        android:label="Khadamati"
+        android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Base.Theme.Mobile_Project_HZA2M">
+        android:theme="@style/Theme.Mobile_Project_HZA2M">
         <activity
-            android:name=".InsuranceServiceUserActivity"
+            android:name=".UserLogin"
             android:exported="false" />
         <activity
-            android:name=".ContactUsActivity"
-            android:exported="false"
-            android:theme="@style/Base.Theme.Mobile_Project_HZA2M" /> <!-- Core Activities -->
-        <activity
-            android:name=".AddServiceItemActivity"
-            android:exported="false" />
-        <activity
-            android:name=".DisplayServicesActivity"
+            android:name=".Settings"
             android:exported="false"
             android:theme="@style/Theme.Mobile_Project_HZA2M" />
         <activity
             android:name=".HomeActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Mobile_Project_HZA2M" />
+        <activity
+            android:name=".UserOrProvider"
+            android:exported="false" />
+        <activity
+            android:name=".UserDetails"
             android:exported="false" />
         <activity
             android:name=".SplashActivity"
@@ -38,81 +37,11 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity> <!-- User Flow -->
-        <activity
-            android:name=".UserOrProvider"
-            android:exported="false" />
-        <activity
-            android:name=".UserLogin"
-            android:exported="false" />
-        <activity
-            android:name=".UserDetails"
-            android:exported="false" /> <!-- Service Provider Signup -->
-        <activity
-            android:name=".ServiceProviderSignUpActivity"
-            android:exported="false" /> <!-- Admin Activities -->
-        <activity
-            android:name=".AdminAddServiceActivity"
-            android:exported="false"
-            android:theme="@style/Theme.Mobile_Project_HZA2M" />
-        <activity
-            android:name=".AdminDashboardActivity"
-            android:exported="false"
-            android:theme="@style/Theme.Mobile_Project_HZA2M" />
-        <activity
-            android:name=".AdminInsertAdminActivity"
-            android:exported="false"
-            android:theme="@style/Theme.Mobile_Project_HZA2M" />
-        <activity
-            android:name=".AdminViewProviderActivity"
-            android:exported="false"
-            android:theme="@style/Theme.Mobile_Project_HZA2M" />
-        <activity
-            android:name=".AdminViewUserActivity"
-            android:exported="false"
-            android:theme="@style/Theme.Mobile_Project_HZA2M" /> <!-- My Profile / Wallet -->
-        <activity
-            android:name=".MyProfileActivity"
-            android:exported="false"
-            android:parentActivityName=".DisplayServicesActivity"
-            android:theme="@style/Theme.Mobile_Project_HZA2M" />
-        <activity
-            android:name=".MyWalletActivity"
-            android:exported="false"
-            android:parentActivityName=".DisplayServicesActivity"
-            android:theme="@style/Theme.Mobile_Project_HZA2M" /> <!-- My Services -->
-        <activity
-            android:name=".MyServicesActivity"
-            android:exported="false"
-            android:theme="@style/Theme.Mobile_Project_HZA2M" /> <!-- Ogero -->
-        <activity
-            android:name=".OgeroServiceProviderActivity"
-            android:exported="false"
-            android:theme="@style/Theme.Mobile_Project_HZA2M" />
-        <activity
-            android:name=".OgeroServiceUserActivity"
-            android:exported="false"
-            android:theme="@style/Theme.Mobile_Project_HZA2M" /> <!-- Streaming -->
-        <activity
-            android:name=".StreamingServiceProviderActivity"
-            android:exported="false" />
-        <activity
-            android:name=".StreamingServiceUserActivity"
-            android:exported="false" /> <!-- Telecom -->
-        <activity
-            android:name=".TelecomServiceProviderActivity"
-            android:exported="false" />
-        <activity
-            android:name=".TelecomServiceUserActivity"
-            android:exported="false" /> <!-- Tuition -->
-        <activity
-            android:name=".TuitionServiceProviderActivity"
-            android:exported="false"
-            android:theme="@style/Theme.Mobile_Project_HZA2M" />
-        <activity
-            android:name=".TuitionServiceUserActivity"
-            android:exported="false"
-            android:theme="@style/Theme.Mobile_Project_HZA2M" />
+        </activity>
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>
