@@ -32,7 +32,126 @@
 
     <string name="next">Next</string>
     <string name="previous">Previous</string>
+    <string name="action_profile">my_profile</string>
+    <string name="action_mywallet">mywallet</string>
+    <string name="Activites">Activities</string>
+    <string name="DisplayServicesTitle">Available Services</string>
+    <string name="hintName">Full Name</string>
+    <string name="hintMail">Email</string>
+    <string name="hintPhone">Phone Number</string>
+    <string name="hintAge">Age</string>
+    <string name="hintGender">Gender</string>
+    <string name="TranscationHistory">Transaction History</string>
+    <string name="MySubscriptions"> My Subscriptions</string>
+    <string name="btnsave"> Save</string>
+    <string name="btnedit"> Edit</string>
+    <string name="edAdminHints"> e.g. Water Bills, Tutoring</string>
+    <string name="tvadminmmanageservices"> Manage Service Category</string>
+    <string name="tv_subheader">Existing Categories</string>
+    <string name="txtbtnaddservice">Add Category</string>
+    <string name="name">Name</string>
+    <string name="txtemailplaceholder">email@example.com</string>
+    <string name="service_title">Service Title</string>
+    <string name="tvservicepriceplaceholdrr">$50</string>
+    <string name="txtdeleteservice">Delete</string>
+    <string name="delete">Delete</string>
+    <string name="category_name">Category Name</string>
+    <string name="no_services_found">No services found.</string>
+    <string name="search_services">Search services...</string>
+    <string name="my_services">My Services</string>
+    <string name="tvregistered">Registered Users</string>
+    <string name="tvregisteredprovider">Registered Providers</string>
+    <string name="tvaddnewadmin">Add New Admin</string>
+    <string name="edfull_name">Full Name</string>
+    <string name="edemail">Email</string>
+    <string name="edpassword">Password</string>
+    <string name="btnadd_admin">Add Admin</string>
+    <string name="tvadmin_dashboard">Admin Dashboard</string>
+    <string name="btnadd_new_service_category">Add New Service Category</string>
+    <string name="btnview_delete_users">View/Delete Users</string>
+    <string name="btnview_delete_service_providers">View /Delete Service Providers</string>
+    <string name="btninsert_admin">Insert Admin</string>
+    <string name="continue_as">Continue As...</string>
+    <string name="i_m_a_user">I\'m a User</string>
+    <string name="i_m_a_service_provider">I\'m a Service Provider</string>
+    <string name="bank_reference_number">Bank Reference Number</string>
+    <string name="upload_payment_screenshot">Upload Payment Screenshot</string>
+    <string name="university_name">University Name</string>
+    <string name="pay_tuition_fee">Pay Tuition Fee</string>
+    <string name="add_tuition_fee_service">Add Tuition Fee Service</string>
+    <string name="university_logo">University Logo</string>
+    <string name="university_name2">University Name</string>
+    <string name="details_about_the_university_location_type_etc">Details about the University (location, type, etc.)</string>
+    <string name="bank_account_number_for_payment">Bank Account Number for Payment</string>
+    <string name="save_service">Save Service</string>
+    <string name="enter_amount">Enter amount</string>
+    <string name="add">Add</string>
+    <string name="service_category">Service Category *</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="e_g_ab5_j4xb_9">e.g. aB5*j4Xb+9</string>
+    <string name="password">Password *</string>
+    <string name="e_g_randomaddress_gmail_com">e.g. randomaddress@gmail.com</string>
+    <string name="email">Email *</string>
+    <string name="e_g_pierre_maalouf">e.g. Pierre Maalouf</string>
+    <string name="service_icon">Service Icon *</string>
+    <string name="service_image">Service Image</string>
+    <string name="upload_image">Upload Image</string>
+    <string name="service_name">Service Name *</string>
+    <string name="e_g_pay_wi_fi_bill">e.g. Pay Wi-Fi Bill</string>
+    <string name="price">Price *</string>
+    <string name="e_g_20">$ e.g. 20</string>
+    <string name="add_service">Add Service</string>
+    <string name="ogero_service">(Ogero Service)</string>
 
+    <string name="premium_plan">Premium Plan</string>
+    <string name="_5_month">$5 / month</string>
+    <string name="up_to_4_users">Up to 4 users</string>
+    <string name="subscribe">Subscribe</string>
+    <string name="security">Security</string>
+    <string name="info">Your security is our top priority. At Khadamati, we use best practices to keep
+        your information safe and your transactions protected. </string>
+    <string name="info1">"How we protect you:\n\n"
+                "1. Data Encryption: All your data is encrypted using AES-256 encryption.\n\n"
+                "2. Secure Payments: Every transaction id processed through certain secure gateways.\n\n"
+                "3. Two-Factor Authentication (2DFA): Add an extra layer of protection to your account.\n\n"
+                "4. Real-time Transaction Monitoring: We monitor transactions to detect and prevent suspicious activity.\n\n"</string>
+    <string name="inf"> "Your Privacy Matters\n\n</string>
+    <string name="info2">
+\n\n 1. We never share your personal information with third parties without your consent.\n\n
+2. All payment details are securely stored and tokenized.\n\n
+3. You control what data you share and can manage permissions anytime.\n\n"</string>
+    <string name="rate">How much would you rate Khadamati?</string>
+    <string name="rate1">Your honest feedback matters a lot!  </string>
+    <string name="terms">"Please review and accept our Terms and Conditions before signing up:\n\n" +
+                "1. You must be at least 18 years old and legally eligible to use this app.\n\n" +
+                "2. You are responsible for your account, including all transactions and keeping your credentials secure.\n\n" +
+                "3. Illegal use is strictly prohibited — including fraud, money laundering, or unauthorized transfers.\n\n" +
+                "4. Fees may apply for specific transactions, transfers, or account services. These will be disclosed when applicable.\n\n" +
+                "5. We may suspend or terminate your account for policy violations or suspicious activity.\n\n"</string>
+    <string name="info3">Write here. Press enter after you finish.</string>
+
+    <string-array name="months_array">
+        <item>01</item>
+        <item>02</item>
+        <item>03</item>
+        <item>04</item>
+        <item>05</item>
+        <item>06</item>
+        <item>07</item>
+        <item>08</item>
+        <item>09</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+    </string-array>
+
+    <string-array name="years_array">
+        <item>2024</item>
+        <item>2025</item>
+        <item>2026</item>
+        <item>2027</item>
+        <item>2028</item>
+    </string-array>
 
 
 </resources>
