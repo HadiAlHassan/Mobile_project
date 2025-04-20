@@ -29,10 +29,30 @@
     <string name="hint">Enter here</string>
     <string name="welcome">Welcome!</string>
     <string name="userr">Username</string>
-
+    <string name="security">Security</string>
+    <string name="info">Your security is our top priority. At Khadamati, we use best practices to keep
+        your information safe and your transactions protected. </string>
+    <string name="info1">"How we protect you:\n\n"
+                "1. Data Encryption: All your data is encrypted using AES-256 encryption.\n\n"
+                "2. Secure Payments: Every transaction id processed through certain secure gateways.\n\n"
+                "3. Two-Factor Authentication (2DFA): Add an extra layer of protection to your account.\n\n"
+                "4. Real-time Transaction Monitoring: We monitor transactions to detect and prevent suspicious activity.\n\n"</string>
+    <string name="inf"> "Your Privacy Matters\n\n</string>
+    <string name="info2">
+\n\n 1. We never share your personal information with third parties without your consent.\n\n
+2. All payment details are securely stored and tokenized.\n\n
+3. You control what data you share and can manage permissions anytime.\n\n"</string>
+    <string name="rate">How much would you rate Khadamati?</string>
+    <string name="rate1">Your honest feedback matters a lot!  </string>
+    <string name="terms">"Please review and accept our Terms and Conditions before signing up:\n\n" +
+                "1. You must be at least 18 years old and legally eligible to use this app.\n\n" +
+                "2. You are responsible for your account, including all transactions and keeping your credentials secure.\n\n" +
+                "3. Illegal use is strictly prohibited — including fraud, money laundering, or unauthorized transfers.\n\n" +
+                "4. Fees may apply for specific transactions, transfers, or account services. These will be disclosed when applicable.\n\n" +
+                "5. We may suspend or terminate your account for policy violations or suspicious activity.\n\n"</string>
+    <string name="info3">Write here. Press enter after you finish.</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
-
 
 
 </resources>

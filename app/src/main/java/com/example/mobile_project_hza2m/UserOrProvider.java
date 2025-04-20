@@ -46,10 +46,10 @@ public class UserOrProvider extends AppCompatActivity {
                 AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
                 builder.setTitle("Personal Inquires");
 
-                // Set your message here
+
                 builder.setMessage("Shall you have any concern or question, feel free to contact us on our hotline 1297 ");
 
-                // Add OK button
+
                 builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -57,7 +57,7 @@ public class UserOrProvider extends AppCompatActivity {
                     }
                 });
 
-                // Show the dialog
+
                 AlertDialog dialog = builder.create();
                 dialog.show();
             }
