@@ -1,51 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/main"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/scrollView"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
     android:background="@color/WhiteSmoke"
-    android:stretchColumns="1"
-    android:padding="16dp"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".UserDetails"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    <!-- Common Input Rows -->
-    <TableRow><TextView style="@style/FormLabel" android:text="@string/fname"/><EditText android:id="@+id/fname" style="@style/FormInput" android:hint="@string/hint"/></TableRow>
-    <TableRow><TextView style="@style/FormLabel" android:text="@string/mname"/><EditText android:id="@+id/mname" style="@style/FormInput" android:hint="@string/hint"/></TableRow>
-    <TableRow><TextView style="@style/FormLabel" android:text="@string/lname"/><EditText android:id="@+id/lname" style="@style/FormInput" android:hint="@string/hint"/></TableRow>
-    <TableRow><TextView style="@style/FormLabel" android:text="@string/phone"/><EditText android:id="@+id/phone" style="@style/FormInput" android:inputType="phone" android:hint="@string/hint"/></TableRow>
-    <TableRow><TextView style="@style/FormLabel" android:text="@string/address"/><EditText android:id="@+id/address" style="@style/FormInput" android:inputType="textPostalAddress" android:hint="@string/hint"/></TableRow>
-
-    <!-- Age Selection -->
+    <TableLayout
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:stretchColumns="1"
+        android:padding="16dp">
+    <!-- Name Fields -->
     <TableRow>
-        <TextView style="@style/FormLabel" android:text="@string/age"/>
-        <RadioGroup
-            android:orientation="vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp">
-            <RadioButton android:id="@+id/rb1" android:text="@string/below" android:textColor="@color/UseBlue" android:textStyle="bold" android:layout_height="wrap_content" android:layout_width="wrap_content"/>
-            <RadioButton android:id="@+id/rb2" android:text="@string/above" android:textColor="@color/UseBlue" android:textStyle="bold" android:layout_height="wrap_content" android:layout_width="wrap_content"/>
-        </RadioGroup>
+        <TextView style="@style/FormLabel" android:text="@string/fname"/>
+        <EditText android:id="@+id/fname" style="@style/FormInput" android:hint="Enter first name"/>
+    </TableRow>
+    <TableRow>
+        <TextView style="@style/FormLabel" android:text="@string/mname"/>
+        <EditText android:id="@+id/mname" style="@style/FormInput" android:hint="Enter middle name"/>
+    </TableRow>
+    <TableRow>
+        <TextView style="@style/FormLabel" android:text="@string/lname"/>
+        <EditText android:id="@+id/lname" style="@style/FormInput" android:hint="Enter last name"/>
     </TableRow>
 
-    <!-- Account Info -->
-    <TableRow><TextView style="@style/FormLabel" android:text="@string/username"/><EditText android:id="@+id/username" style="@style/FormInput" android:hint="@string/hint"/></TableRow>
-    <TableRow><TextView style="@style/FormLabel" android:text="@string/pass"/><EditText android:id="@+id/pass" style="@style/FormInput" android:inputType="textPassword" android:hint="@string/hint"/></TableRow>
-    <TableRow><TextView style="@style/FormLabel" android:text="@string/pass1"/><EditText android:id="@+id/pass1" style="@style/FormInput" android:inputType="textPassword" android:hint="@string/hint"/></TableRow>
+    <!-- Contact Fields -->
+    <TableRow>
+        <TextView style="@style/FormLabel" android:text="@string/phone"/>
+        <EditText android:id="@+id/phone" style="@style/FormInput"
+            android:inputType="phone"
+            android:hint="Enter phone number"/>
+    </TableRow>
+    <TableRow>
+        <TextView style="@style/FormLabel" android:text="@string/address"/>
+        <EditText android:id="@+id/address" style="@style/FormInput"
+            android:inputType="textPostalAddress"
+            android:hint="Enter address"/>
+    </TableRow>
 
-    <!-- Image Upload -->
-    <TableRow><TextView style="@style/FormLabel" android:text="@string/upload"/>
-
-        <ImageView
-            android:id="@+id/imageView"
+    <!-- Age Group -->
+    <TableRow>
+        <TextView style="@style/FormLabel" android:text="@string/age"/>
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/img" /></TableRow>
+            android:orientation="vertical">
+            <RadioButton
+                android:id="@+id/rb1"
+                android:text="@string/below"
+                android:layout_height="wrap_content" android:layout_width="wrap_content"
+                android:textColor="@color/UseBlue"
+                android:textStyle="bold" />
+            <RadioButton
+                android:id="@+id/rb2"
+                android:text="@string/above"
+                android:textColor="@color/UseBlue"
+                android:textStyle="bold"  android:layout_height="wrap_content" android:layout_width="wrap_content"/>
+        </LinearLayout>
+    </TableRow>
+
+    <!-- Account Credentials -->
+    <TableRow>
+        <TextView style="@style/FormLabel" android:text="@string/username"/>
+        <EditText android:id="@+id/username" style="@style/FormInput" android:hint="Choose a username"/>
+    </TableRow>
+    <TableRow>
+        <TextView style="@style/FormLabel" android:text="@string/pass"/>
+        <EditText android:id="@+id/pass" style="@style/FormInput"
+            android:inputType="textPassword"
+            android:hint="Enter password"/>
+    </TableRow>
+    <TableRow>
+        <TextView style="@style/FormLabel" android:text="@string/pass1"/>
+        <EditText android:id="@+id/pass1" style="@style/FormInput"
+            android:inputType="textPassword"
+            android:hint="Confirm password"/>
+    </TableRow>
+
+    <!-- Profile Image -->
+    <TableRow>
+        <TextView style="@style/FormLabel" android:text="@string/upload"/>
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:background="@drawable/img"
+            android:scaleType="centerCrop"
+            android:contentDescription="Profile Image"/>
+    </TableRow>
     <TableRow>
         <Button
-            android:id="@+id/button"
+            android:id="@+id/btnUploadIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/upload2"
@@ -54,10 +105,10 @@
             android:layout_marginTop="8dp"/>
     </TableRow>
 
-    <!-- Submit Button -->
+    <!-- Submit -->
     <TableRow>
         <Button
-            android:id="@+id/button1"
+            android:id="@+id/btnsignup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/btnSignUp"
@@ -67,4 +118,6 @@
             android:backgroundTint="@color/UseBlue"
             android:layout_marginTop="16dp"/>
     </TableRow>
+
 </TableLayout>
+    </ScrollView>

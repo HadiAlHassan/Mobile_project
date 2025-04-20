@@ -23,7 +23,6 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.navigation.ui.AppBarConfiguration;
 
 
-
 import com.google.android.material.snackbar.Snackbar;
 
 import org.jetbrains.annotations.Nullable;
@@ -35,10 +34,11 @@ public class UserDetails extends AppCompatActivity {
     private static final int PICK_IMAGE_REQUEST = 100;
     private ActivityResultLauncher<Intent> galleryLauncher;
     private ImageView imageView;
-    private EditText fname, mname,lname, phone, address, username, pass, pass1;
+    private EditText fname, mname, lname, phone, address, username, pass, pass1;
     private RadioButton rb1, rb2;
-    private Button button;
-    Button button1;
+
+    Button btnSignUp, btnUploadIcon;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,10 +47,11 @@ public class UserDetails extends AppCompatActivity {
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;});
+            return insets;
+        });
         imageView = findViewById(R.id.imageView);
-        Button button = findViewById(R.id.button);
-        button1 = findViewById(R.id.button1);
+        btnUploadIcon = findViewById(R.id.btnUploadIcon);
+        btnSignUp = findViewById(R.id.btnsignup);
 
         fname = findViewById(R.id.fname);
         mname = findViewById(R.id.mname);
@@ -62,14 +63,16 @@ public class UserDetails extends AppCompatActivity {
         pass1 = findViewById(R.id.pass1);
         rb1 = findViewById(R.id.rb1);
         rb2 = findViewById(R.id.rb2);
-        button.setOnClickListener(v -> openGallery());
-        button1.setOnClickListener(v -> validateInputs());
+        //button.setOnClickListener(v -> openGallery());
+        //button1.setOnClickListener(v -> validateInputs());
     }
+
     private void openGallery() {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         intent.setType("image/*");
         startActivityForResult(intent, PICK_IMAGE_REQUEST);
     }
+
     private void validateInputs() {
         String nameInput = fname.getText().toString().trim();
         String mnamee = mname.getText().toString().trim();
@@ -113,7 +116,7 @@ public class UserDetails extends AppCompatActivity {
             return;
         }
         String emailPattern = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
-        if(!addressInput.matches(emailPattern)){
+        if (!addressInput.matches(emailPattern)) {
             address.setError("Please align by the email pattern format");
             return;
         }
@@ -129,8 +132,8 @@ public class UserDetails extends AppCompatActivity {
             showToast("Please enter your password.");
             return;
         }
-        String passpattern="^(?=.*[A-Z])(?=.*[a-zA-Z0-9]).{6,}$";
-        if(!passwordInput.matches(passpattern)){
+        String passpattern = "^(?=.*[A-Z])(?=.*[a-zA-Z0-9]).{6,}$";
+        if (!passwordInput.matches(passpattern)) {
             pass.setError("Please note that your chosen password should be at least 6 alphanumerics long with one uppercase letter ");
             return;
         }
@@ -166,7 +169,7 @@ public class UserDetails extends AppCompatActivity {
                 "2. You are responsible for your account, including all transactions and keeping your credentials secure.\n\n" +
                 "3. Illegal use is strictly prohibited — including fraud, money laundering, or unauthorized transfers.\n\n" +
                 "4. Fees may apply for specific transactions, transfers, or account services. These will be disclosed when applicable.\n\n" +
-                "5. We may suspend or terminate your account for policy violations or suspicious activity.\n\n" );
+                "5. We may suspend or terminate your account for policy violations or suspicious activity.\n\n");
 
         builder.setPositiveButton("Accept", new DialogInterface.OnClickListener() {
             @Override
@@ -192,6 +195,7 @@ public class UserDetails extends AppCompatActivity {
     private void showToast(String message) {
         Toast.makeText(UserDetails.this, message, Toast.LENGTH_SHORT).show();
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
