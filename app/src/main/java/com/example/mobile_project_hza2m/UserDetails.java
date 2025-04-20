@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -46,7 +47,7 @@ public class UserDetails extends AppCompatActivity {
     private RadioButton rb1, rb2;
     private Button btnSignUp, btnUploadIcon;
 
-    private final String Base_Url = "http://192.168.0.101/Mobile_submodule_backend/PHP/auth/register_user.php";
+    private final String Base_Url = "http://192.168.0.101/Mobile_submodule_backend/PHP/auth/user_signup.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,7 +139,7 @@ public class UserDetails extends AppCompatActivity {
         String profileImageEncoded = "";
         if (selectedBitmap != null) {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            selectedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            selectedBitmap.compress(Bitmap.CompressFormat.JPEG, 50, baos);
             byte[] imageBytes = baos.toByteArray();
             profileImageEncoded = Base64.encodeToString(imageBytes, Base64.DEFAULT);
         }
@@ -148,6 +149,7 @@ public class UserDetails extends AppCompatActivity {
         String finalProfileImageEncoded = profileImageEncoded;
         StringRequest request = new StringRequest(Request.Method.POST, Base_Url,
                 response -> {
+                    Log.d("RAW_RESPONSE", response);  // <-- Add this line
                     try {
                         JSONObject json = new JSONObject(response);
                         if (json.getBoolean("success")) {
@@ -158,9 +160,10 @@ public class UserDetails extends AppCompatActivity {
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
-                        Toast.makeText(this, "Error parsing response", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Error parsing response: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
-                },
+                }
+                ,
                 error -> Toast.makeText(this, "Network Error: " + error.getMessage(), Toast.LENGTH_LONG).show()
         ) {
             @Override
