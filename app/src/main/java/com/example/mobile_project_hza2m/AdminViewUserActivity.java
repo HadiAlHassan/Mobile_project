@@ -46,7 +46,7 @@ public class AdminViewUserActivity extends AppCompatActivity {
     }
 
     private void fetchUsers() {
-        String url = "http://192.168.0.74/Mobile_submodule_backend/PHP/admin/admin_get_all_users.php";
+        String url = Config.BASE_URL+"admin/admin_get_all_users.php";
 
         userList.clear();
 

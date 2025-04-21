@@ -71,7 +71,8 @@ public class AdminCategoryAdapter extends RecyclerView.Adapter<AdminCategoryAdap
     }
 
     private void deleteCategory(int categoryId) {
-        String url = "http:// 192.168.0.74/Mobile_submodule_backend/PHP/admin/admin_delete_category.php";
+
+        String url = Config.BASE_URL+"admin/admin_delete_category.php";
 
         StringRequest request = new StringRequest(Request.Method.POST, url,
                 response -> {

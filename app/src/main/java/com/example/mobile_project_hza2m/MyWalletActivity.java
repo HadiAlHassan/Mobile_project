@@ -61,7 +61,7 @@ public class MyWalletActivity extends AppCompatActivity {
     }
 
     private void fetchWalletBalance(int userId) {
-        String url = "http://192.168.0.74/Mobile_submodule_backend/PHP/wallet/get_wallet_balance.php?user_id=" + userId;
+        String url = Config.BASE_URL+"wallet/get_wallet_balance.php?user_id=" + userId;
         StringRequest request = new StringRequest(Request.Method.GET, url,
                 response -> {
                     try {
@@ -86,7 +86,7 @@ public class MyWalletActivity extends AppCompatActivity {
     }
 
     private void fetchTransactions(int userId) {
-        String url = "http://192.168.0.101/Mobile_submodule_backend/PHP/wallet/get_wallet_transactions.php?user_id=" + userId;
+        String url = Config.BASE_URL+"wallet/get_wallet_transactions.php?user_id=" + userId;
         StringRequest request = new StringRequest(Request.Method.GET, url,
                 response -> {
                     try {
@@ -121,7 +121,7 @@ public class MyWalletActivity extends AppCompatActivity {
     }
 
     private void fetchSubscriptions(int userId) {
-        String url = "http://192.168.0.101/Mobile_submodule_backend/PHP/services/get_user_subscriptions.php?user_id=" + userId;
+        String url = Config.BASE_URL+"services/get_user_subscriptions.php?user_id=" + userId;
         StringRequest request = new StringRequest(Request.Method.GET, url,
                 response -> {
                     try {

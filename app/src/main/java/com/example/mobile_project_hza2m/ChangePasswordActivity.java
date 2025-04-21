@@ -16,7 +16,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
 
     EditText oldPassword, newPassword, confirmPassword;
     Button changePasswordBtn;
-    private static final String CHANGE_URL = "http://192.168.0.74/Mobile_submodule_backend/PHP/auth/change_password.php";
+    private static final String CHANGE_URL = "http://192.168.0.104/Mobile_submodule_backend/PHP/auth/change_password.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

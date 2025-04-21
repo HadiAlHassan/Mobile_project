@@ -46,7 +46,7 @@ public class AdminViewProviderActivity extends AppCompatActivity {
     }
 
     private void fetchProviders() {
-        String url = "http:// 192.168.0.74/Mobile_submodule_backend/PHP/admin/admin_get_all_providers.php";
+        String url = Config.BASE_URL+"admin/admin_get_all_providers.php";
 
         providerList.clear();
 

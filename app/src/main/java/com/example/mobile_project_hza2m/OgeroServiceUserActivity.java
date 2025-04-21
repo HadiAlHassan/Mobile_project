@@ -26,7 +26,7 @@ public class OgeroServiceUserActivity extends AppCompatActivity {
     EditText editServiceId;
     Button btnSubscribe;
 
-    String SUBSCRIBE_URL = "http://192.168.0.101/Mobile_submodule_backend/PHP/services/subscribe_service.php";
+    String SUBSCRIBE_URL = Config.BASE_URL+"services/subscribe_service.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

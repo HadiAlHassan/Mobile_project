@@ -53,7 +53,7 @@ public class ContactUsActivity extends AppCompatActivity {
     }
 
     private void sendContactMessage(String name, String email, String message, View view) {
-        String url = "http://192.168.0.104/Mobile_submodule_backend/PHP/submit_contact_message.php";
+        String url = Config.BASE_URL+"submit_contact_message.php";
 
         RequestQueue queue = Volley.newRequestQueue(this);
 

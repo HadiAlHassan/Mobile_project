@@ -29,8 +29,8 @@ public class MyProfileActivity extends AppCompatActivity {
     private Button saveBtn, logoutBtn;
     private Button editBtn;
 
-    private static final String LOAD_URL = "http://192.168.0.74/Mobile_submodule_backend/PHP/profile/load_profile.php";
-    private static final String SAVE_URL = "http://192.168.0.74/Mobile_submodule_backend/PHP/profile/update_profile.php";
+    private static final String LOAD_URL = Config.BASE_URL+"profile/load_profile.php";
+    private static final String SAVE_URL = Config.BASE_URL+"profile/update_profile.php";
 
     private int userId;  // Assume this comes from login
 
@@ -174,7 +174,7 @@ public class MyProfileActivity extends AppCompatActivity {
     }
 
     private void deleteAccount() {
-        String url = "http://192.168.0.74/Mobile_submodule_backend/PHP/profile/delete_account.php";
+        String url = Config.BASE_URL+"profile/delete_account.php";
         ProgressDialog dialog = ProgressDialog.show(this, "", "Deleting...", true);
 
         StringRequest request = new StringRequest(Request.Method.POST, url,

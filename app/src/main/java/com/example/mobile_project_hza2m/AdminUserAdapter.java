@@ -26,7 +26,7 @@ public class AdminUserAdapter extends RecyclerView.Adapter<AdminUserAdapter.User
 
     private final Context context;
     private final List<UserAdmin> userList;
-    private final String deleteUrl = "http://192.168.0.104/Mobile_submodule_backend/PHP/admin/admin_delete_user.php";
+    private final String deleteUrl = Config.BASE_URL+"admin/admin_delete_user.php";
 
     public AdminUserAdapter(Context context, List<UserAdmin> userList) {
         this.context = context;

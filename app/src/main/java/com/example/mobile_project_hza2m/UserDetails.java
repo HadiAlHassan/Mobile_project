@@ -47,7 +47,7 @@ public class UserDetails extends AppCompatActivity {
     private RadioButton rb1, rb2;
     private Button btnSignUp, btnUploadIcon;
 
-    private final String Base_Url = "http://192.168.0.74/Mobile_submodule_backend/PHP/auth/user_signup.php";
+    private final String Base_Url = Config.BASE_URL+"auth/user_signup.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

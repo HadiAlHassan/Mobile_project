@@ -53,7 +53,7 @@ public class AdminAddServiceActivity extends AppCompatActivity {
     }
 
     private void fetchCategories() {
-        String url = "http://192.168.0.104/Mobile_submodule_backend/PHP/admin/admin_get_all_categories.php";
+        String url = Config.BASE_URL+"admin/admin_get_all_categories.php";
 
         categoryList.clear();
 
@@ -101,7 +101,7 @@ public class AdminAddServiceActivity extends AppCompatActivity {
     }
 
     private void addCategoryToServer(String categoryName) {
-        String url = "http://192.168.0.104/Mobile_submodule_backend/PHP/admin/admin_add_category.php";
+        String url = Config.BASE_URL+"admin/admin_add_category.php";
 
         StringRequest request = new StringRequest(Request.Method.POST, url,
                 response -> {

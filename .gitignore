@@ -75,3 +75,5 @@ yarn.lock
 /.github/
 .fastlane/
 .ci/
+
+app/src/main/java/com/example/mobile_project_hza2m/Config.java

@@ -70,7 +70,7 @@ public class ServiceProviderSignUpActivity extends AppCompatActivity {
         progressDialog.setMessage("Loading categories...");
         progressDialog.show();
 
-        String url = "http://192.168.0.101/Mobile_submodule_backend/PHP/auth/get_categories.php";
+        String url = Config.BASE_URL+"auth/get_categories.php";
 
         StringRequest request = new StringRequest(Request.Method.GET, url,
                 response -> {
@@ -108,7 +108,7 @@ public class ServiceProviderSignUpActivity extends AppCompatActivity {
         progressDialog.setMessage("Registering...");
         progressDialog.show();
 
-        String url = "http://192.168.0.101/Mobile_submodule_backend/PHP/auth/provider_signup.php";
+        String url = Config.BASE_URL+"auth/provider_signup.php";
         StringRequest request = new StringRequest(Request.Method.POST, url,
                 response -> {
                     progressDialog.dismiss();

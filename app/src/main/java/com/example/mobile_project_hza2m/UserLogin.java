@@ -32,8 +32,8 @@ public class UserLogin extends AppCompatActivity {
 
     EditText edUser, edPass;
     Button btnLogin, btnLogout;
-    private final String LOGIN_URL = "http://192.168.0.74/Mobile_submodule_backend/PHP/auth/login.php";
-    private static final String LOGOUT_URL = "http://192.168.0.74/Mobile_submodule_backend/PHP/auth/logout.php";
+    private final String LOGIN_URL = Config.BASE_URL+"auth/login.php";
+    private static final String LOGOUT_URL = Config.BASE_URL+"auth/logout.php";
 
     private SharedPreferences prefs;
 
@@ -202,7 +202,7 @@ public class UserLogin extends AppCompatActivity {
     }
 
     private void createWallet(int userId) {
-        String url = "http://192.168.0.74/Mobile_submodule_backend/PHP/wallet/create_wallet.php";
+        String url = Config.BASE_URL+"wallet/create_wallet.php";
 
         StringRequest walletRequest = new StringRequest(Request.Method.POST, url,
                 response -> Log.d("WALLET_RESPONSE", response),
