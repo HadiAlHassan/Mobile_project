@@ -33,6 +33,9 @@ public class UserLogin extends AppCompatActivity {
     EditText edUser, edPass;
     Button btnLogin, btnLogout;
     private final String LOGIN_URL = "http://192.168.0.74/Mobile_submodule_backend/PHP/auth/login.php";
+    private static final String LOGOUT_URL = "http://192.168.0.74/Mobile_submodule_backend/PHP/auth/logout.php";
+
+    private SharedPreferences prefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,9 +54,35 @@ public class UserLogin extends AppCompatActivity {
         btnLogin = findViewById(R.id.btn1Login);
         btnLogout = findViewById(R.id.btnLogout);
 
+        prefs = getSharedPreferences("AppPrefs", MODE_PRIVATE);
+
+        String savedEmail = prefs.getString("saved_email", null);
+        String savedPass = prefs.getString("saved_password", null);
+        String role = prefs.getString("role", null);
+
+        // ✅ If logged in, redirect based on role
+        if (savedEmail != null && savedPass != null && role != null) {
+            switch (role) {
+                case "user":
+                    startActivity(new Intent(this, MyProfileActivity.class));
+                    break;
+                case "provider":
+                    startActivity(new Intent(this, MyServicesActivity.class));
+                    break;
+                case "admin":
+                    startActivity(new Intent(this, AdminDashboardActivity.class));
+                    break;
+            }
+            finish(); // Prevent going back to login
+            return;
+        }
+
+        // Else normal login flow
         btnLogin.setOnClickListener(v -> loginUser());
         btnLogout.setOnClickListener(v -> logoutUser());
+        btnLogout.setEnabled(false);  // Only enabled if session exists
     }
+
 
     private void loginUser() {
         String email = edUser.getText().toString().trim();
@@ -73,8 +102,10 @@ public class UserLogin extends AppCompatActivity {
                             String role = json.getString("role");
                             Toast.makeText(this, "Login successful as " + role, Toast.LENGTH_SHORT).show();
 
-                            SharedPreferences prefs = getSharedPreferences("AppPrefs", MODE_PRIVATE);
                             SharedPreferences.Editor editor = prefs.edit();
+                            editor.putString("saved_email", email);
+                            editor.putString("saved_password", password);
+                            editor.putString("role", role);
 
                             switch (role) {
                                 case "user":
@@ -82,9 +113,13 @@ public class UserLogin extends AppCompatActivity {
                                     editor.putInt("user_id", userId);
                                     editor.putString("role", role);
                                     editor.apply();
+
+                                    // Only users get wallet
                                     createWallet(userId);
-                                    startActivity(new Intent(this, DisplayServicesActivity.class));
+
+                                    startActivity(new Intent(this, MyProfileActivity.class));
                                     break;
+
                                 case "provider":
                                     int providerId = json.getInt("provider_id");
                                     editor.putInt("provider_id", providerId);
@@ -92,6 +127,7 @@ public class UserLogin extends AppCompatActivity {
                                     editor.apply();
                                     startActivity(new Intent(this, MyServicesActivity.class));
                                     break;
+
                                 case "admin":
                                     int adminId = json.getInt("admin_id");
                                     editor.putInt("admin_id", adminId);
@@ -100,7 +136,6 @@ public class UserLogin extends AppCompatActivity {
                                     startActivity(new Intent(this, AdminDashboardActivity.class));
                                     break;
                             }
-
                             finish();
 
                         } else {
@@ -127,8 +162,7 @@ public class UserLogin extends AppCompatActivity {
             }
         };
 
-        RequestQueue queue = Volley.newRequestQueue(this);
-        queue.add(request);
+        Volley.newRequestQueue(this).add(request);
     }
 
     private void logoutUser() {
@@ -136,11 +170,32 @@ public class UserLogin extends AppCompatActivity {
                 .setTitle("Logout?")
                 .setMessage("Are you sure you want to log out?")
                 .setPositiveButton("Yes", (dialog, which) -> {
-                    SharedPreferences prefs = getSharedPreferences("AppPrefs", MODE_PRIVATE);
-                    prefs.edit().clear().apply();
-                    Toast.makeText(this, "Logged out successfully", Toast.LENGTH_SHORT).show();
-                    edUser.setText("");
-                    edPass.setText("");
+                    StringRequest request = new StringRequest(Request.Method.POST, LOGOUT_URL,
+                            response -> {
+                                SharedPreferences.Editor editor = prefs.edit();
+                                editor.remove("saved_email");
+                                editor.remove("saved_password");
+                                editor.remove("user_id");
+                                editor.remove("provider_id");
+                                editor.remove("admin_id");
+                                editor.remove("role");
+                                editor.apply();
+
+                                edUser.setText("");
+                                edPass.setText("");
+                                edUser.setEnabled(true);
+                                edPass.setEnabled(true);
+                                btnLogin.setEnabled(true);
+                                btnLogout.setEnabled(false);
+
+                                Toast.makeText(this, "Logged out successfully", Toast.LENGTH_SHORT).show();
+                            },
+                            error -> {
+                                error.printStackTrace();
+                                Toast.makeText(this, "Logout failed (server unreachable)", Toast.LENGTH_LONG).show();
+                            }
+                    );
+                    Volley.newRequestQueue(this).add(request);
                 })
                 .setNegativeButton("Cancel", null)
                 .show();
@@ -161,7 +216,6 @@ public class UserLogin extends AppCompatActivity {
             }
         };
 
-        RequestQueue queue = Volley.newRequestQueue(this);
-        queue.add(walletRequest);
+        Volley.newRequestQueue(this).add(walletRequest);
     }
 }

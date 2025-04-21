@@ -10,18 +10,18 @@ import android.view.MenuItem;
 
 import androidx.navigation.ui.AppBarConfiguration;
 
-import com.example.mobile_project_hza2m.databinding.ActivityPrivacy1Binding;
+import com.example.mobile_project_hza2m.databinding.ActivityPrivacyBinding;
 
 public class Privacy extends AppCompatActivity {
 
     private AppBarConfiguration appBarConfiguration;
-    private ActivityPrivacy1Binding binding;
+    private ActivityPrivacyBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        binding = ActivityPrivacy1Binding.inflate(getLayoutInflater());
+        binding = ActivityPrivacyBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         setSupportActionBar(binding.toolbar);
