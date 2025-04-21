@@ -28,10 +28,12 @@ public class ContactUsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         binding = ActivityContactUsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         setSupportActionBar(binding.toolbar);
+
 
         EditText nameInput = findViewById(R.id.editName);
         EditText emailInput = findViewById(R.id.editEmail);
@@ -76,7 +78,7 @@ public class ContactUsActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_main2, menu);
         return true;
     }
 
@@ -85,16 +87,9 @@ public class ContactUsActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_settings) {
-            return true;
+            startActivity(new Intent(this, Settings.class));
         }
 
-        if (id == R.id.action_mywallet) {
-            startActivity(new Intent(this, MyWalletActivity.class));
-        }
-
-        if (id == R.id.action_myprofile) {
-            startActivity(new Intent(this, MyProfileActivity.class));
-        }
 
         return super.onOptionsItemSelected(item);
     }

@@ -32,6 +32,7 @@ public class MyBillingActivity extends AppCompatActivity {
     Spinner spinnerExpirationYear, spinnerExpirationMonth;
 
     private ProgressDialog progressDialog;
+    private SharedPreferences billingPrefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +43,7 @@ public class MyBillingActivity extends AppCompatActivity {
         setSupportActionBar(binding.toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
+        // Bind views
         textInputFirstName = findViewById(R.id.textInputFirstName);
         textInputAmount = findViewById(R.id.textInputAmount);
         editFirstName = findViewById(R.id.editFirstName);
@@ -52,7 +54,14 @@ public class MyBillingActivity extends AppCompatActivity {
         spinnerExpirationMonth = findViewById(R.id.spinnerExpirationMonth);
         spinnerExpirationYear = findViewById(R.id.spinnerExpirationYear);
 
-        btnSave.setOnClickListener(v -> saveBillingData());
+        billingPrefs = getSharedPreferences("BillingPrefs", MODE_PRIVATE);
+        loadBillingDetails();  // 👈 Load values when activity starts
+
+        btnSave.setOnClickListener(v -> {
+            saveBillingData();
+            saveToLocalPrefs(); // 👈 Save locally for autofill next time
+        });
+
         btnCancel.setOnClickListener(v -> clearForm());
     }
 
@@ -105,6 +114,49 @@ public class MyBillingActivity extends AppCompatActivity {
 
         Volley.newRequestQueue(this).add(request);
     }
+
+    private void saveToLocalPrefs() {
+        SharedPreferences.Editor editor = billingPrefs.edit();
+
+        editor.putString("first_name", editFirstName.getText().toString());
+        editor.putString("last_name", ((EditText) findViewById(R.id.editLastName)).getText().toString());
+        editor.putString("card_number", ((EditText) findViewById(R.id.editCardNumber)).getText().toString());
+        editor.putString("cvn", ((EditText) findViewById(R.id.editCvn)).getText().toString());
+        editor.putString("address", ((EditText) findViewById(R.id.editAddressLine1)).getText().toString());
+        editor.putString("city", ((EditText) findViewById(R.id.editCity)).getText().toString());
+        editor.putString("country", ((EditText) findViewById(R.id.editCountry)).getText().toString());
+        editor.putString("zip", ((EditText) findViewById(R.id.editZipCode)).getText().toString());
+        editor.putString("phone", ((EditText) findViewById(R.id.editPhoneNb)).getText().toString());
+        editor.putString("email", ((EditText) findViewById(R.id.editEmail)).getText().toString());
+        editor.putInt("card_type", radioGroupCardType.getCheckedRadioButtonId());
+        editor.putInt("exp_month", spinnerExpirationMonth.getSelectedItemPosition());
+        editor.putInt("exp_year", spinnerExpirationYear.getSelectedItemPosition());
+
+        editor.apply();
+    }
+
+
+    private void loadBillingDetails() {
+        editFirstName.setText(billingPrefs.getString("first_name", ""));
+        ((EditText) findViewById(R.id.editLastName)).setText(billingPrefs.getString("last_name", ""));
+        ((EditText) findViewById(R.id.editCardNumber)).setText(billingPrefs.getString("card_number", ""));
+        ((EditText) findViewById(R.id.editCvn)).setText(billingPrefs.getString("cvn", ""));
+        ((EditText) findViewById(R.id.editAddressLine1)).setText(billingPrefs.getString("address", ""));
+        ((EditText) findViewById(R.id.editCity)).setText(billingPrefs.getString("city", ""));
+        ((EditText) findViewById(R.id.editCountry)).setText(billingPrefs.getString("country", ""));
+        ((EditText) findViewById(R.id.editZipCode)).setText(billingPrefs.getString("zip", ""));
+        ((EditText) findViewById(R.id.editPhoneNb)).setText(billingPrefs.getString("phone", ""));
+        ((EditText) findViewById(R.id.editEmail)).setText(billingPrefs.getString("email", ""));
+
+        int savedCardTypeId = billingPrefs.getInt("card_type", -1);
+        if (savedCardTypeId != -1) {
+            radioGroupCardType.check(savedCardTypeId);
+        }
+
+        spinnerExpirationMonth.setSelection(billingPrefs.getInt("exp_month", 0));
+        spinnerExpirationYear.setSelection(billingPrefs.getInt("exp_year", 0));
+    }
+
 
     private boolean validateForm() {
         boolean valid = true;
