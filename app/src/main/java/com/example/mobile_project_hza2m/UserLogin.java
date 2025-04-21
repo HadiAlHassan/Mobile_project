@@ -7,9 +7,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
+import android.widget.*;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,7 +16,6 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
@@ -32,8 +29,9 @@ public class UserLogin extends AppCompatActivity {
 
     EditText edUser, edPass;
     Button btnLogin, btnLogout;
-    private final String LOGIN_URL = Config.BASE_URL+"auth/login.php";
-    private static final String LOGOUT_URL = Config.BASE_URL+"auth/logout.php";
+
+    private final String LOGIN_URL = Config.BASE_URL + "auth/login.php";
+    private final String LOGOUT_URL = Config.BASE_URL + "auth/logout.php";
 
     private SharedPreferences prefs;
 
@@ -56,33 +54,21 @@ public class UserLogin extends AppCompatActivity {
 
         prefs = getSharedPreferences("AppPrefs", MODE_PRIVATE);
 
+        // Auto-redirect if session exists
         String savedEmail = prefs.getString("saved_email", null);
         String savedPass = prefs.getString("saved_password", null);
         String role = prefs.getString("role", null);
 
-        // ✅ If logged in, redirect based on role
         if (savedEmail != null && savedPass != null && role != null) {
-            switch (role) {
-                case "user":
-                    startActivity(new Intent(this, MyProfileActivity.class));
-                    break;
-                case "provider":
-                    startActivity(new Intent(this, MyServicesActivity.class));
-                    break;
-                case "admin":
-                    startActivity(new Intent(this, AdminDashboardActivity.class));
-                    break;
-            }
-            finish(); // Prevent going back to login
+            redirectToDashboard(role);
+            finish();
             return;
         }
 
-        // Else normal login flow
         btnLogin.setOnClickListener(v -> loginUser());
         btnLogout.setOnClickListener(v -> logoutUser());
-        btnLogout.setEnabled(false);  // Only enabled if session exists
+        btnLogout.setEnabled(false);
     }
-
 
     private void loginUser() {
         String email = edUser.getText().toString().trim();
@@ -100,7 +86,6 @@ public class UserLogin extends AppCompatActivity {
                         JSONObject json = new JSONObject(response);
                         if (json.has("success") && json.getBoolean("success")) {
                             String role = json.getString("role");
-                            Toast.makeText(this, "Login successful as " + role, Toast.LENGTH_SHORT).show();
 
                             SharedPreferences.Editor editor = prefs.edit();
                             editor.putString("saved_email", email);
@@ -111,38 +96,30 @@ public class UserLogin extends AppCompatActivity {
                                 case "user":
                                     int userId = json.getInt("user_id");
                                     editor.putInt("user_id", userId);
-                                    editor.putString("role", role);
                                     editor.apply();
-
-                                    // Only users get wallet
                                     createWallet(userId);
-
-                                    startActivity(new Intent(this, MyProfileActivity.class));
+                                    redirectToDashboard(role);
                                     break;
 
                                 case "provider":
                                     int providerId = json.getInt("provider_id");
                                     editor.putInt("provider_id", providerId);
-                                    editor.putString("role", role);
                                     editor.apply();
-                                    startActivity(new Intent(this, MyServicesActivity.class));
+                                    redirectToDashboard(role);
                                     break;
 
                                 case "admin":
                                     int adminId = json.getInt("admin_id");
                                     editor.putInt("admin_id", adminId);
-                                    editor.putString("role", role);
                                     editor.apply();
-                                    startActivity(new Intent(this, AdminDashboardActivity.class));
+                                    redirectToDashboard(role);
                                     break;
                             }
                             finish();
-
                         } else {
                             String msg = json.optString("message", "Login failed");
                             Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
                         }
-
                     } catch (JSONException e) {
                         e.printStackTrace();
                         Toast.makeText(this, "Error parsing response: " + e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -151,8 +128,7 @@ public class UserLogin extends AppCompatActivity {
                 error -> {
                     error.printStackTrace();
                     Toast.makeText(this, "Network error: " + error.toString(), Toast.LENGTH_LONG).show();
-                }
-        ) {
+                }) {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> map = new HashMap<>();
@@ -165,6 +141,20 @@ public class UserLogin extends AppCompatActivity {
         Volley.newRequestQueue(this).add(request);
     }
 
+    private void redirectToDashboard(String role) {
+        switch (role) {
+            case "user":
+                startActivity(new Intent(this, MyProfileActivity.class));
+                break;
+            case "provider":
+                startActivity(new Intent(this, MyServicesActivity.class));
+                break;
+            case "admin":
+                startActivity(new Intent(this, AdminDashboardActivity.class));
+                break;
+        }
+    }
+
     private void logoutUser() {
         new AlertDialog.Builder(this)
                 .setTitle("Logout?")
@@ -173,13 +163,7 @@ public class UserLogin extends AppCompatActivity {
                     StringRequest request = new StringRequest(Request.Method.POST, LOGOUT_URL,
                             response -> {
                                 SharedPreferences.Editor editor = prefs.edit();
-                                editor.remove("saved_email");
-                                editor.remove("saved_password");
-                                editor.remove("user_id");
-                                editor.remove("provider_id");
-                                editor.remove("admin_id");
-                                editor.remove("role");
-                                editor.apply();
+                                editor.clear().apply();
 
                                 edUser.setText("");
                                 edPass.setText("");
@@ -192,9 +176,8 @@ public class UserLogin extends AppCompatActivity {
                             },
                             error -> {
                                 error.printStackTrace();
-                                Toast.makeText(this, "Logout failed (server unreachable)", Toast.LENGTH_LONG).show();
-                            }
-                    );
+                                Toast.makeText(this, "Logout failed", Toast.LENGTH_LONG).show();
+                            });
                     Volley.newRequestQueue(this).add(request);
                 })
                 .setNegativeButton("Cancel", null)
@@ -202,12 +185,11 @@ public class UserLogin extends AppCompatActivity {
     }
 
     private void createWallet(int userId) {
-        String url = Config.BASE_URL+"wallet/create_wallet.php";
+        String url = Config.BASE_URL + "wallet/create_wallet.php";
 
         StringRequest walletRequest = new StringRequest(Request.Method.POST, url,
                 response -> Log.d("WALLET_RESPONSE", response),
-                error -> Log.e("WALLET_ERROR", "Error creating wallet: " + error.getMessage())
-        ) {
+                error -> Log.e("WALLET_ERROR", "Error creating wallet: " + error.getMessage())) {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> map = new HashMap<>();

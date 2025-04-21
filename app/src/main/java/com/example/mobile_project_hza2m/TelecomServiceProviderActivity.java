@@ -1,24 +1,44 @@
 package com.example.mobile_project_hza2m;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.example.mobile_project_hza2m.databinding.ActivityInsuranceServiceProviderBinding;
+import com.example.mobile_project_hza2m.databinding.ActivityTelecomServiceProviderBinding;
+
+
 public class TelecomServiceProviderActivity extends AppCompatActivity {
 
+    com.example.mobile_project_hza2m.databinding.ActivityTelecomServiceProviderBinding binding;
     private ImageView imageViewProviderLogo, imageViewUpload;
     private EditText editTextCompany, editTextBankAccount, editTextServiceArea;
     private Button buttonSubmit;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_telecom_service_provider);
+
+        binding = ActivityTelecomServiceProviderBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+
+        binding.fabaddfund.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(TelecomServiceProviderActivity.this, AddServiceItemActivity.class);
+                startActivity(i);
+            }
+        });
 
         // Toolbar setup
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -28,6 +48,7 @@ public class TelecomServiceProviderActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
+;
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
 
         // Views

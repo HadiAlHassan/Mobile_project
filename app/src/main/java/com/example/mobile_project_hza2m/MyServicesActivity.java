@@ -1,6 +1,7 @@
 package com.example.mobile_project_hza2m;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,8 +31,15 @@ public class MyServicesActivity extends AppCompatActivity {
         fabAddService = findViewById(R.id.fabAddMyService);
         tvServiceType = findViewById(R.id.tvServiceType);
 
+        // 🔐 Get category info from SharedPreferences
+        SharedPreferences prefs = getSharedPreferences("AppPrefs", MODE_PRIVATE);
+        int categoryId = prefs.getInt("category_id", -1);
+
+        String categoryLabel = getCategoryLabel(categoryId);
+        tvServiceType.setText("Service Category: " + categoryLabel);
+
+        // 🧾 Dummy list (replace with real service data)
         serviceList = new ArrayList<>();
-        // Sample data — replace with data from your DB/API
         serviceList.add(new Service("Tuition for LAU", "$200", R.drawable.tuitionfees));
         serviceList.add(new Service("Ogero Bill Payment", "$30", R.drawable.ogero));
 
@@ -44,10 +52,40 @@ public class MyServicesActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
 
+        // 🟦 FAB click — navigate based on category ID
         fabAddService.setOnClickListener(v -> {
-            // Launch add service activity
-            //based on text view of services we direct
-            startActivity(new Intent(this, AddServiceItemActivity.class));
+            switch (categoryId) {
+                case 1: // Ogero
+                    startActivity(new Intent(this, OgeroServiceProviderActivity.class));
+
+                    break;
+                case 2: // Insurance
+                    startActivity(new Intent(this, InsuranceServiceProviderActivity.class));
+                    break;
+                case 3: // Streaming
+                    startActivity(new Intent(this, StreamingServiceProviderActivity.class));
+                    break;
+                case 4: // Telecom
+                    startActivity(new Intent(this, TelecomServiceProviderActivity.class));
+                    break;
+                case 5: // Tuition
+                    startActivity(new Intent(this, TuitionServiceProviderActivity.class));
+                    break;
+                default:
+                    startActivity(new Intent(this, MyServicesActivity.class));
+                    break;
+            }
         });
+    }
+
+    private String getCategoryLabel(int categoryId) {
+        switch (categoryId) {
+            case 1: return "Ogero";
+            case 2: return "Insurance";
+            case 3: return "Streaming";
+            case 4: return "Telecom";
+            case 5: return "Tuition";
+            default: return "General";
+        }
     }
 }

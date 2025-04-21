@@ -2,17 +2,15 @@ package com.example.mobile_project_hza2m;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import java.util.*;
 
 public class ServiceProviderSignUpActivity extends AppCompatActivity {
@@ -25,6 +23,8 @@ public class ServiceProviderSignUpActivity extends AppCompatActivity {
     List<String> categoryNames = new ArrayList<>();
     ProgressDialog progressDialog;
 
+    SharedPreferences prefs;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,6 +35,8 @@ public class ServiceProviderSignUpActivity extends AppCompatActivity {
         editServiceProviderPassword = findViewById(R.id.editServiceProviderPassword);
         spinnerServiceType = findViewById(R.id.spinnerServiceType);
         btnServiceProviderSignUp = findViewById(R.id.btnServiceProviderSignUp);
+
+        prefs = getSharedPreferences("AppPrefs", MODE_PRIVATE);
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setCancelable(false);
@@ -70,7 +72,7 @@ public class ServiceProviderSignUpActivity extends AppCompatActivity {
         progressDialog.setMessage("Loading categories...");
         progressDialog.show();
 
-        String url = Config.BASE_URL+"auth/get_categories.php";
+        String url = Config.BASE_URL + "auth/get_categories.php";
 
         StringRequest request = new StringRequest(Request.Method.GET, url,
                 response -> {
@@ -108,15 +110,28 @@ public class ServiceProviderSignUpActivity extends AppCompatActivity {
         progressDialog.setMessage("Registering...");
         progressDialog.show();
 
-        String url = Config.BASE_URL+"auth/provider_signup.php";
+        String url = Config.BASE_URL + "auth/provider_signup.php";
+
         StringRequest request = new StringRequest(Request.Method.POST, url,
                 response -> {
                     progressDialog.dismiss();
                     try {
                         JSONObject json = new JSONObject(response);
                         if (json.getBoolean("success")) {
-                            Toast.makeText(this, "Registration successful", Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(this, MyServicesActivity.class));
+                            int providerId = json.getInt("provider_id");
+
+                            // Save login info and redirect
+                            SharedPreferences.Editor editor = prefs.edit();
+                            editor.putInt("provider_id", providerId);
+                            editor.putString("saved_email", email);
+                            editor.putString("saved_password", password);
+                            editor.putString("role", "provider");
+                            editor.putInt("category_id", categoryId);
+                            editor.apply();
+
+                            Toast.makeText(this, "Welcome! You’re now signed in.", Toast.LENGTH_SHORT).show();
+
+                            startActivity(new Intent(this, MyServicesActivity.class)); // 🔁 change activity if needed
                             finish();
                         } else {
                             Toast.makeText(this, json.getString("message"), Toast.LENGTH_LONG).show();
