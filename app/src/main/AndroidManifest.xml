@@ -11,9 +11,17 @@
         android:icon="@drawable/khadamatlogo"
         android:label="@string/app_name"
         android:roundIcon="@drawable/khadamatlogo"
-        android:usesCleartextTraffic="true"
         android:supportsRtl="true"
-        android:theme="@style/Base.Theme.Mobile_Project_HZA2M">
+        android:theme="@style/Base.Theme.Mobile_Project_HZA2M"
+        android:usesCleartextTraffic="true">
+        <activity
+            android:name=".Privacy"
+            android:exported="false"
+            android:theme="@style/Base.Theme.Mobile_Project_HZA2M" />
+        <activity
+            android:name=".Security"
+            android:exported="false"
+            android:theme="@style/Base.Theme.Mobile_Project_HZA2M" />
         <activity
             android:name=".InsuranceServiceUserActivity"
             android:exported="false" />
@@ -24,9 +32,14 @@
         <activity
             android:name=".AddServiceItemActivity"
             android:exported="false" />
-
         <activity
             android:name=".Settings"
+            android:exported="false" />
+        <activity
+            android:name=".Privacy"
+            android:exported="false" />
+        <activity
+            android:name=".Security1"
             android:exported="false" />
         <activity
             android:name=".DisplayServicesActivity"
@@ -84,8 +97,7 @@
         <activity
             android:name=".MyWalletActivity"
             android:exported="false"
-            android:parentActivityName=".DisplayServicesActivity"
-           /> <!-- My Services -->
+            android:parentActivityName=".DisplayServicesActivity" /> <!-- My Services -->
         <activity
             android:name=".MyServicesActivity"
             android:exported="false"
@@ -114,7 +126,6 @@
             android:name=".TuitionServiceProviderActivity"
             android:exported="false"
             android:theme="@style/Theme.Mobile_Project_HZA2M" />
-
         <activity
             android:name=".MyBillingActivity"
             android:exported="false"

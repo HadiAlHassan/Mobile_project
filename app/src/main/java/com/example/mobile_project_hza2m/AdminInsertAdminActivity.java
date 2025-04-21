@@ -59,7 +59,7 @@ public class AdminInsertAdminActivity extends AppCompatActivity {
     }
 
     private void insertAdmin(String name, String email, String password) {
-        String url = "http://192.168.0.104/Mobile_submodule_backend/PHP/admin/admin_add_admin.php";
+        String url = "http:// 192.168.0.74/Mobile_submodule_backend/PHP/admin/admin_add_admin.php";
 
         RequestQueue queue = Volley.newRequestQueue(this);
 

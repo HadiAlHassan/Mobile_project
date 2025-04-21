@@ -3,6 +3,7 @@ package com.example.mobile_project_hza2m;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -20,32 +21,25 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.mobile_project_hza2m.databinding.ActivityUserOrProviderBinding;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
-import java.util.Map;import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.HashMap;
 import java.util.Map;
-import android.content.SharedPreferences;
-
 
 public class UserLogin extends AppCompatActivity {
-    private ActivityUserOrProviderBinding binding;
+
     EditText edUser, edPass;
-    Button btnLogin;
-
+    Button btnLogin, btnLogout;
     private final String LOGIN_URL = "http://192.168.0.74/Mobile_submodule_backend/PHP/auth/login.php";
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_user_login);
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -55,11 +49,10 @@ public class UserLogin extends AppCompatActivity {
         edUser = findViewById(R.id.edUser);
         edPass = findViewById(R.id.edPass);
         btnLogin = findViewById(R.id.btn1Login);
+        btnLogout = findViewById(R.id.btnLogout);
 
         btnLogin.setOnClickListener(v -> loginUser());
-
-
-
+        btnLogout.setOnClickListener(v -> logoutUser());
     }
 
     private void loginUser() {
@@ -74,10 +67,8 @@ public class UserLogin extends AppCompatActivity {
         StringRequest request = new StringRequest(Request.Method.POST, LOGIN_URL,
                 response -> {
                     Log.e("RAW_LOGIN_RESPONSE", "[" + response + "]");
-
                     try {
                         JSONObject json = new JSONObject(response);
-
                         if (json.has("success") && json.getBoolean("success")) {
                             String role = json.getString("role");
                             Toast.makeText(this, "Login successful as " + role, Toast.LENGTH_SHORT).show();
@@ -94,7 +85,6 @@ public class UserLogin extends AppCompatActivity {
                                     createWallet(userId);
                                     startActivity(new Intent(this, DisplayServicesActivity.class));
                                     break;
-
                                 case "provider":
                                     int providerId = json.getInt("provider_id");
                                     editor.putInt("provider_id", providerId);
@@ -102,7 +92,6 @@ public class UserLogin extends AppCompatActivity {
                                     editor.apply();
                                     startActivity(new Intent(this, MyServicesActivity.class));
                                     break;
-
                                 case "admin":
                                     int adminId = json.getInt("admin_id");
                                     editor.putInt("admin_id", adminId);
@@ -113,8 +102,8 @@ public class UserLogin extends AppCompatActivity {
                             }
 
                             finish();
+
                         } else {
-                            // ❌ Login failed — show backend message
                             String msg = json.optString("message", "Login failed");
                             Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
                         }
@@ -138,13 +127,27 @@ public class UserLogin extends AppCompatActivity {
             }
         };
 
-
         RequestQueue queue = Volley.newRequestQueue(this);
         queue.add(request);
     }
 
+    private void logoutUser() {
+        new AlertDialog.Builder(this)
+                .setTitle("Logout?")
+                .setMessage("Are you sure you want to log out?")
+                .setPositiveButton("Yes", (dialog, which) -> {
+                    SharedPreferences prefs = getSharedPreferences("AppPrefs", MODE_PRIVATE);
+                    prefs.edit().clear().apply();
+                    Toast.makeText(this, "Logged out successfully", Toast.LENGTH_SHORT).show();
+                    edUser.setText("");
+                    edPass.setText("");
+                })
+                .setNegativeButton("Cancel", null)
+                .show();
+    }
+
     private void createWallet(int userId) {
-        String url = "http://192.168.0.101/Mobile_submodule_backend/PHP/wallet/create_wallet.php";
+        String url = "http://192.168.0.74/Mobile_submodule_backend/PHP/wallet/create_wallet.php";
 
         StringRequest walletRequest = new StringRequest(Request.Method.POST, url,
                 response -> Log.d("WALLET_RESPONSE", response),
@@ -161,5 +164,4 @@ public class UserLogin extends AppCompatActivity {
         RequestQueue queue = Volley.newRequestQueue(this);
         queue.add(walletRequest);
     }
-
 }

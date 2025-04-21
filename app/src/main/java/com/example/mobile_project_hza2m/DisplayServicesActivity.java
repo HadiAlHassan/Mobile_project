@@ -86,7 +86,7 @@ public class DisplayServicesActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_settings) {
-            return true;
+            startActivity(new Intent(this, Settings.class));
         }
 
         if (id == R.id.action_mywallet) {

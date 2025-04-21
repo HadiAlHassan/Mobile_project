@@ -44,12 +44,23 @@
             android:inputType="textPassword"
             android:layout_marginBottom="24dp" />
 
+        <!-- Login Button -->
         <Button
             android:id="@+id/btn1Login"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Login"
             android:backgroundTint="@color/UseBlue"
+            android:textColor="@android:color/white"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Logout Button -->
+        <Button
+            android:id="@+id/btnLogout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Logout"
+            android:backgroundTint="@android:color/darker_gray"
             android:textColor="@android:color/white" />
     </LinearLayout>
 </ScrollView>

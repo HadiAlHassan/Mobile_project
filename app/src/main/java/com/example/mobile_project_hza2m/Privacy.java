@@ -2,34 +2,48 @@ package com.example.mobile_project_hza2m;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.ImageView;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+
+import android.view.Menu;
+import android.view.MenuItem;
+
+import androidx.navigation.ui.AppBarConfiguration;
+
+import com.example.mobile_project_hza2m.databinding.ActivityPrivacy1Binding;
 
 public class Privacy extends AppCompatActivity {
-    ImageView back2;
+
+    private AppBarConfiguration appBarConfiguration;
+    private ActivityPrivacy1Binding binding;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_privacy);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
-        back2= findViewById(R.id.back2);
-        back2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent j= new Intent(Privacy.this, Settings.class);
-                startActivity(j);
-            }
-        });
+
+        binding = ActivityPrivacy1Binding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+        setSupportActionBar(binding.toolbar);
+
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main2, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_settings) {
+            startActivity(new Intent(this, Settings.class));
+        }
+
+
+        return super.onOptionsItemSelected(item);
     }
 }
