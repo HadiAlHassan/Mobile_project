@@ -38,7 +38,7 @@ public class UserLogin extends AppCompatActivity {
     EditText edUser, edPass;
     Button btnLogin;
 
-    private final String LOGIN_URL = "http://192.168.0.101/Mobile_submodule_backend/PHP/auth/login.php";
+    private final String LOGIN_URL = "http://192.168.0.74/Mobile_submodule_backend/PHP/auth/login.php";
 
 
     @Override
