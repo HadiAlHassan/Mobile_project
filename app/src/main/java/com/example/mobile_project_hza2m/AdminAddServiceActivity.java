@@ -2,25 +2,36 @@ package com.example.mobile_project_hza2m;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
-
-import com.google.android.material.snackbar.Snackbar;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.view.View;
-
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.Request;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.mobile_project_hza2m.databinding.ActivityAdminAddServiceBinding;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class AdminAddServiceActivity extends AppCompatActivity {
-RecyclerView recyclerViewCategories;
+
     private AppBarConfiguration appBarConfiguration;
     private ActivityAdminAddServiceBinding binding;
+
+    RecyclerView recyclerViewCategories;
+    List<CategoryModel> categoryList = new ArrayList<>();
+    AdminCategoryAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,19 +42,92 @@ RecyclerView recyclerViewCategories;
 
         setSupportActionBar(binding.toolbar);
 
-        binding.fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAnchorView(R.id.fab)
-                        .setAction("Action", null).show();
+        recyclerViewCategories = findViewById(R.id.recyclerViewCategories);
+        recyclerViewCategories.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new AdminCategoryAdapter(this, categoryList, this::fetchCategories);
+        recyclerViewCategories.setAdapter(adapter);
+
+        fetchCategories();
+
+        binding.fab.setOnClickListener(view -> showAddCategoryDialog());
+    }
+
+    private void fetchCategories() {
+        String url = "http://192.168.0.104/Mobile_submodule_backend/PHP/admin/admin_get_all_categories.php";
+
+        categoryList.clear();
+
+        StringRequest request = new StringRequest(Request.Method.GET, url,
+                response -> {
+                    try {
+                        JSONArray array = new JSONArray(response);
+                        for (int i = 0; i < array.length(); i++) {
+                            JSONObject obj = array.getJSONObject(i);
+                            int id = obj.getInt("id");
+                            String name = obj.getString("name");
+                            categoryList.add(new CategoryModel(id, name));
+                        }
+                        adapter.notifyDataSetChanged();
+                    } catch (Exception e) {
+                        Toast.makeText(this, "Parse error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                },
+                error -> Toast.makeText(this, "Network error", Toast.LENGTH_SHORT).show()
+        );
+
+        Volley.newRequestQueue(this).add(request);
+    }
+
+    private void showAddCategoryDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Add New Category");
+
+        final EditText input = new EditText(this);
+        input.setHint("Enter category name");
+        builder.setView(input);
+
+        builder.setPositiveButton("Add", (dialog, which) -> {
+            String categoryName = input.getText().toString().trim();
+            if (!categoryName.isEmpty()) {
+                addCategoryToServer(categoryName);
+            } else {
+                Toast.makeText(this, "Category name cannot be empty", Toast.LENGTH_SHORT).show();
             }
         });
 
-       /* AdminCategoryAdapter adapter = new AdminCategoryAdapter(this, categoryList, this::fetchCategories);
-        recyclerViewCategories.setAdapter(adapter); */
+        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
 
+        builder.show();
     }
 
+    private void addCategoryToServer(String categoryName) {
+        String url = "http://192.168.0.104/Mobile_submodule_backend/PHP/admin/admin_add_category.php";
+
+        StringRequest request = new StringRequest(Request.Method.POST, url,
+                response -> {
+                    try {
+                        JSONObject json = new JSONObject(response);
+                        if (json.getBoolean("success")) {
+                            Toast.makeText(this, json.getString("message"), Toast.LENGTH_SHORT).show();
+                            fetchCategories(); // refresh list
+                        } else {
+                            Toast.makeText(this, json.getString("message"), Toast.LENGTH_LONG).show();
+                        }
+                    } catch (Exception e) {
+                        Toast.makeText(this, "Error parsing server response", Toast.LENGTH_SHORT).show();
+                    }
+                },
+                error -> Toast.makeText(this, "Network error: " + error.getMessage(), Toast.LENGTH_LONG).show()
+        ) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("category_name", categoryName);
+                return params;
+            }
+        };
+
+        Volley.newRequestQueue(this).add(request);
+    }
 
 }
