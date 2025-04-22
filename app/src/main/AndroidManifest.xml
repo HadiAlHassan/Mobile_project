@@ -15,12 +15,15 @@
         android:theme="@style/Base.Theme.Mobile_Project_HZA2M"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".ServiceItemsActivity"
+            android:name=".InsertServiceItemActivity"
             android:exported="false"
             android:theme="@style/Base.Theme.Mobile_Project_HZA2M" />
-
         <activity
             android:name=".AddServiceItemActivity"
+            android:exported="false"
+            android:theme="@style/Base.Theme.Mobile_Project_HZA2M" />
+        <activity
+            android:name=".ServiceItemsActivity"
             android:exported="false"
             android:theme="@style/Base.Theme.Mobile_Project_HZA2M" />
         <activity
@@ -30,8 +33,6 @@
         <activity
             android:name=".ChangePasswordActivity"
             android:exported="false" />
-
-
         <activity
             android:name=".Privacy"
             android:exported="false"

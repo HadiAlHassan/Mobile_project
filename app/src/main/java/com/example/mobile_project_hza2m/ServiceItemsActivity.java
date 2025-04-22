@@ -2,7 +2,6 @@ package com.example.mobile_project_hza2m;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -14,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.mobile_project_hza2m.databinding.ActivityHomeBinding;
 import com.example.mobile_project_hza2m.databinding.ActivityServiceItemsBinding;
 
 import org.json.JSONArray;
@@ -38,8 +36,11 @@ public class ServiceItemsActivity extends AppCompatActivity {
         binding = ActivityServiceItemsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        binding.fab.setOnClickListener(view ->
-                startActivity(new Intent(ServiceItemsActivity.this, AddServiceItemActivity.class)));
+        binding.fab.setOnClickListener(view -> {
+            Intent intent = new Intent(ServiceItemsActivity.this, InsertServiceItemActivity.class);
+            startActivityForResult(intent, 1001); // 👈 launch with request code
+        });
+
 
 
         recyclerView = findViewById(R.id.recyclerViewServiceItems);
@@ -133,4 +134,17 @@ public class ServiceItemsActivity extends AppCompatActivity {
 
         Volley.newRequestQueue(this).add(request);
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 1001 && resultCode == RESULT_OK) {
+            int serviceId = getIntent().getIntExtra("service_id", -1);
+            if (serviceId != -1) {
+                fetchItems(serviceId); // 🔁 re-fetch after new item is added
+            }
+        }
+    }
+
 }

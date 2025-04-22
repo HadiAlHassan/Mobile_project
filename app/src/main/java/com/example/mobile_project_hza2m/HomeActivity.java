@@ -1,23 +1,13 @@
 package com.example.mobile_project_hza2m;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
-import androidx.activity.EdgeToEdge;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.view.View;
 import android.widget.Button;
 
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
-
 import com.example.mobile_project_hza2m.databinding.ActivityHomeBinding;
-import com.google.android.material.snackbar.Snackbar;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -49,7 +39,7 @@ public class HomeActivity extends AppCompatActivity {
         });
 
         btnTest.setOnClickListener(v -> {
-            Intent intent = new Intent(HomeActivity.this, DisplayServicesActivity.class);
+            Intent intent = new Intent(HomeActivity.this, InsertServiceItemActivity.class);
             startActivity(intent);
         });
     }

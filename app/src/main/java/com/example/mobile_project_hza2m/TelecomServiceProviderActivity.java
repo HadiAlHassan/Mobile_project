@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.*;
 
@@ -72,7 +71,7 @@ public class TelecomServiceProviderActivity extends AppCompatActivity {
         buttonSubmit.setOnClickListener(v -> uploadService());
 
         binding.fabaddserviceitem.setOnClickListener(view -> {
-            Intent i = new Intent(TelecomServiceProviderActivity.this, AddServiceItemActivity.class);
+            Intent i = new Intent(TelecomServiceProviderActivity.this, InsertServiceItemActivity.class);
             startActivity(i);
         });
     }

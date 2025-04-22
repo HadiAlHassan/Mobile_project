@@ -1,19 +1,31 @@
 package com.example.mobile_project_hza2m;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.webkit.MimeTypeMap;
-import android.widget.*;
+
+import com.android.volley.Request;
+import com.android.volley.toolbox.Volley;
+import com.google.android.material.snackbar.Snackbar;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.android.volley.Request;
-import com.android.volley.toolbox.Volley;
+import android.view.View;
+import android.webkit.MimeTypeMap;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.Toast;
+
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
+
+import com.example.mobile_project_hza2m.databinding.ActivityInsertServiceItemBinding;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,14 +33,15 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public class AddServiceItemActivity extends AppCompatActivity {
+public class InsertServiceItemActivity extends AppCompatActivity {
 
+    private AppBarConfiguration appBarConfiguration;
+    private ActivityInsertServiceItemBinding binding;
     private EditText editServiceName, editServicePrice, editServiceDescription;
     private ImageView imagePreview;
     private Uri selectedImageUri;
-    private ProgressDialog progressDialog;
 
-    private final String UPLOAD_URL = Config.BASE_URL + "services/add_service_item.php";
+    Button btnUpload, btnSubmit;
 
     private final ActivityResultLauncher<Intent> imagePickerLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
@@ -39,18 +52,25 @@ public class AddServiceItemActivity extends AppCompatActivity {
                 }
             });
 
+    private final String UPLOAD_URL = Config.BASE_URL + "services/add_service_item.php";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_service_item);
+
+        binding = ActivityInsertServiceItemBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+        setSupportActionBar(binding.toolbar);
+
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
         editServiceName = findViewById(R.id.editServiceName);
         editServicePrice = findViewById(R.id.editServicePrice);
         editServiceDescription = findViewById(R.id.editServiceDescription);
         imagePreview = findViewById(R.id.imagePreview);
-        Button btnUpload = findViewById(R.id.btnUploadIcon);
-        Button btnSubmit = findViewById(R.id.btnSubmitService);
+        btnUpload = findViewById(R.id.btnUploadIcon);
+        btnSubmit = findViewById(R.id.btnSubmitService);
 
         btnUpload.setOnClickListener(v -> {
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -59,6 +79,8 @@ public class AddServiceItemActivity extends AppCompatActivity {
         });
 
         btnSubmit.setOnClickListener(v -> uploadServiceItem());
+
+
     }
 
     private void uploadServiceItem() {
@@ -79,28 +101,35 @@ public class AddServiceItemActivity extends AppCompatActivity {
             return;
         }
 
-        progressDialog = ProgressDialog.show(this, "", "Uploading...", true);
 
         VolleyMultipartRequest multipartRequest = new VolleyMultipartRequest(Request.Method.POST, UPLOAD_URL,
                 response -> {
-                    progressDialog.dismiss();
                     Toast.makeText(this, "Service item added successfully", Toast.LENGTH_SHORT).show();
+                    setResult(RESULT_OK); // ✅ tell parent to refresh
                     finish();
+
                 },
                 error -> {
-                    progressDialog.dismiss();
                     Toast.makeText(this, "Upload failed: " + error.getMessage(), Toast.LENGTH_LONG).show();
                 }) {
 
             @Override
             public Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
+                String mime = getContentResolver().getType(selectedImageUri);
+                String extension = MimeTypeMap.getSingleton().getExtensionFromMimeType(mime);
+                if (extension == null) extension = "jpg"; // fallback
+
+                String filename = "svc_" + System.currentTimeMillis() + "." + extension;
+
                 params.put("service_id", String.valueOf(serviceId));
-                params.put("service_name", name);
-                params.put("description", description);
-                params.put("price", price);
+                params.put("item_name", name); // 🔄 match PHP field
+                params.put("item_description", description); // 🔄 match PHP field
+                params.put("item_price", price); // 🔄 match PHP field
+                params.put("icon_url", filename); // ✅ send image filename
                 return params;
             }
+
 
             @Override
             public Map<String, DataPart> getByteData() {
@@ -112,15 +141,21 @@ public class AddServiceItemActivity extends AppCompatActivity {
 
                     String mime = getContentResolver().getType(selectedImageUri);
                     String extension = MimeTypeMap.getSingleton().getExtensionFromMimeType(mime);
+                    if (extension == null) extension = "jpg"; // fallback
 
-                    imageParams.put("service_icon", new DataPart("svc_" + System.currentTimeMillis() + "." + extension, inputData));
+                    String filename = "svc_" + System.currentTimeMillis() + "." + extension;
+
+                    imageParams.put("service_icon", new DataPart(filename, inputData, "image/" + extension));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
                 return imageParams;
             }
+
         };
 
         Volley.newRequestQueue(this).add(multipartRequest);
     }
+
+
 }
