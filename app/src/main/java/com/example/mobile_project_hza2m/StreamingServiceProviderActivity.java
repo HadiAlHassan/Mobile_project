@@ -28,12 +28,10 @@ import java.util.Map;
 
 public class StreamingServiceProviderActivity extends AppCompatActivity {
 
-
     private ActivityStreamingServiceProviderBinding binding;
-ImageView imageViewProviderLogo, imageViewUpload;
- EditText editTextCompany, editTextCoverage, editTextBankAccount, editTextRegion;
-
-Button btnSubmitStreaming;
+    private ImageView imageViewProviderLogo, imageViewUpload;
+    private EditText editTextCompany, editTextCoverage, editTextBankAccount, editTextRegion;
+    private Button btnSubmitStreaming;
     private Uri selectedLogoUri;
     private ProgressDialog progressDialog;
     private final String UPLOAD_URL = Config.BASE_URL + "services/add_service.php";
@@ -52,22 +50,23 @@ Button btnSubmitStreaming;
         super.onCreate(savedInstanceState);
         binding = ActivityStreamingServiceProviderBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-    ImageView imageViewUpload = findViewById(R.id.imageViewUpload);
-        ImageView imageViewProviderLogo = findViewById(R.id.imageViewProviderLogo);
-            imageViewUpload.setOnClickListener(v -> {
+
+        // Assign UI components
+        imageViewProviderLogo = findViewById(R.id.imageViewProviderLogo);
+        imageViewUpload = findViewById(R.id.imageViewUpload);
+        editTextCompany = findViewById(R.id.editTextCompany);
+        editTextCoverage = findViewById(R.id.editTextCoverage);
+        editTextBankAccount = findViewById(R.id.editTextBankAccount);
+        editTextRegion = findViewById(R.id.editTextRegion);
+        btnSubmitStreaming = findViewById(R.id.buttonSubmitStreaming);
+
+        imageViewUpload.setOnClickListener(v -> {
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
             intent.setType("image/*");
             logoPickerLauncher.launch(intent);
         });
-        btnSubmitStreaming = findViewById(R.id.buttonSubmitStreaming);
+
         btnSubmitStreaming.setOnClickListener(v -> uploadStreamingService());
-
-         editTextCompany = findViewById(R.id.editTextCompany);
-         editTextBankAccount = findViewById(R.id.editTextBankAccount);
-         editTextCoverage = findViewById(R.id.editTextCoverage);
-         editTextRegion = findViewById(R.id.editTextRegion);
-
-
     }
 
     private void uploadStreamingService() {
@@ -76,7 +75,7 @@ Button btnSubmitStreaming;
         String bank = editTextBankAccount.getText().toString().trim();
         String region = editTextRegion.getText().toString().trim();
 
-        if (company.isEmpty() || coverage.isEmpty() || bank.isEmpty() || region.isEmpty()|| selectedLogoUri == null) {
+        if (company.isEmpty() || coverage.isEmpty() || bank.isEmpty() || region.isEmpty() || selectedLogoUri == null) {
             Toast.makeText(this, "Please fill all fields and upload a logo", Toast.LENGTH_SHORT).show();
             return;
         }

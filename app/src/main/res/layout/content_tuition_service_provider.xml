@@ -84,6 +84,25 @@
             android:inputType="number"
             android:layout_marginTop="12dp" />
 
+        <!-- Region -->
+        <EditText
+            android:id="@+id/editTextRegion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="University Region"
+            android:layout_marginTop="12dp"
+            android:inputType="textCapWords" />
+
+        <!-- Contact Number -->
+        <EditText
+            android:id="@+id/editTextContactNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="University Contact Number"
+            android:inputType="phone"
+            android:layout_marginTop="12dp" />
+
+
         <!-- Submit Button -->
         <Button
             android:id="@+id/buttonSaveTuitionService"

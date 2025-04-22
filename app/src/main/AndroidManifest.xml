@@ -18,6 +18,11 @@
             android:name=".ServiceItemsActivity"
             android:exported="false"
             android:theme="@style/Base.Theme.Mobile_Project_HZA2M" />
+
+        <activity
+            android:name=".AddServiceItemActivity"
+            android:exported="false"
+            android:theme="@style/Base.Theme.Mobile_Project_HZA2M" />
         <activity
             android:name=".InsuranceServiceProviderActivity"
             android:exported="false"
@@ -25,10 +30,8 @@
         <activity
             android:name=".ChangePasswordActivity"
             android:exported="false" />
-        <activity
-            android:name=".AddServiceItemActivity"
-            android:parentActivityName=".MyServicesActivity"
-            android:exported="false" /> <!-- Core Activities -->
+
+
         <activity
             android:name=".Privacy"
             android:exported="false"

@@ -46,11 +46,12 @@ public class ServiceAdapter extends RecyclerView.Adapter<ServiceAdapter.ServiceV
         loadImageFromUrl(Config.BASE_URL + service.getLogoUrl(), holder.serviceIcon);
 
         holder.itemView.setOnClickListener(v -> {
-            Intent intent = new Intent(context, ServiceItemsActivity.class);
-            intent.putExtra("service_id", service.getServiceId());
-            intent.putExtra("service_name", service.getServiceName());
+            Intent intent = new Intent(context, TelecomServiceUserActivity.class);
+            intent.putExtra("service_id", service.getServiceId()); // ✅ REQUIRED
+            intent.putExtra("service_name", service.getServiceName()); // Optional
             context.startActivity(intent);
         });
+
 
     }
 

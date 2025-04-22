@@ -28,25 +28,25 @@ public class DisplayServicesActivity extends AppCompatActivity {
     private AppBarConfiguration appBarConfiguration;
     private ActivityDisplayServicesBinding binding;
 
+    private RecyclerView serviceRecyclerView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         binding = ActivityDisplayServicesBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         setSupportActionBar(binding.toolbar);
-        RecyclerView categoryRecyclerView = findViewById(R.id.serviceRecyclerView);
-        categoryRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-
+        serviceRecyclerView = findViewById(R.id.serviceRecyclerView);
         categoryList = new ArrayList<>();
-        loadServiceData();
-
         ServiceCategoryAdapter adapter = new ServiceCategoryAdapter(this, categoryList);
-        categoryRecyclerView.setAdapter(adapter);
+        serviceRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        serviceRecyclerView.setAdapter(adapter);
+
+        loadServiceData(adapter);
     }
 
-    private void loadServiceData() {
+    private void loadServiceData(ServiceCategoryAdapter adapter) {
         String url = Config.BASE_URL + "services/get_services_grouped.php";
 
         Volley.newRequestQueue(this).add(new StringRequest(Request.Method.GET, url,
@@ -66,17 +66,17 @@ public class DisplayServicesActivity extends AppCompatActivity {
                                 for (int j = 0; j < services.length(); j++) {
                                     JSONObject s = services.getJSONObject(j);
                                     String name = s.getString("service_name");
-                                    String imageUrl = s.optString("image_url", null);
-                                    // If you're loading images from URLs, use Glide or Picasso
-                                    int fallbackDrawable = R.drawable.khadmatiico; // fallback if no image resource
-                                    companies.add(new Company(name, fallbackDrawable, categoryName));
+                                    int serviceId = s.getInt("service_id");
+                                    int fallbackDrawable = R.drawable.khadmatiico;
+
+                                    companies.add(new Company(name, fallbackDrawable, categoryName, serviceId));
                                 }
+
 
                                 categoryList.add(new ServiceCategory(categoryName, companies));
                             }
 
-                            RecyclerView categoryRecyclerView = findViewById(R.id.serviceRecyclerView);
-                            categoryRecyclerView.setAdapter(new ServiceCategoryAdapter(this, categoryList));
+                            adapter.notifyDataSetChanged();
                         } else {
                             Toast.makeText(this, "No services available", Toast.LENGTH_SHORT).show();
                         }
@@ -87,6 +87,7 @@ public class DisplayServicesActivity extends AppCompatActivity {
                 error -> Toast.makeText(this, "Network error: " + error.getMessage(), Toast.LENGTH_LONG).show()
         ));
     }
+
 
 
     @Override

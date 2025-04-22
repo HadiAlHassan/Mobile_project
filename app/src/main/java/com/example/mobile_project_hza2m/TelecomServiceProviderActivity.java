@@ -25,7 +25,8 @@ import java.util.Map;
 
 public class TelecomServiceProviderActivity extends AppCompatActivity {
 
-    EditText editTextCompany, editTextDescription, editTextBankAccount, editTextRegion, editTextPrice;
+    EditText editTextCompany, editTextDescription, editTextBankAccount, editTextRegion;
+    EditText editTextCategory, editTextAddress;
     ImageView imageViewLogo;
     Uri selectedLogoUri;
     Button buttonSubmit;
@@ -57,6 +58,11 @@ public class TelecomServiceProviderActivity extends AppCompatActivity {
         imageViewLogo = findViewById(R.id.imageViewLogo);
         buttonSubmit = findViewById(R.id.buttonSubmitTelecom);
 
+         editTextCategory = findViewById(R.id.editTextCategory);
+         editTextAddress = findViewById(R.id.editTextAddress);
+
+
+
         findViewById(R.id.imageViewUploadLogo).setOnClickListener(v -> {
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
             intent.setType("image/*");
@@ -76,6 +82,10 @@ public class TelecomServiceProviderActivity extends AppCompatActivity {
         String description = editTextDescription.getText().toString().trim();
         String bank = editTextBankAccount.getText().toString().trim();
         String region = editTextRegion.getText().toString().trim();
+        // In uploadService():
+        String category = editTextCategory.getText().toString().trim();
+        String address = editTextAddress.getText().toString().trim();
+
 
         if (company.isEmpty() || description.isEmpty() || bank.isEmpty() || region.isEmpty()  || selectedLogoUri == null) {
             Toast.makeText(this, "Please fill all fields and upload a logo", Toast.LENGTH_SHORT).show();
@@ -122,15 +132,21 @@ public class TelecomServiceProviderActivity extends AppCompatActivity {
             @Override
             public Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
+                String ext = MimeTypeMap.getSingleton().getExtensionFromMimeType(getContentResolver().getType(selectedLogoUri));
+                String filename = "logo_" + System.currentTimeMillis() + "." + ext;
+
                 params.put("provider_id", String.valueOf(providerId));
-                params.put("category", "telecom");
+                params.put("category", category);
                 params.put("title", company);
                 params.put("details", description);
-                params.put("address", region);
+                params.put("address", address);
                 params.put("region", region);
                 params.put("bank_account", bank);
+                params.put("logo_url", filename); // ✅ Added logo_url here
                 return params;
             }
+
+
 
             @Override
             public Map<String, DataPart> getByteData() {
@@ -140,12 +156,15 @@ public class TelecomServiceProviderActivity extends AppCompatActivity {
                     byte[] logoData = new byte[iStream.available()];
                     iStream.read(logoData);
                     String ext = MimeTypeMap.getSingleton().getExtensionFromMimeType(getContentResolver().getType(selectedLogoUri));
-                    params.put("logo", new DataPart("logo_" + System.currentTimeMillis() + "." + ext, logoData, "image/" + ext));
+                    String filename = "logo_" + System.currentTimeMillis() + "." + ext;
+
+                    params.put("logo", new DataPart(filename, logoData, "image/" + ext));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
                 return params;
             }
+
         };
 
         Volley.newRequestQueue(this).add(request);

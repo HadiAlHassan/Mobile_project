@@ -1,5 +1,6 @@
 package com.example.mobile_project_hza2m;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
@@ -13,6 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.mobile_project_hza2m.databinding.ActivityHomeBinding;
+import com.example.mobile_project_hza2m.databinding.ActivityServiceItemsBinding;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -28,10 +31,16 @@ public class ServiceItemsActivity extends AppCompatActivity {
     private ServiceItemAdapter adapter;
     private List<ServiceItem> serviceItemList;
 
+    private ActivityServiceItemsBinding binding;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_service_items);
+        binding = ActivityServiceItemsBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+        binding.fab.setOnClickListener(view ->
+                startActivity(new Intent(ServiceItemsActivity.this, AddServiceItemActivity.class)));
+
 
         recyclerView = findViewById(R.id.recyclerViewServiceItems);
         serviceItemList = new ArrayList<>();

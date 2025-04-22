@@ -55,11 +55,11 @@ public class MyServicesActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerViewMyServices);
         fabAddService = findViewById(R.id.fabAddMyService);
         tvServiceType = findViewById(R.id.tvServiceType);
-        textViewEmpty = findViewById(R.id.textViewEmpty);
         editTextSearch = findViewById(R.id.editTextSearch);
 
         SharedPreferences prefs = getSharedPreferences("AppPrefs", MODE_PRIVATE);
-        int categoryId = prefs.getInt("category_id", -1);
+        String serviceCategory = prefs.getString("service_category", "General");
+
         providerId = prefs.getInt("provider_id", -1);
 
         if (providerId == -1) {
@@ -69,8 +69,8 @@ public class MyServicesActivity extends AppCompatActivity {
             return;
         }
 
-        String categoryLabel = getCategoryLabel(categoryId);
-        tvServiceType.setText("Service Category: " + categoryLabel);
+        tvServiceType.setText("Service Category: " + serviceCategory);
+
 
         serviceList = new ArrayList<>();
         adapter = new MyServiceAdapter(serviceList, (service, position) -> {
@@ -90,14 +90,28 @@ public class MyServicesActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
 
         fabAddService.setOnClickListener(v -> {
-            switch (categoryId) {
-                case 1: startActivity(new Intent(this, OgeroServiceProviderActivity.class)); break;
-                case 2: startActivity(new Intent(this, InsuranceServiceProviderActivity.class)); break;
-                case 3: startActivity(new Intent(this, StreamingServiceProviderActivity.class)); break;
-                case 4: startActivity(new Intent(this, TelecomServiceProviderActivity.class)); break;
-                case 5: startActivity(new Intent(this, TuitionServiceProviderActivity.class)); break;
-                default: break;
+            Toast.makeText(this, "Category ID: " + serviceCategory, Toast.LENGTH_SHORT).show();
+
+            switch (serviceCategory) {
+                case "Ogero Phone Bills":
+                    startActivity(new Intent(this, OgeroServiceProviderActivity.class));
+                    break;
+                case "Insurance":
+                    startActivity(new Intent(this, InsuranceServiceProviderActivity.class));
+                    break;
+                case "Tuition Fees":
+                    startActivity(new Intent(this, TuitionServiceProviderActivity.class));
+                    break;
+                case "Streaming Services":
+                    startActivity(new Intent(this, StreamingServiceProviderActivity.class));
+                    break;
+                case "Telecommunication Services":
+                    startActivity(new Intent(this, TelecomServiceProviderActivity.class));
+                    break;
+                default:
+                    Toast.makeText(this, "Unknown service category", Toast.LENGTH_SHORT).show();
             }
+
         });
 
         editTextSearch.addTextChangedListener(new TextWatcher() {
@@ -130,7 +144,8 @@ public class MyServicesActivity extends AppCompatActivity {
                             serviceList.add(new Service(
                                     svc.getInt("service_id"),
                                     svc.getString("service_name"),
-                                    svc.getString("logo_url")
+                                    svc.getString("logo_url") // ✅
+
                             ));
 
                         }

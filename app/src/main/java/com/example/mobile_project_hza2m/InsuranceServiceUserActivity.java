@@ -28,16 +28,17 @@ public class InsuranceServiceUserActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_insurance_service_user);
 
-        String companyName = getIntent().getStringExtra("company_name");
-        String category = getIntent().getStringExtra("category"); // optional
-
-        if (companyName != null) {
-            fetchServicesForCompany(companyName);
+        int serviceId = getIntent().getIntExtra("service_id", -1);
+        String serviceName = getIntent().getStringExtra("service_name"); // optional for UI
+        if (serviceId != -1) {
+            fetchPlansFromServiceItems(serviceId);
+        } else {
+            Toast.makeText(this, "Missing service ID", Toast.LENGTH_SHORT).show();
         }
 
         // Toolbar setup
         Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle("Insurance Services");
+        toolbar.setTitle(serviceName != null ? serviceName : "Insurance Plans");
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -48,53 +49,45 @@ public class InsuranceServiceUserActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerViewInsurancePlans);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // Dummy data
         plans = new ArrayList<>();
-        plans.add(new InsurancePlan("Basic Plan", "Covers medical visits & hospitalization", "$25 / month", R.drawable.ic_launcher_foreground));
-        plans.add(new InsurancePlan("Family Plan", "Covers 4 members with dental & optical", "$70 / month", R.drawable.ic_launcher_foreground));
-        plans.add(new InsurancePlan("Accident Coverage", "Emergency and accident incidents only", "$12 / month", R.drawable.ic_launcher_foreground));
-
         adapter = new InsurancePlanAdapter(this, plans, plan ->
                 Toast.makeText(this, "Requested: " + plan.getTitle(), Toast.LENGTH_SHORT).show());
 
         recyclerView.setAdapter(adapter);
     }
 
-    private void fetchServicesForCompany(String companyName) {
-        String url = Config.BASE_URL + "services/get_services.php?company_name=" + Uri.encode(companyName);
+    private void fetchPlansFromServiceItems(int serviceId) {
+        String url = Config.BASE_URL + "services/get_service_items.php?service_id=" + serviceId;
 
         StringRequest request = new StringRequest(Request.Method.GET, url,
                 response -> {
                     try {
                         JSONObject json = new JSONObject(response);
                         if (json.getBoolean("success")) {
-                            JSONArray services = json.getJSONArray("services");
-                            plans = new ArrayList<>();
+                            JSONArray items = json.getJSONArray("items");
+                            plans.clear();
 
-                            for (int i = 0; i < services.length(); i++) {
-                                JSONObject obj = services.getJSONObject(i);
+                            for (int i = 0; i < items.length(); i++) {
+                                JSONObject obj = items.getJSONObject(i);
                                 plans.add(new InsurancePlan(
-                                        obj.getString("service_name"),
-                                        "Insurance plan from " + obj.getString("service_name"), // fallback
-                                        "$10 / month",  // or parse real price if returned
-                                        R.drawable.khadamatlogo // fallback icon or parse image_url
+                                        obj.getString("item_name"),
+                                        obj.getString("item_description"),
+                                        obj.getString("item_price"),
+                                        R.drawable.khadamatlogo // use a real image if available
                                 ));
                             }
 
-                            adapter = new InsurancePlanAdapter(this, plans, plan ->
-                                    Toast.makeText(this, "Requested: " + plan.getTitle(), Toast.LENGTH_SHORT).show());
-                            recyclerView.setAdapter(adapter);
+                            adapter.notifyDataSetChanged();
                         } else {
-                            Toast.makeText(this, "No insurance services found", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, "No plans found", Toast.LENGTH_SHORT).show();
                         }
                     } catch (Exception e) {
                         Toast.makeText(this, "Parse error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 },
-                error -> Toast.makeText(this, "Error fetching insurance services", Toast.LENGTH_SHORT).show()
+                error -> Toast.makeText(this, "Error fetching plans", Toast.LENGTH_SHORT).show()
         );
 
         Volley.newRequestQueue(this).add(request);
     }
-
 }

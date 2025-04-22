@@ -16,7 +16,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
 
     EditText oldPassword, newPassword, confirmPassword;
     Button changePasswordBtn;
-    private static final String CHANGE_URL = "http://192.168.0.104/Mobile_submodule_backend/PHP/auth/change_password.php";
+    private static final String CHANGE_URL = Config.BASE_URL + "auth/change_password.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,8 +72,14 @@ public class ChangePasswordActivity extends AppCompatActivity {
                     map.put("user_id", String.valueOf(userId));
                     map.put("old_password", oldPass);
                     map.put("new_password", newPass);
+
+                    // ✅ Add this line:
+                    String role = prefs.getString("role", "user");
+                    map.put("role", role);
+
                     return map;
                 }
+
             };
 
             Volley.newRequestQueue(this).add(request);

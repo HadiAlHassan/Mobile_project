@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -33,12 +32,11 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.CompanyV
     public void onBindViewHolder(@NonNull CompanyViewHolder holder, int position) {
         Company company = companies.get(position);
         holder.companyName.setText(company.getName());
-        holder.companyIcon.setImageResource(company.getIconResId());
-
-        String serviceType = company.getServiceType();
+        holder.companyIcon.setImageResource(company.getDrawableId());
 
         holder.itemView.setOnClickListener(v -> {
             Class<?> targetActivity;
+            String serviceType = company.getCategory();
 
             switch (serviceType) {
                 case "Ogero Phone Bills":
@@ -59,8 +57,9 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.CompanyV
                     break;
             }
 
-            Toast.makeText(holder.itemView.getContext(), serviceType, Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(holder.itemView.getContext(), targetActivity);
+            intent.putExtra("service_id", company.getServiceId()); // ✅ KEY FIX
+            intent.putExtra("company_name", company.getName());
             holder.itemView.getContext().startActivity(intent);
         });
     }
@@ -81,3 +80,4 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.CompanyV
         }
     }
 }
+

@@ -26,6 +26,7 @@ public class TuitionServiceProviderActivity extends AppCompatActivity {
     private ActivityTuitionServiceProviderBinding binding;
 
     EditText editTextUniversityName, editTextUniversityDetails, editTextBankAccount;
+    EditText editTextRegion, editTextContactNumber;
     Button buttonSaveTuitionService;
     private Uri selectedLogoUri;
     private ProgressDialog progressDialog;
@@ -53,6 +54,9 @@ public class TuitionServiceProviderActivity extends AppCompatActivity {
         editTextUniversityDetails = findViewById(R.id.editTextUniversityDetails);
         editTextBankAccount = findViewById(R.id.editTextBankAccount);
         buttonSaveTuitionService = findViewById(R.id.buttonSaveTuitionService);
+         editTextRegion = findViewById(R.id.editTextRegion);
+         editTextContactNumber = findViewById(R.id.editTextContactNumber);
+
 
         imageViewUploadLogo.setOnClickListener(v -> {
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -67,7 +71,14 @@ public class TuitionServiceProviderActivity extends AppCompatActivity {
         String universityName = editTextUniversityName.getText().toString().trim();
         String details = editTextUniversityDetails.getText().toString().trim();
         String bankAccount = editTextBankAccount.getText().toString().trim();
-        String region = "N/A"; // You can adjust or add a region input field later
+        String region = editTextRegion.getText().toString().trim();
+        String contactNumber = editTextContactNumber.getText().toString().trim();
+
+        if (region.isEmpty() || contactNumber.isEmpty()) {
+            Toast.makeText(this, "Region and contact number are required", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
 
 
         if (universityName.isEmpty() || details.isEmpty() || bankAccount.isEmpty() || selectedLogoUri == null) {

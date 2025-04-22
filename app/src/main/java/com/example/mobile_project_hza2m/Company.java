@@ -3,28 +3,19 @@ package com.example.mobile_project_hza2m;
 
 public class Company {
     private String name;
-    private int iconResId;
-    private String serviceType; // ✅ New field
+    private int drawableId;
+    private String category;
+    private int serviceId; // ✅ Add this
 
-    public Company(String name, int iconResId, String serviceType) {
+    public Company(String name, int drawableId, String category, int serviceId) {
         this.name = name;
-        this.iconResId = iconResId;
-        this.serviceType = serviceType;
+        this.drawableId = drawableId;
+        this.category = category;
+        this.serviceId = serviceId;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public int getIconResId() {
-        return iconResId;
-    }
-
-    public String getServiceType() {
-        return serviceType;
-    }
-
-    public void setServiceType(String serviceType) {
-        this.serviceType = serviceType;
-    }
+    public String getName() { return name; }
+    public int getDrawableId() { return drawableId; }
+    public String getCategory() { return category; }
+    public int getServiceId() { return serviceId; }
 }

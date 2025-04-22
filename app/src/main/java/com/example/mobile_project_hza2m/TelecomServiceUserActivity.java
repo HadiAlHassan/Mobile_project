@@ -1,13 +1,12 @@
 package com.example.mobile_project_hza2m;
 
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
@@ -18,76 +17,80 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class TelecomServiceUserActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
-    private List<Service> serviceList;
-    private ServiceAdapter adapter;
+    private TelecomCardAdapter adapter;
+    private ArrayList<TelecomCard> cards;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_telecom_service_user);
 
+        // Setup toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Telecom Services");
         setSupportActionBar(toolbar);
-
-        // Enable back arrow
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
-
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
 
+        // Setup RecyclerView
         recyclerView = findViewById(R.id.recyclerViewTelecomCards);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
 
-        serviceList = new ArrayList<>();
+        cards = new ArrayList<>();
+        adapter = new TelecomCardAdapter(this, cards, card -> {
+            Toast.makeText(this, "Selected: " + card.getValue(), Toast.LENGTH_SHORT).show();
+            // TODO: Open payment screen / subscription logic
+        });
+        recyclerView.setAdapter(adapter);
 
-        String companyName = getIntent().getStringExtra("company_name");
-        String category = getIntent().getStringExtra("category");
-
-        if (companyName != null) {
-            fetchServicesForCompany(companyName);
+        int serviceId = getIntent().getIntExtra("service_id", -1);
+        if (serviceId != -1) {
+            fetchServiceItems(serviceId);
         } else {
-            Toast.makeText(this, "Missing company name", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Missing service ID", Toast.LENGTH_SHORT).show();
         }
     }
 
-    private void fetchServicesForCompany(String companyName) {
-        String url = Config.BASE_URL + "services/get_services_by_company.php?company_name=" + Uri.encode(companyName);
+    private void fetchServiceItems(int serviceId) {
+        String url = Config.BASE_URL + "services/get_service_items.php?service_id=" + serviceId;
 
         StringRequest request = new StringRequest(Request.Method.GET, url,
                 response -> {
                     try {
                         JSONObject json = new JSONObject(response);
                         if (json.getBoolean("success")) {
-                            JSONArray serviceArray = json.getJSONArray("services");
-                            for (int i = 0; i < serviceArray.length(); i++) {
-                                JSONObject obj = serviceArray.getJSONObject(i);
-                                serviceList.add(new Service(
-                                        obj.getInt("service_id"),
-                                        obj.getString("service_name"),
-                                        obj.getString("logo_url"),
-                                        obj.getString("category")
-                                ));
+                            JSONArray items = json.getJSONArray("items");
+                            cards.clear();
+
+                            for (int i = 0; i < items.length(); i++) {
+                                JSONObject obj = items.getJSONObject(i);
+                                String value = obj.getString("item_name"); // e.g., "$5"
+                                String imageName = obj.optString("item_image", "touch_5usd.png"); // e.g., "touch_5usd.png"
+
+                                int imageRes = getResources().getIdentifier(
+                                        imageName.replace(".png", ""), "drawable", getPackageName());
+
+                                if (imageRes == 0) imageRes = R.drawable.khadmatiico; // fallback
+
+                                cards.add(new TelecomCard(value, imageRes));
                             }
 
-                            adapter = new ServiceAdapter(this, serviceList);
-                            recyclerView.setAdapter(adapter);
-
+                            adapter.notifyDataSetChanged();
                         } else {
-                            Toast.makeText(this, "No services found", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, "No service items found", Toast.LENGTH_SHORT).show();
                         }
                     } catch (Exception e) {
                         Toast.makeText(this, "Parse error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 },
-                error -> Toast.makeText(this, "Error loading services", Toast.LENGTH_SHORT).show()
+                error -> Toast.makeText(this, "Network error", Toast.LENGTH_SHORT).show()
         );
 
         Volley.newRequestQueue(this).add(request);

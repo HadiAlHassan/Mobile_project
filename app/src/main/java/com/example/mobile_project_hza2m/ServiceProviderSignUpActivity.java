@@ -126,12 +126,12 @@ public class ServiceProviderSignUpActivity extends AppCompatActivity {
 
                             // Save login info and role
                             SharedPreferences.Editor editor = prefs.edit();
-                            editor.putInt("user_id", providerId); // ✅ allows MyProfileActivity to work with one ID
+                            editor.putInt("user_id", providerId);
                             editor.putInt("provider_id", providerId);
                             editor.putString("saved_email", email);
                             editor.putString("saved_password", password);
-                            editor.putString("role", "provider"); // ✅ to load correct profile
-                            editor.putInt("category_id", categoryId);
+                            editor.putString("role", "provider");
+                            editor.putString("service_category", serviceCategory); // optional
                             editor.apply();
 
                             Toast.makeText(this, "Welcome! You’re now signed in.", Toast.LENGTH_SHORT).show();
@@ -155,16 +155,16 @@ public class ServiceProviderSignUpActivity extends AppCompatActivity {
                 map.put("username", username);
                 map.put("contact_email", email);
                 map.put("password", password);
-                map.put("service_category", serviceCategory);
-                map.put("category_id", String.valueOf(categoryId));
-                map.put("address", "");         // Default placeholder
-                map.put("contact_number", "");  // Default placeholder
+                map.put("service_category", serviceCategory); // ✅ send only name
+                map.put("address", "");
+                map.put("contact_number", "");
                 return map;
             }
         };
 
         Volley.newRequestQueue(this).add(request);
     }
+
 
 
 
