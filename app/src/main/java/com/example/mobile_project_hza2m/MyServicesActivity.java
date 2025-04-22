@@ -105,7 +105,6 @@ public class MyServicesActivity extends AppCompatActivity {
                             serviceList.add(new Services(
                                     svc.getInt("service_id"),
                                     svc.getString("service_name"),
-                                    "$" + svc.getDouble("price"),
                                     R.drawable.ic_launcher_foreground
                             ));
                         }

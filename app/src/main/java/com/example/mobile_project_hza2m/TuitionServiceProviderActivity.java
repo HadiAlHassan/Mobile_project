@@ -68,7 +68,7 @@ public class TuitionServiceProviderActivity extends AppCompatActivity {
         String details = editTextUniversityDetails.getText().toString().trim();
         String bankAccount = editTextBankAccount.getText().toString().trim();
         String region = "N/A"; // You can adjust or add a region input field later
-        String price = "0.00"; // Tuition service might not have upfront price
+
 
         if (universityName.isEmpty() || details.isEmpty() || bankAccount.isEmpty() || selectedLogoUri == null) {
             Toast.makeText(this, "Please fill all fields and upload a logo", Toast.LENGTH_SHORT).show();
@@ -117,7 +117,6 @@ public class TuitionServiceProviderActivity extends AppCompatActivity {
                 params.put("category", "tuition");
                 params.put("title", universityName);
                 params.put("details", details);
-                params.put("price", price);
                 params.put("address", "University Area");
                 params.put("region", region);
                 params.put("bank_account", bankAccount);

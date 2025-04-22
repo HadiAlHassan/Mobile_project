@@ -63,7 +63,6 @@ public class OgeroServiceProviderActivity extends AppCompatActivity {
     private void uploadOgeroService() {
         String ogeroNumber = editTextOgeroNumber.getText().toString().trim();
         String bankAccount = editTextBankAccount.getText().toString().trim();
-        String price = "0.00"; // fixed or default for now
 
         if (ogeroNumber.isEmpty() || bankAccount.isEmpty() || selectedLogoUri == null) {
             Toast.makeText(this, "Please fill all fields and upload a logo", Toast.LENGTH_SHORT).show();
@@ -110,8 +109,7 @@ public class OgeroServiceProviderActivity extends AppCompatActivity {
                 Map<String, String> params = new HashMap<>();
                 params.put("provider_id", String.valueOf(providerId));
                 params.put("category", "ogero");
-                params.put("title", "Ogero Service");
-                params.put("price", price);
+                params.put("title", "Ogero Service");;
                 params.put("address", ogeroNumber);
                 params.put("region", ogeroNumber);
                 params.put("bank_account", bankAccount);

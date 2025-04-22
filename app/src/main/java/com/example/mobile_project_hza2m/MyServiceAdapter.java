@@ -64,7 +64,6 @@ public class MyServiceAdapter extends RecyclerView.Adapter<MyServiceAdapter.View
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Services service = serviceList.get(position);
         holder.serviceName.setText(service.getName());
-        holder.servicePrice.setText(service.getPrice());
         holder.serviceIcon.setImageResource(service.getIconResId());
 
         holder.deleteBtn.setOnClickListener(v -> {
@@ -93,7 +92,6 @@ public class MyServiceAdapter extends RecyclerView.Adapter<MyServiceAdapter.View
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             serviceName = itemView.findViewById(R.id.textServiceName);
-            servicePrice = itemView.findViewById(R.id.textServicePrice);
             serviceIcon = itemView.findViewById(R.id.imageServiceIcon);
             deleteBtn = itemView.findViewById(R.id.buttonDeleteService);
         }

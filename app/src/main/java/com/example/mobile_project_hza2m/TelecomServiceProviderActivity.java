@@ -54,7 +54,6 @@ public class TelecomServiceProviderActivity extends AppCompatActivity {
         editTextDescription = findViewById(R.id.editTextDescription);
         editTextBankAccount = findViewById(R.id.editTextBankAccount);
         editTextRegion = findViewById(R.id.editTextRegion);
-        editTextPrice = findViewById(R.id.editTextPrice);
         imageViewLogo = findViewById(R.id.imageViewLogo);
         buttonSubmit = findViewById(R.id.buttonSubmitTelecom);
 
@@ -77,9 +76,8 @@ public class TelecomServiceProviderActivity extends AppCompatActivity {
         String description = editTextDescription.getText().toString().trim();
         String bank = editTextBankAccount.getText().toString().trim();
         String region = editTextRegion.getText().toString().trim();
-        String price = editTextPrice.getText().toString().trim();
 
-        if (company.isEmpty() || description.isEmpty() || bank.isEmpty() || region.isEmpty() || price.isEmpty() || selectedLogoUri == null) {
+        if (company.isEmpty() || description.isEmpty() || bank.isEmpty() || region.isEmpty()  || selectedLogoUri == null) {
             Toast.makeText(this, "Please fill all fields and upload a logo", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -128,7 +126,6 @@ public class TelecomServiceProviderActivity extends AppCompatActivity {
                 params.put("category", "telecom");
                 params.put("title", company);
                 params.put("details", description);
-                params.put("price", price);
                 params.put("address", region);
                 params.put("region", region);
                 params.put("bank_account", bank);

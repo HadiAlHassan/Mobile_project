@@ -31,7 +31,7 @@ public class StreamingServiceProviderActivity extends AppCompatActivity {
 
     private ActivityStreamingServiceProviderBinding binding;
 ImageView imageViewProviderLogo, imageViewUpload;
- EditText editTextCompany, editTextCoverage, editTextBankAccount, editTextRegion, editTextPrice;
+ EditText editTextCompany, editTextCoverage, editTextBankAccount, editTextRegion;
 
 Button btnSubmitStreaming;
     private Uri selectedLogoUri;
@@ -66,7 +66,6 @@ Button btnSubmitStreaming;
          editTextBankAccount = findViewById(R.id.editTextBankAccount);
          editTextCoverage = findViewById(R.id.editTextCoverage);
          editTextRegion = findViewById(R.id.editTextRegion);
-         editTextPrice = findViewById(R.id.editTextPrice);
 
 
     }
@@ -76,9 +75,8 @@ Button btnSubmitStreaming;
         String coverage = editTextCoverage.getText().toString().trim();
         String bank = editTextBankAccount.getText().toString().trim();
         String region = editTextRegion.getText().toString().trim();
-        String price = editTextPrice.getText().toString().trim();
 
-        if (company.isEmpty() || coverage.isEmpty() || bank.isEmpty() || region.isEmpty() || price.isEmpty() || selectedLogoUri == null) {
+        if (company.isEmpty() || coverage.isEmpty() || bank.isEmpty() || region.isEmpty()|| selectedLogoUri == null) {
             Toast.makeText(this, "Please fill all fields and upload a logo", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -125,7 +123,6 @@ Button btnSubmitStreaming;
                 params.put("category", "streaming");
                 params.put("title", company);
                 params.put("details", coverage);
-                params.put("price", price);
                 params.put("address", region);
                 params.put("region", region);
                 params.put("bank_account", bank);
