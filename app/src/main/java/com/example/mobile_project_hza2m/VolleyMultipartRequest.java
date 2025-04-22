@@ -1,22 +1,16 @@
 package com.example.mobile_project_hza2m;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.NetworkResponse;
-import com.android.volley.Request;
-import com.android.volley.Response;
+import com.android.volley.*;
 import com.android.volley.toolbox.HttpHeaderParser;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.util.HashMap;
-import java.util.Map;
+import java.io.*;
+import java.util.*;
 
-public class VolleyMultipartRequest extends Request<NetworkResponse> {
+public abstract class VolleyMultipartRequest extends Request<NetworkResponse> {
 
     private final Response.Listener<NetworkResponse> mListener;
     private final Response.ErrorListener mErrorListener;
-    private final Map<String, String> mHeaders;
+    private final Map<String, String> headers;
 
     public VolleyMultipartRequest(int method, String url,
                                   Response.Listener<NetworkResponse> listener,
@@ -24,53 +18,56 @@ public class VolleyMultipartRequest extends Request<NetworkResponse> {
         super(method, url, errorListener);
         this.mListener = listener;
         this.mErrorListener = errorListener;
-        this.mHeaders = new HashMap<>();
+        this.headers = new HashMap<>();
     }
 
     @Override
-    public Map<String, String> getHeaders() throws AuthFailureError {
-        return mHeaders;
+    public Map<String, String> getHeaders() {
+        return headers;
     }
+
+    protected abstract Map<String, DataPart> getByteData();
 
     @Override
     public String getBodyContentType() {
-        return "multipart/form-data;boundary=" + boundary;
+        return "multipart/form-data; boundary=" + BOUNDARY;
     }
+
+    private static final String LINE_FEED = "\r\n";
+    private static final String BOUNDARY = "VolleyBoundary_" + System.currentTimeMillis();
 
     @Override
     public byte[] getBody() throws AuthFailureError {
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        DataOutputStream writer = new DataOutputStream(output);
 
         try {
-            // Text parameters
+            // Text
             for (Map.Entry<String, String> entry : getParams().entrySet()) {
-                bos.write(("--" + boundary + LINE_FEED).getBytes());
-                bos.write(("Content-Disposition: form-data; name=\"" + entry.getKey() + "\"" + LINE_FEED).getBytes());
-                bos.write((LINE_FEED).getBytes());
-                bos.write((entry.getValue() + LINE_FEED).getBytes());
+                writer.writeBytes("--" + BOUNDARY + LINE_FEED);
+                writer.writeBytes("Content-Disposition: form-data; name=\"" + entry.getKey() + "\"" + LINE_FEED);
+                writer.writeBytes(LINE_FEED);
+                writer.writeBytes(entry.getValue() + LINE_FEED);
             }
 
-            // File parameters
-            Map<String, DataPart> data = getByteData();
-            for (Map.Entry<String, DataPart> entry : data.entrySet()) {
-                DataPart file = entry.getValue();
-                bos.write(("--" + boundary + LINE_FEED).getBytes());
-                bos.write(("Content-Disposition: form-data; name=\"" + entry.getKey() +
-                        "\"; filename=\"" + file.getFileName() + "\"" + LINE_FEED).getBytes());
-                bos.write(("Content-Type: " + file.getType() + LINE_FEED).getBytes());
-                bos.write((LINE_FEED).getBytes());
-
-                bos.write(file.getContent());
-
-                bos.write((LINE_FEED).getBytes());
+            // File
+            for (Map.Entry<String, DataPart> entry : getByteData().entrySet()) {
+                DataPart part = entry.getValue();
+                writer.writeBytes("--" + BOUNDARY + LINE_FEED);
+                writer.writeBytes("Content-Disposition: form-data; name=\"" +
+                        entry.getKey() + "\"; filename=\"" + part.getFileName() + "\"" + LINE_FEED);
+                writer.writeBytes("Content-Type: " + part.getType() + LINE_FEED);
+                writer.writeBytes(LINE_FEED);
+                writer.write(part.getContent());
+                writer.writeBytes(LINE_FEED);
             }
 
-            bos.write(("--" + boundary + "--" + LINE_FEED).getBytes());
+            writer.writeBytes("--" + BOUNDARY + "--" + LINE_FEED);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        return bos.toByteArray();
+        return output.toByteArray();
     }
 
     @Override
@@ -84,16 +81,8 @@ public class VolleyMultipartRequest extends Request<NetworkResponse> {
     }
 
     @Override
-    public void deliverError(com.android.volley.VolleyError error) {
+    public void deliverError(VolleyError error) {
         mErrorListener.onErrorResponse(error);
-    }
-
-    public Map<String, String> getParams() throws AuthFailureError {
-        return new HashMap<>();
-    }
-
-    public Map<String, DataPart> getByteData() throws AuthFailureError {
-        return new HashMap<>();
     }
 
     public static class DataPart {
@@ -123,7 +112,4 @@ public class VolleyMultipartRequest extends Request<NetworkResponse> {
             return type;
         }
     }
-
-    private static final String LINE_FEED = "\r\n";
-    private final String boundary = "apiclient-" + System.currentTimeMillis();
 }

@@ -1,43 +1,139 @@
 package com.example.mobile_project_hza2m;
 
+import android.app.ProgressDialog;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
+import android.webkit.MimeTypeMap;
+import android.widget.*;
 
-import com.google.android.material.snackbar.Snackbar;
-
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.view.View;
+import com.android.volley.Request;
+import com.android.volley.toolbox.Volley;
 
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
+import org.json.JSONObject;
 
-import com.example.mobile_project_hza2m.databinding.ActivityOgeroServiceProviderBinding;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 public class OgeroServiceProviderActivity extends AppCompatActivity {
 
-    private AppBarConfiguration appBarConfiguration;
-    private ActivityOgeroServiceProviderBinding binding;
+    private EditText editTextOgeroNumber, editTextBankAccount;
+    private ImageView imageViewProviderLogo;
+    private Uri selectedLogoUri;
+    private ProgressDialog progressDialog;
+
+    private final String UPLOAD_URL = Config.BASE_URL + "services/add_service.php";
+
+    private final ActivityResultLauncher<Intent> logoPickerLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                    selectedLogoUri = result.getData().getData();
+                    imageViewProviderLogo.setImageURI(selectedLogoUri);
+                }
+            }
+    );
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_ogero_service_provider);
 
-        binding = ActivityOgeroServiceProviderBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        imageViewProviderLogo = findViewById(R.id.imageViewProviderLogo);
+        ImageView imageViewUpload = findViewById(R.id.imageViewUpload);
+        editTextOgeroNumber = findViewById(R.id.editTextHotline);
+        editTextBankAccount = findViewById(R.id.editTextBankAccount);
+        Button buttonSubmit = findViewById(R.id.buttonSubmitOgero);
 
-        setSupportActionBar(binding.toolbar);
-
-        binding.fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAnchorView(R.id.fab)
-                        .setAction("Action", null).show();
-            }
+        imageViewUpload.setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+            intent.setType("image/*");
+            logoPickerLauncher.launch(intent);
         });
+
+        buttonSubmit.setOnClickListener(v -> uploadOgeroService());
     }
 
+    private void uploadOgeroService() {
+        String ogeroNumber = editTextOgeroNumber.getText().toString().trim();
+        String bankAccount = editTextBankAccount.getText().toString().trim();
+        String price = "0.00"; // fixed or default for now
 
+        if (ogeroNumber.isEmpty() || bankAccount.isEmpty() || selectedLogoUri == null) {
+            Toast.makeText(this, "Please fill all fields and upload a logo", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        SharedPreferences prefs = getSharedPreferences("AppPrefs", MODE_PRIVATE);
+        int providerId = prefs.getInt("provider_id", -1);
+        if (providerId == -1) {
+            Toast.makeText(this, "Provider ID not found", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        progressDialog = ProgressDialog.show(this, "", "Submitting...", true);
+
+        VolleyMultipartRequest request = new VolleyMultipartRequest(Request.Method.POST, UPLOAD_URL,
+                response -> {
+                    progressDialog.dismiss();
+                    try {
+                        String json = new String(response.data);
+                        JSONObject obj = new JSONObject(json);
+                        if (obj.getBoolean("success")) {
+                            int serviceId = obj.getInt("service_id");
+                            SharedPreferences.Editor editor = prefs.edit();
+                            editor.putInt("service_id", serviceId);
+                            editor.apply();
+                            Toast.makeText(this, obj.getString("message"), Toast.LENGTH_SHORT).show();
+                            finish();
+                        } else {
+                            Toast.makeText(this, obj.getString("message"), Toast.LENGTH_SHORT).show();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        Toast.makeText(this, "Error parsing response", Toast.LENGTH_SHORT).show();
+                    }
+                },
+                error -> {
+                    progressDialog.dismiss();
+                    Toast.makeText(this, "Upload failed: " + error.getMessage(), Toast.LENGTH_LONG).show();
+                }) {
+
+            @Override
+            public Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("provider_id", String.valueOf(providerId));
+                params.put("category", "ogero");
+                params.put("title", "Ogero Service");
+                params.put("price", price);
+                params.put("address", ogeroNumber);
+                params.put("region", ogeroNumber);
+                params.put("bank_account", bankAccount);
+                return params;
+            }
+
+            @Override
+            public Map<String, DataPart> getByteData() {
+                Map<String, DataPart> params = new HashMap<>();
+                try {
+                    InputStream iStream = getContentResolver().openInputStream(selectedLogoUri);
+                    byte[] logoData = new byte[iStream.available()];
+                    iStream.read(logoData);
+                    String ext = MimeTypeMap.getSingleton().getExtensionFromMimeType(getContentResolver().getType(selectedLogoUri));
+                    params.put("logo", new DataPart("logo_" + System.currentTimeMillis() + "." + ext, logoData, "image/" + ext));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return params;
+            }
+        };
+
+        Volley.newRequestQueue(this).add(request);
+    }
 }

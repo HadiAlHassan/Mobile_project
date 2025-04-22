@@ -6,23 +6,14 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.webkit.MimeTypeMap;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.Toast;
+import android.widget.*;
 
-import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.android.volley.Request;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.mobile_project_hza2m.databinding.ActivityAddServiceItemBinding;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -31,11 +22,8 @@ import java.util.Map;
 
 public class AddServiceItemActivity extends AppCompatActivity {
 
-    private ActivityAddServiceItemBinding binding;
-    private EditText editServiceName, editServicePrice;
+    private EditText editServiceName, editServicePrice, editServiceDescription;
     private ImageView imagePreview;
-    private Button btnUpload, btnSubmit;
-
     private Uri selectedImageUri;
     private ProgressDialog progressDialog;
 
@@ -48,20 +36,19 @@ public class AddServiceItemActivity extends AppCompatActivity {
                     selectedImageUri = result.getData().getData();
                     imagePreview.setImageURI(selectedImageUri);
                 }
-            }
-    );
+            });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityAddServiceItemBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        setContentView(R.layout.activity_add_service_item);
 
         editServiceName = findViewById(R.id.editServiceName);
         editServicePrice = findViewById(R.id.editServicePrice);
+        editServiceDescription = findViewById(R.id.editServiceDescription);
         imagePreview = findViewById(R.id.imagePreview);
-        btnUpload = findViewById(R.id.btnUploadIcon);
-        btnSubmit = findViewById(R.id.btnSubmitService);
+        Button btnUpload = findViewById(R.id.btnUploadIcon);
+        Button btnSubmit = findViewById(R.id.btnSubmitService);
 
         btnUpload.setOnClickListener(v -> {
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -75,16 +62,18 @@ public class AddServiceItemActivity extends AppCompatActivity {
     private void uploadServiceItem() {
         String name = editServiceName.getText().toString().trim();
         String price = editServicePrice.getText().toString().trim();
+        String description = editServiceDescription.getText().toString().trim();
 
         if (name.isEmpty() || price.isEmpty() || selectedImageUri == null) {
-            Toast.makeText(this, "Please fill all fields and upload an image", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Please fill all required fields and upload an image", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        SharedPreferences prefs = getSharedPreferences("AppPrefs", MODE_PRIVATE);
-        int providerId = prefs.getInt("provider_id", -1);
-        if (providerId == -1) {
-            Toast.makeText(this, "Provider ID not found", Toast.LENGTH_SHORT).show();
+        SharedPreferences prefs = getSharedPreferences("AppPrefs", MODE_PRIVATE); // named preferences
+        int serviceId = prefs.getInt("service_id", -1); // MUST be service_id, not provider_id
+
+        if (serviceId == -1) {
+            Toast.makeText(this, "Service ID not found in AppPrefs", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -100,28 +89,33 @@ public class AddServiceItemActivity extends AppCompatActivity {
                     progressDialog.dismiss();
                     Toast.makeText(this, "Upload failed: " + error.getMessage(), Toast.LENGTH_LONG).show();
                 }) {
+
             @Override
             public Map<String, String> getParams() {
-                Map<String, String> map = new HashMap<>();
-                map.put("provider_id", String.valueOf(providerId));
-                map.put("service_name", name);
-                map.put("price", price);
-                return map;
+                Map<String, String> params = new HashMap<>();
+                params.put("service_id", String.valueOf(serviceId));
+                params.put("service_name", name);
+                params.put("description", description);
+                params.put("price", price);
+                return params;
             }
 
             @Override
             public Map<String, DataPart> getByteData() {
-                Map<String, DataPart> params = new HashMap<>();
+                Map<String, DataPart> imageParams = new HashMap<>();
                 try {
                     InputStream iStream = getContentResolver().openInputStream(selectedImageUri);
                     byte[] inputData = new byte[iStream.available()];
                     iStream.read(inputData);
-                    String extension = MimeTypeMap.getSingleton().getExtensionFromMimeType(getContentResolver().getType(selectedImageUri));
-                    params.put("image", new DataPart("service_" + System.currentTimeMillis() + "." + extension, inputData));
+
+                    String mime = getContentResolver().getType(selectedImageUri);
+                    String extension = MimeTypeMap.getSingleton().getExtensionFromMimeType(mime);
+
+                    imageParams.put("service_icon", new DataPart("svc_" + System.currentTimeMillis() + "." + extension, inputData));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                return params;
+                return imageParams;
             }
         };
 

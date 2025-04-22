@@ -15,17 +15,17 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Offer Ogero Bill Payment Service"
+            android:text="Register Ogero Bill Payment Service"
             android:textSize="20sp"
             android:textStyle="bold"
             android:textColor="@color/black"
             android:layout_marginBottom="16dp" />
 
-        <!-- Provider Logo / Proof Image -->
+        <!-- Logo Upload -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Upload Service Proof / Logo"
+            android:text="Upload Service Logo"
             android:textSize="16sp"
             android:textStyle="bold"
             android:layout_marginBottom="8dp" />
@@ -39,9 +39,9 @@
                 android:id="@+id/imageViewProviderLogo"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/khadmatiico"
+                android:src="@drawable/ic_launcher_foreground"
                 android:scaleType="centerCrop"
-                android:background="@color/UseBlue"
+                android:background="@drawable/circle_background"
                 android:padding="4dp" />
 
             <ImageView
@@ -56,31 +56,57 @@
                 android:elevation="4dp" />
         </FrameLayout>
 
-        <!-- Ogero Landline Number -->
-        <EditText
-            android:id="@+id/editTextOgeroNumber"
+        <!-- Service Title -->
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Ogero Hotline Number"
-            android:inputType="phone" />
+            android:hint="Service Title">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextServiceTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textCapWords"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Hotline Number -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:hint="Ogero Hotline Number">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextHotline"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="phone" />
+        </com.google.android.material.textfield.TextInputLayout>
+
 
         <!-- Bank Account -->
-        <EditText
-            android:id="@+id/editTextBankAccount"
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Bank Account Number for Payments"
-            android:inputType="number"
-            android:layout_marginTop="12dp" />
+            android:layout_marginTop="16dp"
+            android:hint="Bank Account Number">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextBankAccount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Referral Client -->
-        <EditText
-            android:id="@+id/editTextReferralClient"
+        <!-- Price -->
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Referral Customer Service"
-            android:inputType="textCapWords"
-            android:layout_marginTop="12dp" />
+            android:layout_marginTop="16dp"
+            android:hint="Service Price (e.g. 5.00)">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextPrice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Submit Button -->
         <Button

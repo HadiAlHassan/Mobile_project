@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="24dp"
@@ -11,6 +12,7 @@
         android:orientation="vertical"
         android:gravity="center_horizontal">
 
+        <!-- Title -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -55,28 +57,23 @@
                 android:elevation="4dp" />
         </FrameLayout>
 
-        <!-- Company Name -->
+        <!-- Service Name -->
         <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Insurance Company Name">
-
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextCompany"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textCapWords" />
+                android:layout_height="wrap_content" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Description -->
         <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:hint="Coverage Description">
-
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextCoverage"
                 android:layout_width="match_parent"
@@ -87,12 +84,10 @@
 
         <!-- Bank Account -->
         <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:hint="Bank Account">
-
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextBankAccount"
                 android:layout_width="match_parent"
@@ -102,22 +97,32 @@
 
         <!-- Region -->
         <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:hint="Service Area">
-
+            android:hint="Service Region">
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextRegion"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textCapWords" />
+                android:layout_height="wrap_content" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Submit -->
+        <!-- Price -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:hint="Service Price">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextPrice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Submit Button -->
         <Button
-            android:id="@+id/buttonSubmitInsurance"
+            android:id="@+id/buttonSubmitStreaming"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Submit Service"

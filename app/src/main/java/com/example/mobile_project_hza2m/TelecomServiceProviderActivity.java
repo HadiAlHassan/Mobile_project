@@ -1,83 +1,156 @@
 package com.example.mobile_project_hza2m;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.Toast;
+import android.webkit.MimeTypeMap;
+import android.widget.*;
 
-import androidx.annotation.NonNull;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
-import com.example.mobile_project_hza2m.databinding.ActivityInsuranceServiceProviderBinding;
+import com.android.volley.Request;
+import com.android.volley.toolbox.Volley;
 import com.example.mobile_project_hza2m.databinding.ActivityTelecomServiceProviderBinding;
 
+import org.json.JSONObject;
+
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 public class TelecomServiceProviderActivity extends AppCompatActivity {
 
-    com.example.mobile_project_hza2m.databinding.ActivityTelecomServiceProviderBinding binding;
-    private ImageView imageViewProviderLogo, imageViewUpload;
-    private EditText editTextCompany, editTextBankAccount, editTextServiceArea;
-    private Button buttonSubmit;
+    EditText editTextCompany, editTextDescription, editTextBankAccount, editTextRegion, editTextPrice;
+    ImageView imageViewLogo;
+    Uri selectedLogoUri;
+    Button buttonSubmit;
+    ProgressDialog progressDialog;
 
+    private ActivityTelecomServiceProviderBinding binding;
+    private final String UPLOAD_URL = Config.BASE_URL + "services/add_service.php";
+
+    private final ActivityResultLauncher<Intent> imagePickerLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                    selectedLogoUri = result.getData().getData();
+                    imageViewLogo.setImageURI(selectedLogoUri);
+                }
+            }
+    );
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         binding = ActivityTelecomServiceProviderBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-
-        binding.fabaddfund.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(TelecomServiceProviderActivity.this, AddServiceItemActivity.class);
-                startActivity(i);
-            }
-        });
-
-        // Toolbar setup
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle("Telecom Provider Info");
-        setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
-        }
-;
-        toolbar.setNavigationOnClickListener(v -> onBackPressed());
-
-        // Views
-        imageViewProviderLogo = findViewById(R.id.imageViewProviderLogo);
-        imageViewUpload = findViewById(R.id.imageViewUpload);
         editTextCompany = findViewById(R.id.editTextCompany);
+        editTextDescription = findViewById(R.id.editTextDescription);
         editTextBankAccount = findViewById(R.id.editTextBankAccount);
-        editTextServiceArea = findViewById(R.id.editTextServiceArea);
+        editTextRegion = findViewById(R.id.editTextRegion);
+        editTextPrice = findViewById(R.id.editTextPrice);
+        imageViewLogo = findViewById(R.id.imageViewLogo);
         buttonSubmit = findViewById(R.id.buttonSubmitTelecom);
 
-        // Handle image upload (optional)
-        imageViewUpload.setOnClickListener(v -> {
-            Toast.makeText(this, "Upload image clicked", Toast.LENGTH_SHORT).show();
-            // TODO: Open image picker
+        findViewById(R.id.imageViewUploadLogo).setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+            intent.setType("image/*");
+            imagePickerLauncher.launch(intent);
         });
 
-        // Handle submission
-        buttonSubmit.setOnClickListener(v -> {
-            String company = editTextCompany.getText().toString().trim();
-            String bank = editTextBankAccount.getText().toString().trim();
-            String area = editTextServiceArea.getText().toString().trim();
+        buttonSubmit.setOnClickListener(v -> uploadService());
 
-            if (company.isEmpty() || bank.isEmpty()) {
-                Toast.makeText(this, "Please enter company and bank account", Toast.LENGTH_SHORT).show();
-                return;
+        binding.fabaddserviceitem.setOnClickListener(view -> {
+            Intent i = new Intent(TelecomServiceProviderActivity.this, AddServiceItemActivity.class);
+            startActivity(i);
+        });
+    }
+
+    private void uploadService() {
+        String company = editTextCompany.getText().toString().trim();
+        String description = editTextDescription.getText().toString().trim();
+        String bank = editTextBankAccount.getText().toString().trim();
+        String region = editTextRegion.getText().toString().trim();
+        String price = editTextPrice.getText().toString().trim();
+
+        if (company.isEmpty() || description.isEmpty() || bank.isEmpty() || region.isEmpty() || price.isEmpty() || selectedLogoUri == null) {
+            Toast.makeText(this, "Please fill all fields and upload a logo", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        SharedPreferences prefs = getSharedPreferences("AppPrefs", MODE_PRIVATE);
+        int providerId = prefs.getInt("provider_id", -1);
+        if (providerId == -1) {
+            Toast.makeText(this, "Invalid provider session", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        progressDialog = ProgressDialog.show(this, "", "Submitting...", true);
+
+        VolleyMultipartRequest request = new VolleyMultipartRequest(Request.Method.POST, UPLOAD_URL,
+                response -> {
+                    progressDialog.dismiss();
+                    try {
+                        String json = new String(response.data);
+                        JSONObject obj = new JSONObject(json);
+                        if (obj.getBoolean("success")) {
+                            int serviceId = obj.getInt("service_id");
+
+                            SharedPreferences.Editor editor = getSharedPreferences("AppPrefs", MODE_PRIVATE).edit();
+                            editor.putInt("service_id", serviceId);
+                            editor.apply();
+
+                            Toast.makeText(this, obj.getString("message"), Toast.LENGTH_SHORT).show();
+                            finish();
+                        } else {
+                            Toast.makeText(this, obj.getString("message"), Toast.LENGTH_SHORT).show();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        Toast.makeText(this, "Failed to parse server response", Toast.LENGTH_SHORT).show();
+                    }
+                },
+                error -> {
+                    progressDialog.dismiss();
+                    Toast.makeText(this, "Upload failed: " + error.getMessage(), Toast.LENGTH_LONG).show();
+                }) {
+
+            @Override
+            public Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("provider_id", String.valueOf(providerId));
+                params.put("category", "telecom");
+                params.put("title", company);
+                params.put("details", description);
+                params.put("price", price);
+                params.put("address", region);
+                params.put("region", region);
+                params.put("bank_account", bank);
+                return params;
             }
 
-            // TODO: Store or pass data to next step
-            Toast.makeText(this, "Service submitted successfully!", Toast.LENGTH_LONG).show();
-        });
+            @Override
+            public Map<String, DataPart> getByteData() {
+                Map<String, DataPart> params = new HashMap<>();
+                try {
+                    InputStream iStream = getContentResolver().openInputStream(selectedLogoUri);
+                    byte[] logoData = new byte[iStream.available()];
+                    iStream.read(logoData);
+                    String ext = MimeTypeMap.getSingleton().getExtensionFromMimeType(getContentResolver().getType(selectedLogoUri));
+                    params.put("logo", new DataPart("logo_" + System.currentTimeMillis() + "." + ext, logoData, "image/" + ext));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return params;
+            }
+        };
+
+        Volley.newRequestQueue(this).add(request);
     }
 }

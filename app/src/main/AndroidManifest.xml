@@ -15,11 +15,21 @@
         android:theme="@style/Base.Theme.Mobile_Project_HZA2M"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".ServiceItemsActivity"
+            android:exported="false"
+            android:theme="@style/Base.Theme.Mobile_Project_HZA2M" />
+        <activity
             android:name=".InsuranceServiceProviderActivity"
             android:exported="false"
             android:theme="@style/Base.Theme.Mobile_Project_HZA2M" />
         <activity
             android:name=".ChangePasswordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AddServiceItemActivity"
+            android:exported="false" /> <!-- Core Activities -->
+        <activity
+            android:name=".AddServiceItemActivity"
             android:exported="false" />
         <activity
             android:name=".Privacy"
@@ -35,10 +45,7 @@
         <activity
             android:name=".ContactUsActivity"
             android:exported="false"
-            android:theme="@style/Base.Theme.Mobile_Project_HZA2M" /> <!-- Core Activities -->
-        <activity
-            android:name=".AddServiceItemActivity"
-            android:exported="false" />
+            android:theme="@style/Base.Theme.Mobile_Project_HZA2M" />
         <activity
             android:name=".Settings"
             android:exported="false" />
@@ -127,7 +134,6 @@
             android:name=".TuitionServiceProviderActivity"
             android:exported="false"
             android:theme="@style/Theme.Mobile_Project_HZA2M" />
-
         <activity
             android:name=".MyBillingActivity"
             android:exported="false"
