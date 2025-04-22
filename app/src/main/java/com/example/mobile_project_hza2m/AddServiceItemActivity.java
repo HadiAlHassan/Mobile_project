@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class AddServiceItemActivity extends AppCompatActivity {
 
@@ -42,6 +43,7 @@ public class AddServiceItemActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_service_item);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
         editServiceName = findViewById(R.id.editServiceName);
         editServicePrice = findViewById(R.id.editServicePrice);

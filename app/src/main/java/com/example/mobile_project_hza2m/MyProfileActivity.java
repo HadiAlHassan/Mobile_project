@@ -3,6 +3,7 @@ package com.example.mobile_project_hza2m;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -21,18 +22,21 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+
+
 public class MyProfileActivity extends AppCompatActivity {
 
     private ActivityMyProfileBinding binding;
     private EditText fullName, email, phone, gender;
     private RadioGroup ageGroupRadio;
-    private Button saveBtn, logoutBtn;
-    private Button editBtn;
+    private Button saveBtn, logoutBtn, editBtn;
 
-    private static final String LOAD_URL = Config.BASE_URL+"profile/load_profile.php";
-    private static final String SAVE_URL = Config.BASE_URL+"profile/update_profile.php";
+    private static final String LOAD_URL = Config.BASE_URL + "profile/load_profile.php";
+    private static final String SAVE_URL = Config.BASE_URL + "profile/update_profile.php";
+    private static final String DELETE_URL = Config.BASE_URL + "profile/delete_account.php";
 
-    private int userId;  // Assume this comes from login
+    private int userId;
+    private String role;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,11 +56,19 @@ public class MyProfileActivity extends AppCompatActivity {
         logoutBtn = findViewById(R.id.buttonLogout);
         editBtn = findViewById(R.id.buttonEdit);
 
-        userId = getSharedPreferences("AppPrefs", MODE_PRIVATE).getInt("user_id", -1);
+        SharedPreferences prefs = getSharedPreferences("AppPrefs", MODE_PRIVATE);
+        role = prefs.getString("role", "user");
+        userId = role.equals("provider") ? prefs.getInt("provider_id", -1) : prefs.getInt("user_id", -1);
+
+        if (userId <= 0) {
+            Toast.makeText(this, "Session expired. Please log in again.", Toast.LENGTH_LONG).show();
+            startActivity(new Intent(this, UserLogin.class));
+            finish();
+            return;
+        }
 
         loadProfile();
         enableEditing(false);
-
 
         saveBtn.setOnClickListener(v -> updateProfile());
         logoutBtn.setOnClickListener(v -> {
@@ -67,43 +79,45 @@ public class MyProfileActivity extends AppCompatActivity {
 
         editBtn.setOnClickListener(v -> enableEditing(true));
 
-        Button changePasswordBtn = findViewById(R.id.buttonChangePassword);
-        changePasswordBtn.setOnClickListener(v ->
-                startActivity(new Intent(MyProfileActivity.this, ChangePasswordActivity.class))
-        );
+        findViewById(R.id.buttonChangePassword).setOnClickListener(v ->
+                startActivity(new Intent(MyProfileActivity.this, ChangePasswordActivity.class)));
 
-        Button deleteAccountBtn = findViewById(R.id.buttonDeleteAccount);
-        deleteAccountBtn.setOnClickListener(v -> confirmDeleteAccount());
-
-
-
+        findViewById(R.id.buttonDeleteAccount).setOnClickListener(v -> confirmDeleteAccount());
     }
 
     private void loadProfile() {
         ProgressDialog dialog = ProgressDialog.show(this, "", "Loading...", true);
-        String url = LOAD_URL + "?user_id=" + userId;
+        String url = LOAD_URL + "?user_id=" + userId + "&role=" + role;
 
         StringRequest request = new StringRequest(Request.Method.GET, url,
                 response -> {
                     dialog.dismiss();
-                    Log.e("LOAD_PROFILE_RAW", "[" + response + "]");  // 👈 Log response for debugging
                     try {
                         JSONObject json = new JSONObject(response);
                         if (json.getBoolean("success")) {
-                            JSONObject user = json.getJSONObject("user");
-                            fullName.setText(user.getString("full_name"));
-                            email.setText(user.getString("email"));
-                            phone.setText(user.getString("phone_number"));
-                            gender.setText(user.getString("gender"));
-
-                            String ageGroup = user.getString("age_group");
-                            if ("above".equals(ageGroup)) {
-                                ageGroupRadio.check(R.id.radioAbove);
+                            if (role.equals("provider")) {
+                                JSONObject provider = json.getJSONObject("provider");
+                                fullName.setText(provider.getString("username"));
+                                email.setText(provider.getString("contact_email"));
+                                phone.setText(provider.optString("contact_number", ""));
+                                gender.setVisibility(View.GONE);
+                                ageGroupRadio.setVisibility(View.GONE);
                             } else {
-                                ageGroupRadio.check(R.id.radioBelow);
+                                JSONObject user = json.getJSONObject("user");
+                                fullName.setText(user.getString("full_name"));
+                                email.setText(user.getString("email"));
+                                phone.setText(user.getString("phone_number"));
+                                gender.setText(user.getString("gender"));
+
+                                String ageGroup = user.getString("age_group");
+                                if ("above".equals(ageGroup)) {
+                                    ageGroupRadio.check(R.id.radioAbove);
+                                } else {
+                                    ageGroupRadio.check(R.id.radioBelow);
+                                }
                             }
                         } else {
-                            Toast.makeText(this, "Server returned error: " + json.optString("message"), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, json.optString("message"), Toast.LENGTH_SHORT).show();
                         }
                     } catch (Exception e) {
                         Toast.makeText(this, "Failed to parse profile: " + e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -114,10 +128,8 @@ public class MyProfileActivity extends AppCompatActivity {
                     Toast.makeText(this, "Failed to load profile", Toast.LENGTH_SHORT).show();
                 });
 
-        // ✅ Add the request to the queue (missing line)
         Volley.newRequestQueue(this).add(request);
     }
-
 
     private void updateProfile() {
         String full_name = fullName.getText().toString();
@@ -141,11 +153,16 @@ public class MyProfileActivity extends AppCompatActivity {
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
                 params.put("user_id", String.valueOf(userId));
+                params.put("role", role);
                 params.put("full_name", full_name);
                 params.put("email", emailVal);
                 params.put("phone_number", phoneVal);
-                params.put("gender", genderVal);
-                params.put("age_group", ageGroup);
+
+                if (role.equals("user")) {
+                    params.put("gender", genderVal);
+                    params.put("age_group", ageGroup);
+                }
+
                 return params;
             }
         };
@@ -157,9 +174,9 @@ public class MyProfileActivity extends AppCompatActivity {
         fullName.setEnabled(enabled);
         email.setEnabled(enabled);
         phone.setEnabled(enabled);
-        gender.setEnabled(enabled);
+        gender.setEnabled(enabled && role.equals("user"));
         for (int i = 0; i < ageGroupRadio.getChildCount(); i++) {
-            ageGroupRadio.getChildAt(i).setEnabled(enabled);
+            ageGroupRadio.getChildAt(i).setEnabled(enabled && role.equals("user"));
         }
         saveBtn.setVisibility(enabled ? View.VISIBLE : View.GONE);
     }
@@ -174,10 +191,9 @@ public class MyProfileActivity extends AppCompatActivity {
     }
 
     private void deleteAccount() {
-        String url = Config.BASE_URL+"profile/delete_account.php";
         ProgressDialog dialog = ProgressDialog.show(this, "", "Deleting...", true);
 
-        StringRequest request = new StringRequest(Request.Method.POST, url,
+        StringRequest request = new StringRequest(Request.Method.POST, DELETE_URL,
                 response -> {
                     dialog.dismiss();
                     try {
@@ -201,14 +217,13 @@ public class MyProfileActivity extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> map = new HashMap<>();
-                int userId = getSharedPreferences("AppPrefs", MODE_PRIVATE).getInt("user_id", -1);
                 map.put("user_id", String.valueOf(userId));
+                map.put("role", role);
                 return map;
             }
         };
 
         Volley.newRequestQueue(this).add(request);
     }
-
-
 }
+

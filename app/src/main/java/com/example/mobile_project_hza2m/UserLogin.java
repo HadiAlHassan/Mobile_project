@@ -144,7 +144,7 @@ public class UserLogin extends AppCompatActivity {
     private void redirectToDashboard(String role) {
         switch (role) {
             case "user":
-                startActivity(new Intent(this, MyProfileActivity.class));
+                startActivity(new Intent(this, DisplayServicesActivity.class));
                 break;
             case "provider":
                 startActivity(new Intent(this, MyServicesActivity.class));
@@ -173,6 +173,7 @@ public class UserLogin extends AppCompatActivity {
                                 btnLogout.setEnabled(false);
 
                                 Toast.makeText(this, "Logged out successfully", Toast.LENGTH_SHORT).show();
+                                startActivity(new Intent(this, HomeActivity.class));
                             },
                             error -> {
                                 error.printStackTrace();

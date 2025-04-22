@@ -27,10 +27,8 @@
             android:exported="false" />
         <activity
             android:name=".AddServiceItemActivity"
+            android:parentActivityName=".MyServicesActivity"
             android:exported="false" /> <!-- Core Activities -->
-        <activity
-            android:name=".AddServiceItemActivity"
-            android:exported="false" />
         <activity
             android:name=".Privacy"
             android:exported="false"
@@ -80,6 +78,7 @@
         <activity
             android:name=".AdminAddServiceActivity"
             android:exported="false"
+            android:parentActivityName=".AdminDashboardActivity"
             android:theme="@style/Theme.Mobile_Project_HZA2M" />
         <activity
             android:name=".AdminDashboardActivity"
@@ -88,14 +87,17 @@
         <activity
             android:name=".AdminInsertAdminActivity"
             android:exported="false"
+            android:parentActivityName=".AdminDashboardActivity"
             android:theme="@style/Theme.Mobile_Project_HZA2M" />
         <activity
             android:name=".AdminViewProviderActivity"
             android:exported="false"
+            android:parentActivityName=".AdminDashboardActivity"
             android:theme="@style/Theme.Mobile_Project_HZA2M" />
         <activity
             android:name=".AdminViewUserActivity"
             android:exported="false"
+            android:parentActivityName=".AdminDashboardActivity"
             android:theme="@style/Theme.Mobile_Project_HZA2M" /> <!-- My Profile / Wallet -->
         <activity
             android:name=".MyProfileActivity"

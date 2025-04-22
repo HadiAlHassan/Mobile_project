@@ -18,6 +18,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class AdminViewUserActivity extends AppCompatActivity {
 
@@ -34,7 +35,7 @@ public class AdminViewUserActivity extends AppCompatActivity {
 
         binding = ActivityAdminViewUserBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         setSupportActionBar(binding.toolbar);
 
         recyclerView = findViewById(R.id.recyclerViewUsers);

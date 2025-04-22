@@ -85,9 +85,11 @@ public class ServiceProviderSignUpActivity extends AppCompatActivity {
                                 JSONObject cat = categories.getJSONObject(i);
                                 int id = cat.getInt("category_id");
                                 String name = cat.getString("name");
+
                                 categoryMap.put(name, id);
                                 categoryNames.add(name);
                             }
+
                             ArrayAdapter<String> adapter = new ArrayAdapter<>(
                                     this, android.R.layout.simple_spinner_dropdown_item, categoryNames);
                             spinnerServiceType.setAdapter(adapter);
@@ -106,6 +108,8 @@ public class ServiceProviderSignUpActivity extends AppCompatActivity {
         Volley.newRequestQueue(this).add(request);
     }
 
+
+
     private void registerProvider(String username, String email, String password, String serviceCategory, int categoryId) {
         progressDialog.setMessage("Registering...");
         progressDialog.show();
@@ -120,18 +124,19 @@ public class ServiceProviderSignUpActivity extends AppCompatActivity {
                         if (json.getBoolean("success")) {
                             int providerId = json.getInt("provider_id");
 
-                            // Save login info and redirect
+                            // Save login info and role
                             SharedPreferences.Editor editor = prefs.edit();
+                            editor.putInt("user_id", providerId); // ✅ allows MyProfileActivity to work with one ID
                             editor.putInt("provider_id", providerId);
                             editor.putString("saved_email", email);
                             editor.putString("saved_password", password);
-                            editor.putString("role", "provider");
+                            editor.putString("role", "provider"); // ✅ to load correct profile
                             editor.putInt("category_id", categoryId);
                             editor.apply();
 
                             Toast.makeText(this, "Welcome! You’re now signed in.", Toast.LENGTH_SHORT).show();
 
-                            startActivity(new Intent(this, MyServicesActivity.class)); // 🔁 change activity if needed
+                            startActivity(new Intent(this, MyServicesActivity.class));
                             finish();
                         } else {
                             Toast.makeText(this, json.getString("message"), Toast.LENGTH_LONG).show();
@@ -152,12 +157,15 @@ public class ServiceProviderSignUpActivity extends AppCompatActivity {
                 map.put("password", password);
                 map.put("service_category", serviceCategory);
                 map.put("category_id", String.valueOf(categoryId));
-                map.put("address", "");
-                map.put("contact_number", "");
+                map.put("address", "");         // Default placeholder
+                map.put("contact_number", "");  // Default placeholder
                 return map;
             }
         };
 
         Volley.newRequestQueue(this).add(request);
     }
+
+
+
 }

@@ -18,6 +18,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class AdminInsertAdminActivity extends AppCompatActivity {
 
@@ -34,7 +35,7 @@ public class AdminInsertAdminActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         setSupportActionBar(binding.toolbar);
-
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         binding.fab.setOnClickListener(view -> Snackbar.make(view, "Admin Tools", Snackbar.LENGTH_LONG)
                 .setAnchorView(R.id.fab)
                 .setAction("Action", null).show());

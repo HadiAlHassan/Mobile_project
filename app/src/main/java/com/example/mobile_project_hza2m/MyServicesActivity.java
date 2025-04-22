@@ -1,10 +1,13 @@
 package com.example.mobile_project_hza2m;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -17,12 +20,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.mobile_project_hza2m.databinding.ActivityMyServicesBinding;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,12 +41,16 @@ public class MyServicesActivity extends AppCompatActivity {
     private List<Services> serviceList;
     private FloatingActionButton fabAddService;
 
+    private ActivityMyServicesBinding binding;
     private int providerId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my_services);
+        binding = ActivityMyServicesBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+        setSupportActionBar(binding.toolbar);
 
         recyclerView = findViewById(R.id.recyclerViewMyServices);
         fabAddService = findViewById(R.id.fabAddMyService);
@@ -52,14 +62,28 @@ public class MyServicesActivity extends AppCompatActivity {
         int categoryId = prefs.getInt("category_id", -1);
         providerId = prefs.getInt("provider_id", -1);
 
+        if (providerId == -1) {
+            Toast.makeText(this, "Invalid provider. Please log in again.", Toast.LENGTH_LONG).show();
+            startActivity(new Intent(this, UserLogin.class));
+            finish();
+            return;
+        }
+
         String categoryLabel = getCategoryLabel(categoryId);
         tvServiceType.setText("Service Category: " + categoryLabel);
 
         serviceList = new ArrayList<>();
         adapter = new MyServiceAdapter(serviceList, (service, position) -> {
-            serviceList.remove(position);
-            adapter.notifyItemRemoved(position);
-            deleteService(service.getId());
+            new AlertDialog.Builder(this)
+                    .setTitle("Delete Service")
+                    .setMessage("Are you sure you want to delete this service?")
+                    .setPositiveButton("Yes", (dialog, which) -> {
+                        serviceList.remove(position);
+                        adapter.notifyItemRemoved(position);
+                        deleteService(service.getId());
+                    })
+                    .setNegativeButton("Cancel", null)
+                    .show();
         }, this);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -88,6 +112,7 @@ public class MyServicesActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        editTextSearch.setText("");
         fetchProviderServices();
     }
 
@@ -109,8 +134,10 @@ public class MyServicesActivity extends AppCompatActivity {
                             ));
                         }
 
+                        Collections.sort(serviceList, Comparator.comparing(Services::getName));
                         adapter.setOriginalList(serviceList);
                         adapter.notifyDataSetChanged();
+                        textViewEmpty.setText("No services found. Click + to add one.");
                         textViewEmpty.setVisibility(serviceList.isEmpty() ? View.VISIBLE : View.GONE);
                     } catch (Exception e) {
                         Toast.makeText(this, "Error parsing services", Toast.LENGTH_SHORT).show();
@@ -149,5 +176,26 @@ public class MyServicesActivity extends AppCompatActivity {
             case 5: return "Tuition";
             default: return "General";
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_settings) {
+            startActivity(new Intent(this, Settings.class));
+        } else if (id == R.id.action_mywallet) {
+            startActivity(new Intent(this, MyWalletActivity.class));
+        } else if (id == R.id.action_myprofile) {
+            startActivity(new Intent(this, MyProfileActivity.class));
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

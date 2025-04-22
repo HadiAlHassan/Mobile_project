@@ -2,6 +2,7 @@ package com.example.mobile_project_hza2m;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -153,6 +154,13 @@ public class UserDetails extends AppCompatActivity {
                     try {
                         JSONObject json = new JSONObject(response);
                         if (json.getBoolean("success")) {
+                            int userId = json.getInt("user_id");
+
+                            SharedPreferences.Editor editor = getSharedPreferences("AppPrefs", MODE_PRIVATE).edit();
+                            editor.putInt("user_id", userId); // ✅ important for profile & auth
+                            editor.putString("role", "user"); // ✅ for unified role logic
+                            editor.apply();
+
                             Toast.makeText(this, "Registration successful!", Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(this, UserLogin.class));
                         } else {

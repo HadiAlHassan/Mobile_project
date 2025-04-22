@@ -1,6 +1,7 @@
 package com.example.mobile_project_hza2m;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
@@ -19,13 +20,9 @@ import com.example.mobile_project_hza2m.databinding.ActivityHomeBinding;
 import com.google.android.material.snackbar.Snackbar;
 
 public class HomeActivity extends AppCompatActivity {
-    Button btnSignUp;
-    Button btnLogin;
-   Button btnTest;
-    private AppBarConfiguration appBarConfiguration;
+
+    Button btnSignUp, btnLogin, btnTest;
     private ActivityHomeBinding binding;
-    int SignUpRequestCode= 10;
-    int LoginRequestCode= 12;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,48 +31,34 @@ public class HomeActivity extends AppCompatActivity {
         binding = ActivityHomeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-
-        binding.fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(HomeActivity.this, ContactUsActivity.class);
-                startActivity(i);
-            }
-        });
+        binding.fab.setOnClickListener(view ->
+                startActivity(new Intent(HomeActivity.this, ContactUsActivity.class)));
 
         btnLogin = findViewById(R.id.btnLogin);
-        btnSignUp= findViewById(R.id.btnSignUp);
+        btnSignUp = findViewById(R.id.btnSignUp);
         btnTest = findViewById(R.id.btntest);
 
-        btnSignUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent= new Intent(HomeActivity.this,UserOrProvider.class);
-                int SignUpRequestCode= 10;
-                startActivityForResult(intent, SignUpRequestCode);
-            }
-
+        btnSignUp.setOnClickListener(v -> {
+            Intent intent = new Intent(HomeActivity.this, UserOrProvider.class);
+            startActivityForResult(intent, 10);
         });
 
-        btnLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(HomeActivity.this, UserLogin.class);
-                startActivityForResult(intent, LoginRequestCode);
-            }
+        btnLogin.setOnClickListener(v -> {
+            Intent intent = new Intent(HomeActivity.this, UserLogin.class);
+            startActivityForResult(intent, 12);
         });
 
-      btnTest.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View v) {
-               Intent intent = new Intent(HomeActivity.this, DisplayServicesActivity.class);
-               startActivity(intent);
-           }
+        btnTest.setOnClickListener(v -> {
+            Intent intent = new Intent(HomeActivity.this, DisplayServicesActivity.class);
+            startActivity(intent);
         });
+    }
 
 
 
-}}
+}
+
+
 
 
 
