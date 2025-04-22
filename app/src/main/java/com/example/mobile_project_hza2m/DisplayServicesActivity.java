@@ -10,8 +10,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.mobile_project_hza2m.databinding.ActivityDisplayServicesBinding;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,40 +47,47 @@ public class DisplayServicesActivity extends AppCompatActivity {
     }
 
     private void loadServiceData() {
-        // 🧾 Ogero Phone Bills
-        String ogeroType = "Ogero Phone Bills";
-        List<Company> ogeroCompanies = new ArrayList<>();
-        ogeroCompanies.add(new Company("Ogero", R.drawable.ogero, ogeroType));
-        categoryList.add(new ServiceCategory(ogeroType, ogeroCompanies));
+        String url = Config.BASE_URL + "services/get_services_grouped.php";
 
-        // 🛡️ Insurance
-        String insuranceType = "Insurance";
-        List<Company> insuranceCompanies = new ArrayList<>();
-        insuranceCompanies.add(new Company("Bankers", R.drawable.insurance, insuranceType));
-        insuranceCompanies.add(new Company("Allianz", R.drawable.insurance, insuranceType));
-        categoryList.add(new ServiceCategory(insuranceType, insuranceCompanies));
+        Volley.newRequestQueue(this).add(new StringRequest(Request.Method.GET, url,
+                response -> {
+                    try {
+                        JSONObject json = new JSONObject(response);
+                        if (json.getBoolean("success")) {
+                            JSONArray groups = json.getJSONArray("data");
 
-        // 🎓 Tuition Fees
-        String tuitionType = "Tuition Fees";
-        List<Company> tuitionCompanies = new ArrayList<>();
-        tuitionCompanies.add(new Company("LAU", R.drawable.tuitionfees, tuitionType));
-        tuitionCompanies.add(new Company("AUB", R.drawable.tuitionfees, tuitionType));
-        categoryList.add(new ServiceCategory(tuitionType, tuitionCompanies));
+                            for (int i = 0; i < groups.length(); i++) {
+                                JSONObject group = groups.getJSONObject(i);
+                                String categoryName = group.getString("category");
 
-        // 📺 Streaming Services
-        String streamingType = "Streaming Services";
-        List<Company> streamingCompanies = new ArrayList<>();
-        streamingCompanies.add(new Company("Netflix", R.drawable.streaming, streamingType));
-        streamingCompanies.add(new Company("Shahid", R.drawable.streaming, streamingType));
-        streamingCompanies.add(new Company("OSN+", R.drawable.streaming, streamingType));
-        categoryList.add(new ServiceCategory(streamingType, streamingCompanies));
+                                JSONArray services = group.getJSONArray("services");
+                                List<Company> companies = new ArrayList<>();
 
-        String TelecomType = "Telecommunication Services";
-        List<Company> telecomCompanies = new ArrayList<>();
-        telecomCompanies.add(new Company("Touch", R.drawable.touch, TelecomType));
-        telecomCompanies.add(new Company("Alfa", R.drawable.alfa, TelecomType));
-        categoryList.add(new ServiceCategory(TelecomType, telecomCompanies));
+                                for (int j = 0; j < services.length(); j++) {
+                                    JSONObject s = services.getJSONObject(j);
+                                    String name = s.getString("service_name");
+                                    String imageUrl = s.optString("image_url", null);
+                                    // If you're loading images from URLs, use Glide or Picasso
+                                    int fallbackDrawable = R.drawable.khadmatiico; // fallback if no image resource
+                                    companies.add(new Company(name, fallbackDrawable, categoryName));
+                                }
+
+                                categoryList.add(new ServiceCategory(categoryName, companies));
+                            }
+
+                            RecyclerView categoryRecyclerView = findViewById(R.id.serviceRecyclerView);
+                            categoryRecyclerView.setAdapter(new ServiceCategoryAdapter(this, categoryList));
+                        } else {
+                            Toast.makeText(this, "No services available", Toast.LENGTH_SHORT).show();
+                        }
+                    } catch (Exception e) {
+                        Toast.makeText(this, "Parse error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                },
+                error -> Toast.makeText(this, "Network error: " + error.getMessage(), Toast.LENGTH_LONG).show()
+        ));
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

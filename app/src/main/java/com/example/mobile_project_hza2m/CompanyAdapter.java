@@ -1,7 +1,5 @@
 package com.example.mobile_project_hza2m;
 
-import static androidx.core.content.ContextCompat.startActivity;
-
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,11 +12,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
-import java.util.Objects;
 
 public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.CompanyViewHolder> {
 
-    private List<Company> companies;
+    private final List<Company> companies;
 
     public CompanyAdapter(List<Company> companies, String serviceType) {
         this.companies = companies;
@@ -38,39 +35,33 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.CompanyV
         holder.companyName.setText(company.getName());
         holder.companyIcon.setImageResource(company.getIconResId());
 
-        // ✅ Access the serviceType per company
         String serviceType = company.getServiceType();
 
-        // Example usage: show toast when clicked
         holder.itemView.setOnClickListener(v -> {
-            if(Objects.equals(serviceType, "Ogero Phone Bills")){
-                Toast.makeText(holder.itemView.getContext(), "Ogero Phone Bills", Toast.LENGTH_SHORT).show();
-                Intent i = new Intent(holder.itemView.getContext(), OgeroServiceUserActivity.class);
-                holder.itemView.getContext().startActivity(i);
+            Class<?> targetActivity;
 
-            }
-            else if(Objects.equals(serviceType, "Insurance")){
-                Toast.makeText(holder.itemView.getContext(), "Insurance", Toast.LENGTH_SHORT).show();
-               Intent i = new Intent(holder.itemView.getContext(), InsuranceServiceUserActivity.class);
-                holder.itemView.getContext().startActivity(i);
-            }
-            else if(serviceType == "Tuition Fees"){
-                Toast.makeText(holder.itemView.getContext(), "Tuition Fees", Toast.LENGTH_SHORT).show();
-                Intent i = new Intent(holder.itemView.getContext(), TuitionServiceUserActivity.class);
-                holder.itemView.getContext().startActivity(i);
-            }
-            else if(serviceType == "Streaming Services"){
-                Toast.makeText(holder.itemView.getContext(), "Streaming Services", Toast.LENGTH_SHORT).show();
-                Intent i = new Intent(holder.itemView.getContext(), StreamingServiceUserActivity.class);
-                holder.itemView.getContext().startActivity(i);
-            }
-            else{
-                Toast.makeText(holder.itemView.getContext(), "Telecommunication Services", Toast.LENGTH_SHORT).show();
-                Intent i = new Intent(holder.itemView.getContext(), TelecomServiceUserActivity.class);
-                holder.itemView.getContext().startActivity(i);
+            switch (serviceType) {
+                case "Ogero Phone Bills":
+                    targetActivity = OgeroServiceUserActivity.class;
+                    break;
+                case "Insurance":
+                    targetActivity = InsuranceServiceUserActivity.class;
+                    break;
+                case "Tuition Fees":
+                    targetActivity = TuitionServiceUserActivity.class;
+                    break;
+                case "Streaming Services":
+                    targetActivity = StreamingServiceUserActivity.class;
+                    break;
+                case "Telecommunication Services":
+                default:
+                    targetActivity = TelecomServiceUserActivity.class;
+                    break;
             }
 
-
+            Toast.makeText(holder.itemView.getContext(), serviceType, Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(holder.itemView.getContext(), targetActivity);
+            holder.itemView.getContext().startActivity(intent);
         });
     }
 
