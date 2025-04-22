@@ -2,6 +2,10 @@ package com.example.mobile_project_hza2m;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,28 +16,31 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executors;
 
 public class MyServiceAdapter extends RecyclerView.Adapter<MyServiceAdapter.ViewHolder> {
 
     public interface OnDeleteClickListener {
-        void onDelete(Services service, int position);
+        void onDelete(Service service, int position);
     }
 
-    private List<Services> serviceList;
-    private List<Services> originalList;
+    private List<Service> serviceList;
+    private List<Service> originalList;
     private final OnDeleteClickListener deleteClickListener;
     private final Context context;
 
-    public MyServiceAdapter(List<Services> serviceList, OnDeleteClickListener listener, Context context) {
+    public MyServiceAdapter(List<Service> serviceList, OnDeleteClickListener listener, Context context) {
         this.serviceList = serviceList;
         this.originalList = new ArrayList<>(serviceList);
         this.deleteClickListener = listener;
         this.context = context;
     }
 
-    public void setOriginalList(List<Services> newList) {
+    public void setOriginalList(List<Service> newList) {
         this.originalList = new ArrayList<>(newList);
         this.serviceList = new ArrayList<>(newList);
     }
@@ -44,8 +51,8 @@ public class MyServiceAdapter extends RecyclerView.Adapter<MyServiceAdapter.View
         if (query.isEmpty()) {
             serviceList.addAll(originalList);
         } else {
-            for (Services service : originalList) {
-                if (service.getName().toLowerCase().contains(query)) {
+            for (Service service : originalList) {
+                if (service.getServiceName().toLowerCase().contains(query)) {
                     serviceList.add(service);
                 }
             }
@@ -62,9 +69,11 @@ public class MyServiceAdapter extends RecyclerView.Adapter<MyServiceAdapter.View
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Services service = serviceList.get(position);
-        holder.serviceName.setText(service.getName());
-        holder.serviceIcon.setImageResource(service.getIconResId());
+        Service service = serviceList.get(position);
+        holder.serviceName.setText(service.getServiceName());
+
+        // ✅ Load logo from URL
+        loadImageFromUrl(Config.BASE_URL + service.getLogoUrl(), holder.serviceIcon);
 
         holder.deleteBtn.setOnClickListener(v -> {
             if (deleteClickListener != null) {
@@ -74,7 +83,7 @@ public class MyServiceAdapter extends RecyclerView.Adapter<MyServiceAdapter.View
 
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, ServiceItemsActivity.class);
-            intent.putExtra("service_id", service.getId());
+            intent.putExtra("service_id", service.getServiceId());
             context.startActivity(intent);
         });
     }
@@ -84,8 +93,23 @@ public class MyServiceAdapter extends RecyclerView.Adapter<MyServiceAdapter.View
         return serviceList.size();
     }
 
+    private void loadImageFromUrl(String url, ImageView imageView) {
+        Executors.newSingleThreadExecutor().execute(() -> {
+            try {
+                InputStream input = new URL(url).openStream();
+                Bitmap bitmap = BitmapFactory.decodeStream(input);
+                new Handler(Looper.getMainLooper()).post(() -> imageView.setImageBitmap(bitmap));
+            } catch (Exception e) {
+                e.printStackTrace();
+                new Handler(Looper.getMainLooper()).post(() ->
+                        imageView.setImageResource(R.drawable.khadmatiico)
+                );
+            }
+        });
+    }
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView serviceName, servicePrice;
+        TextView serviceName;
         ImageView serviceIcon;
         ImageButton deleteBtn;
 

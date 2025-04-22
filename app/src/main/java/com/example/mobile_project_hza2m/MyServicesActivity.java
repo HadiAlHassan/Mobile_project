@@ -38,7 +38,7 @@ public class MyServicesActivity extends AppCompatActivity {
     private EditText editTextSearch;
     private RecyclerView recyclerView;
     private MyServiceAdapter adapter;
-    private List<Services> serviceList;
+    private List<Service> serviceList;
     private FloatingActionButton fabAddService;
 
     private ActivityMyServicesBinding binding;
@@ -80,7 +80,7 @@ public class MyServicesActivity extends AppCompatActivity {
                     .setPositiveButton("Yes", (dialog, which) -> {
                         serviceList.remove(position);
                         adapter.notifyItemRemoved(position);
-                        deleteService(service.getId());
+                        deleteService(service.getServiceId());
                     })
                     .setNegativeButton("Cancel", null)
                     .show();
@@ -127,14 +127,15 @@ public class MyServicesActivity extends AppCompatActivity {
                         serviceList.clear();
                         for (int i = 0; i < array.length(); i++) {
                             JSONObject svc = array.getJSONObject(i);
-                            serviceList.add(new Services(
+                            serviceList.add(new Service(
                                     svc.getInt("service_id"),
                                     svc.getString("service_name"),
-                                    R.drawable.ic_launcher_foreground
+                                    svc.getString("logo_url")
                             ));
+
                         }
 
-                        Collections.sort(serviceList, Comparator.comparing(Services::getName));
+                        Collections.sort(serviceList, Comparator.comparing(Service::getServiceName));
                         adapter.setOriginalList(serviceList);
                         adapter.notifyDataSetChanged();
                         textViewEmpty.setText("No services found. Click + to add one.");

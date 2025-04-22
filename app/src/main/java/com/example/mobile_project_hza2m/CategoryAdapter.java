@@ -1,43 +1,44 @@
 package com.example.mobile_project_hza2m;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHolder> {
+public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder> {
 
-    public interface OnDeleteClickListener {
-        void onDelete(int position);
-    }
+    private final List<Category> categoryList;
+    private final Context context;
 
-    private List<String> categoryList;
-    private OnDeleteClickListener deleteClickListener;
-
-    public CategoryAdapter(List<String> categoryList, OnDeleteClickListener listener) {
+    public CategoryAdapter(Context context, List<Category> categoryList) {
+        this.context = context;
         this.categoryList = categoryList;
-        this.deleteClickListener = listener;
     }
 
     @NonNull
     @Override
-    public CategoryAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_admin_category_display, parent, false);
-        return new ViewHolder(view);
+    public CategoryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(context).inflate(R.layout.item_category_with_services, parent, false);
+        return new CategoryViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CategoryAdapter.ViewHolder holder, int position) {
-        String category = categoryList.get(position);
-        holder.textCategoryName.setText(category);
+    public void onBindViewHolder(@NonNull CategoryViewHolder holder, int position) {
+        Category category = categoryList.get(position);
+        holder.categoryName.setText(category.getName());
 
-        holder.buttonDelete.setOnClickListener(v -> deleteClickListener.onDelete(position));
+        ServiceAdapter serviceAdapter = new ServiceAdapter(context, category.getServices());
+        holder.serviceRecyclerView.setLayoutManager(
+                new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        );
+        holder.serviceRecyclerView.setAdapter(serviceAdapter);
     }
 
     @Override
@@ -45,14 +46,14 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         return categoryList.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView textCategoryName;
-        ImageButton buttonDelete;
+    static class CategoryViewHolder extends RecyclerView.ViewHolder {
+        TextView categoryName;
+        RecyclerView serviceRecyclerView;
 
-        public ViewHolder(@NonNull View itemView) {
+        public CategoryViewHolder(@NonNull View itemView) {
             super(itemView);
-            textCategoryName = itemView.findViewById(R.id.textCategoryName);
-            buttonDelete = itemView.findViewById(R.id.buttonDeleteCategory);
+            categoryName = itemView.findViewById(R.id.textCategoryName);
+            serviceRecyclerView = itemView.findViewById(R.id.companyRecyclerView);
         }
     }
 }

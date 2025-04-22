@@ -4,13 +4,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 import java.util.List;
 
 public class ServiceItemAdapter extends RecyclerView.Adapter<ServiceItemAdapter.ViewHolder> {
 
-    private List<ServiceItem> itemList;
+    private final List<ServiceItem> itemList;
 
     public ServiceItemAdapter(List<ServiceItem> itemList) {
         this.itemList = itemList;
@@ -19,16 +21,17 @@ public class ServiceItemAdapter extends RecyclerView.Adapter<ServiceItemAdapter.
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_service_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.item_service_item, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         ServiceItem item = itemList.get(position);
-        holder.name.setText(item.getName());
-        holder.description.setText(item.getDescription());
-        holder.price.setText(item.getPrice());
+        holder.name.setText(item.getItemName());
+        holder.description.setText(item.getItemDescription());
+        holder.price.setText("$" + item.getItemPrice());
     }
 
     @Override

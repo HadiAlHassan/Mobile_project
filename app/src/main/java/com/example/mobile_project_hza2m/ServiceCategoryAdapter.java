@@ -14,8 +14,8 @@ import java.util.List;
 
 public class ServiceCategoryAdapter extends RecyclerView.Adapter<ServiceCategoryAdapter.CategoryViewHolder> {
 
-    private List<ServiceCategory> categoryList;
-    private Context context;
+    private final List<ServiceCategory> categoryList;
+    private final Context context;
 
     public ServiceCategoryAdapter(Context context, List<ServiceCategory> categoryList) {
         this.context = context;
@@ -25,7 +25,7 @@ public class ServiceCategoryAdapter extends RecyclerView.Adapter<ServiceCategory
     @NonNull
     @Override
     public CategoryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_service_category, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_category_with_services, parent, false);
         return new CategoryViewHolder(view);
     }
 
@@ -36,7 +36,7 @@ public class ServiceCategoryAdapter extends RecyclerView.Adapter<ServiceCategory
 
         CompanyAdapter companyAdapter = new CompanyAdapter(
                 category.getCompanies(),
-                category.getServiceType() // ✅ Pass serviceType
+                category.getServiceType() // Assuming ServiceCategory has this method
         );
 
         holder.companyRecyclerView.setLayoutManager(

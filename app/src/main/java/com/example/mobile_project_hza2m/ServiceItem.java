@@ -1,20 +1,23 @@
 package com.example.mobile_project_hza2m;
 
 public class ServiceItem {
-    private int id;
-    private String name;
-    private String description;
-    private String price;
+    private int itemId;
+    private String itemName;
+    private String itemDescription;
+    private String itemPrice;
+    private String itemImage;
 
-    public ServiceItem(int id, String name, String description, String price) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.price = price;
+    public ServiceItem(int itemId, String itemName, String itemDescription, String itemPrice, String itemImage) {
+        this.itemId = itemId;
+        this.itemName = itemName;
+        this.itemDescription = itemDescription;
+        this.itemPrice = itemPrice;
+        this.itemImage = itemImage;
     }
 
-    public int getId() { return id; }
-    public String getName() { return name; }
-    public String getDescription() { return description; }
-    public String getPrice() { return price; }
+    public int getItemId() { return itemId; }
+    public String getItemName() { return itemName; }
+    public String getItemDescription() { return itemDescription; }
+    public String getItemPrice() { return itemPrice; }
+    public String getItemImage() { return itemImage; }
 }
