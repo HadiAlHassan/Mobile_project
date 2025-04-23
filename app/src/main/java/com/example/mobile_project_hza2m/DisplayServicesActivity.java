@@ -2,15 +2,15 @@ package com.example.mobile_project_hza2m;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
@@ -24,11 +24,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DisplayServicesActivity extends AppCompatActivity {
-    private List<ServiceCategory> categoryList;
-    private AppBarConfiguration appBarConfiguration;
-    private ActivityDisplayServicesBinding binding;
 
+    private List<ServiceCategory> categoryList;
+    private ActivityDisplayServicesBinding binding;
+    private AppBarConfiguration appBarConfiguration;
     private RecyclerView serviceRecyclerView;
+    private ServiceCategoryAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,43 +38,64 @@ public class DisplayServicesActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         setSupportActionBar(binding.toolbar);
-        serviceRecyclerView = findViewById(R.id.serviceRecyclerView);
+
+        serviceRecyclerView = findViewById(R.id.serviceRecyclerView);;
+
         categoryList = new ArrayList<>();
-        ServiceCategoryAdapter adapter = new ServiceCategoryAdapter(this, categoryList);
+        adapter = new ServiceCategoryAdapter(this, categoryList);
+
         serviceRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         serviceRecyclerView.setAdapter(adapter);
 
-        loadServiceData(adapter);
+        //loadServiceData();
+        loadServiceData();
     }
 
-    private void loadServiceData(ServiceCategoryAdapter adapter) {
+    private void loadServiceData() {
         String url = Config.BASE_URL + "services/get_services_grouped.php";
 
         Volley.newRequestQueue(this).add(new StringRequest(Request.Method.GET, url,
                 response -> {
+                    Log.d("RawResponse", response); // ← Add this line
                     try {
                         JSONObject json = new JSONObject(response);
                         if (json.getBoolean("success")) {
                             JSONArray groups = json.getJSONArray("data");
+                            categoryList.clear();
 
                             for (int i = 0; i < groups.length(); i++) {
                                 JSONObject group = groups.getJSONObject(i);
                                 String categoryName = group.getString("category");
+                                int categoryId = group.getInt("category_id");
+                                Log.e("Category ID: ", String.valueOf(categoryId));
 
                                 JSONArray services = group.getJSONArray("services");
-                                List<Company> companies = new ArrayList<>();
+                                List<Service> serviceGroupList = new ArrayList<>();
 
                                 for (int j = 0; j < services.length(); j++) {
-                                    JSONObject s = services.getJSONObject(j);
-                                    String name = s.getString("service_name");
-                                    int serviceId = s.getInt("service_id");
-                                    int fallbackDrawable = R.drawable.khadmatiico;
+                                    try {
+                                        JSONObject s = services.getJSONObject(j);
+                                        Log.d("RawService", s.toString());
 
-                                    companies.add(new Company(name, fallbackDrawable, categoryName, serviceId));
+                                        int serviceId = s.getInt("service_id");
+                                        String name = s.optString("service_name", "Untitled");
+                                        String logoUrl = s.optString("logo_url", "");
+                                        String description = s.optString("description", "");
+                                        String bankAccount = s.optString("bank_account", "");
+
+                                        serviceGroupList.add(new Service(
+                                                serviceId, name, logoUrl, categoryName, description, bankAccount, categoryId
+                                        ));
+                                    } catch (Exception e) {
+                                        Log.e("ServiceParseError", "Service skipped: " + e.getMessage());
+                                    }
                                 }
 
 
-                                categoryList.add(new ServiceCategory(categoryName, companies));
+                                categoryList.add(new ServiceCategory(categoryName, serviceGroupList));
+                                for (int k =0; serviceGroupList.size() > k; k++){
+                                    Log.e("Response2: ", serviceGroupList.get(k).getServiceName());
+                                }
                             }
 
                             adapter.notifyDataSetChanged();
@@ -81,13 +103,14 @@ public class DisplayServicesActivity extends AppCompatActivity {
                             Toast.makeText(this, "No services available", Toast.LENGTH_SHORT).show();
                         }
                     } catch (Exception e) {
+                        Log.e("ParseError", e.getMessage());
+
                         Toast.makeText(this, "Parse error: " + e.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 },
                 error -> Toast.makeText(this, "Network error: " + error.getMessage(), Toast.LENGTH_LONG).show()
         ));
     }
-
 
 
     @Override
@@ -102,14 +125,17 @@ public class DisplayServicesActivity extends AppCompatActivity {
 
         if (id == R.id.action_settings) {
             startActivity(new Intent(this, Settings.class));
+            return true;
         }
 
         if (id == R.id.action_mywallet) {
             startActivity(new Intent(this, MyWalletActivity.class));
+            return true;
         }
 
         if (id == R.id.action_myprofile) {
             startActivity(new Intent(this, MyProfileActivity.class));
+            return true;
         }
 
         return super.onOptionsItemSelected(item);

@@ -3,6 +3,8 @@
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+
 
     <application
         android:allowBackup="true"
@@ -19,9 +21,10 @@
             android:exported="false"
             android:theme="@style/Base.Theme.Mobile_Project_HZA2M" />
         <activity
-            android:name=".AddServiceItemActivity"
+            android:name=".OgeroServiceUserActivity"
             android:exported="false"
             android:theme="@style/Base.Theme.Mobile_Project_HZA2M" />
+
         <activity
             android:name=".ServiceItemsActivity"
             android:exported="false"
@@ -44,6 +47,7 @@
         <activity
             android:name=".InsuranceServiceUserActivity"
             android:exported="false" />
+
         <activity
             android:name=".ContactUsActivity"
             android:exported="false"
@@ -120,10 +124,7 @@
             android:name=".OgeroServiceProviderActivity"
             android:exported="false"
             android:theme="@style/Theme.Mobile_Project_HZA2M" />
-        <activity
-            android:name=".OgeroServiceUserActivity"
-            android:exported="false"
-            android:theme="@style/Theme.Mobile_Project_HZA2M" /> <!-- Streaming -->
+
         <activity
             android:name=".StreamingServiceProviderActivity"
             android:exported="false" />

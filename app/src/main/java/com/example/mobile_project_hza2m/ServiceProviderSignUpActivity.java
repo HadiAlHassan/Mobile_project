@@ -108,8 +108,6 @@ public class ServiceProviderSignUpActivity extends AppCompatActivity {
         Volley.newRequestQueue(this).add(request);
     }
 
-
-
     private void registerProvider(String username, String email, String password, String serviceCategory, int categoryId) {
         progressDialog.setMessage("Registering...");
         progressDialog.show();
@@ -131,7 +129,8 @@ public class ServiceProviderSignUpActivity extends AppCompatActivity {
                             editor.putString("saved_email", email);
                             editor.putString("saved_password", password);
                             editor.putString("role", "provider");
-                            editor.putString("service_category", serviceCategory); // optional
+                            editor.putString("service_category", serviceCategory);
+                            editor.putInt("category_id", categoryId); // ✅ Save category_id
                             editor.apply();
 
                             Toast.makeText(this, "Welcome! You’re now signed in.", Toast.LENGTH_SHORT).show();
@@ -155,7 +154,8 @@ public class ServiceProviderSignUpActivity extends AppCompatActivity {
                 map.put("username", username);
                 map.put("contact_email", email);
                 map.put("password", password);
-                map.put("service_category", serviceCategory); // ✅ send only name
+                map.put("service_category", serviceCategory);
+                map.put("category_id", String.valueOf(categoryId)); // ✅ Send category_id
                 map.put("address", "");
                 map.put("contact_number", "");
                 return map;
@@ -164,8 +164,4 @@ public class ServiceProviderSignUpActivity extends AppCompatActivity {
 
         Volley.newRequestQueue(this).add(request);
     }
-
-
-
-
 }

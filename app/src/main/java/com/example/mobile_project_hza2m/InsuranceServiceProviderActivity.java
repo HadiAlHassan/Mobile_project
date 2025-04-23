@@ -14,23 +14,25 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.Request;
 import com.android.volley.toolbox.Volley;
-import com.example.mobile_project_hza2m.databinding.ActivityTelecomServiceProviderBinding;
+import com.example.mobile_project_hza2m.databinding.ActivityInsuranceServiceProviderBinding;
 
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
 public class InsuranceServiceProviderActivity extends AppCompatActivity {
 
-    EditText editTextCompany, editTextDescription, editTextBankAccount, editTextRegion, editTextPrice;
+    EditText editTextCompany, editTextDescription, editTextBankAccount, editTextRegion;
     ImageView imageViewLogo;
     Uri selectedLogoUri;
     Button buttonSubmit;
     ProgressDialog progressDialog;
 
-    private ActivityTelecomServiceProviderBinding binding;
+    private String uploadedFileName = "";
+    private ActivityInsuranceServiceProviderBinding binding;
 
     private final String UPLOAD_URL = Config.BASE_URL + "services/add_service.php";
 
@@ -41,13 +43,12 @@ public class InsuranceServiceProviderActivity extends AppCompatActivity {
                     selectedLogoUri = result.getData().getData();
                     imageViewLogo.setImageURI(selectedLogoUri);
                 }
-            }
-    );
+            });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityTelecomServiceProviderBinding.inflate(getLayoutInflater());
+        binding = ActivityInsuranceServiceProviderBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         editTextCompany = findViewById(R.id.editTextCompany);
@@ -75,7 +76,7 @@ public class InsuranceServiceProviderActivity extends AppCompatActivity {
         String company = editTextCompany.getText().toString().trim();
         String description = editTextDescription.getText().toString().trim();
         String bank = editTextBankAccount.getText().toString().trim();
-        String region = editTextRegion.getText().toString().trim();;
+        String region = editTextRegion.getText().toString().trim();
 
         if (company.isEmpty() || description.isEmpty() || bank.isEmpty() || region.isEmpty() || selectedLogoUri == null) {
             Toast.makeText(this, "All fields and logo are required", Toast.LENGTH_SHORT).show();
@@ -100,13 +101,11 @@ public class InsuranceServiceProviderActivity extends AppCompatActivity {
                         if (obj.getBoolean("success")) {
                             int serviceId = obj.getInt("service_id");
 
-                            // Save service_id in SharedPreferences
                             SharedPreferences.Editor editor = getSharedPreferences("AppPrefs", MODE_PRIVATE).edit();
                             editor.putInt("service_id", serviceId);
                             editor.apply();
 
                             Toast.makeText(this, obj.getString("message"), Toast.LENGTH_SHORT).show();
-                            // Optional: startActivity(new Intent(this, AddServiceItemActivity.class));
                             finish();
                         } else {
                             Toast.makeText(this, obj.getString("message"), Toast.LENGTH_SHORT).show();
@@ -125,12 +124,13 @@ public class InsuranceServiceProviderActivity extends AppCompatActivity {
             public Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
                 params.put("provider_id", String.valueOf(providerId));
-                params.put("category", "telecom");
+                params.put("category", "insurance"); // FIXED
                 params.put("title", company);
                 params.put("details", description);
                 params.put("address", region);
                 params.put("region", region);
                 params.put("bank_account", bank);
+                params.put("logo_url", "uploads/" + uploadedFileName); // ADDED
                 return params;
             }
 
@@ -139,10 +139,16 @@ public class InsuranceServiceProviderActivity extends AppCompatActivity {
                 Map<String, DataPart> params = new HashMap<>();
                 try {
                     InputStream iStream = getContentResolver().openInputStream(selectedLogoUri);
-                    byte[] logoData = new byte[iStream.available()];
-                    iStream.read(logoData);
+                    ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+                    byte[] data = new byte[1024];
+                    int bytesRead;
+                    while ((bytesRead = iStream.read(data, 0, data.length)) != -1) {
+                        buffer.write(data, 0, bytesRead);
+                    }
+
                     String ext = MimeTypeMap.getSingleton().getExtensionFromMimeType(getContentResolver().getType(selectedLogoUri));
-                    params.put("logo", new DataPart("logo_" + System.currentTimeMillis() + "." + ext, logoData, "image/" + ext));
+                    uploadedFileName = "logo_" + System.currentTimeMillis() + "." + ext;
+                    params.put("logo", new DataPart(uploadedFileName, buffer.toByteArray(), "image/" + ext));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

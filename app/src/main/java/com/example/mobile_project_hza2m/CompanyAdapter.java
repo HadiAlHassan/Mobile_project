@@ -39,7 +39,7 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.CompanyV
             String serviceType = company.getCategory();
 
             switch (serviceType) {
-                case "Ogero Phone Bills":
+                case "Ogero":
                     targetActivity = OgeroServiceUserActivity.class;
                     break;
                 case "Insurance":

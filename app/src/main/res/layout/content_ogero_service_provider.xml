@@ -6,7 +6,6 @@
     android:background="@color/white">
 
     <LinearLayout
-        android:layout_marginTop="60dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -15,17 +14,17 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Register Ogero Bill Payment Service"
+            android:text="Register Ogero Service"
             android:textSize="20sp"
             android:textStyle="bold"
             android:textColor="@color/black"
             android:layout_marginBottom="16dp" />
 
-        <!-- Logo Upload -->
+        <!-- Upload Logo -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Upload Service Logo"
+            android:text="Upload Logo"
             android:textSize="16sp"
             android:textStyle="bold"
             android:layout_marginBottom="8dp" />
@@ -56,31 +55,30 @@
                 android:elevation="4dp" />
         </FrameLayout>
 
-        <!-- Service Title -->
+        <!-- Company Name -->
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Service Title">
+            android:hint="Company Name">
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editTextServiceTitle"
+                android:id="@+id/editTextCompany"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textCapWords"/>
+                android:layout_height="wrap_content" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Hotline Number -->
+        <!-- Description -->
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:hint="Ogero Hotline Number">
+            android:hint="Service Description">
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editTextHotline"
+                android:id="@+id/editTextDescription"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="phone" />
+                android:layout_height="120dp"
+                android:inputType="textMultiLine"
+                android:gravity="top"/>
         </com.google.android.material.textfield.TextInputLayout>
-
 
         <!-- Bank Account -->
         <com.google.android.material.textfield.TextInputLayout
@@ -95,6 +93,59 @@
                 android:inputType="number" />
         </com.google.android.material.textfield.TextInputLayout>
 
+        <!-- Region -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:hint="Service Region">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextRegion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textCapWords" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Address -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:hint="Service Address">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextAddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPostalAddress" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Address -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:hint="Hotline">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edittextHotline"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPostalAddress" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <!-- Category -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:hint="Service Category">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextCategory"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textCapWords"
+                android:text="Ogero" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Submit Button -->
         <Button
@@ -102,8 +153,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Submit Service"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="32dp"
             android:backgroundTint="@color/UseBlue"
             android:textColor="@android:color/white" />
+
     </LinearLayout>
 </ScrollView>

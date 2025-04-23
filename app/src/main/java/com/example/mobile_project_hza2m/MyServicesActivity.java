@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.mobile_project_hza2m.databinding.ActivityHomeBinding;
 import com.example.mobile_project_hza2m.databinding.ActivityMyServicesBinding;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -39,10 +40,10 @@ public class MyServicesActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private MyServiceAdapter adapter;
     private List<Service> serviceList;
-    private FloatingActionButton fabAddService;
 
     private ActivityMyServicesBinding binding;
     private int providerId;
+    private int categoryId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,18 +51,19 @@ public class MyServicesActivity extends AppCompatActivity {
         binding = ActivityMyServicesBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+
+
         setSupportActionBar(binding.toolbar);
 
         recyclerView = findViewById(R.id.recyclerViewMyServices);
-        fabAddService = findViewById(R.id.fabAddMyService);
+
         tvServiceType = findViewById(R.id.tvServiceType);
         editTextSearch = findViewById(R.id.editTextSearch);
+       // textViewEmpty = findViewById(R.id.text);
 
         SharedPreferences prefs = getSharedPreferences("AppPrefs", MODE_PRIVATE);
-        String serviceCategory = prefs.getString("service_category", "General");
-
+        categoryId = prefs.getInt("category_id", -1);
         providerId = prefs.getInt("provider_id", -1);
-
         if (providerId == -1) {
             Toast.makeText(this, "Invalid provider. Please log in again.", Toast.LENGTH_LONG).show();
             startActivity(new Intent(this, UserLogin.class));
@@ -69,8 +71,8 @@ public class MyServicesActivity extends AppCompatActivity {
             return;
         }
 
-        tvServiceType.setText("Service Category: " + serviceCategory);
 
+        tvServiceType.setText("Category ID: " + categoryId);
 
         serviceList = new ArrayList<>();
         adapter = new MyServiceAdapter(serviceList, (service, position) -> {
@@ -89,29 +91,30 @@ public class MyServicesActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
 
-        fabAddService.setOnClickListener(v -> {
-            Toast.makeText(this, "Category ID: " + serviceCategory, Toast.LENGTH_SHORT).show();
-
-            switch (serviceCategory) {
-                case "Ogero Phone Bills":
-                    startActivity(new Intent(this, OgeroServiceProviderActivity.class));
+        binding.fabAddMyService.setOnClickListener(v -> {
+            Toast.makeText(this, "ID: " + categoryId , Toast.LENGTH_SHORT).show();
+            Intent intent;
+            switch (categoryId) {
+                case 1:
+                    intent = new Intent(this, OgeroServiceProviderActivity.class);
                     break;
-                case "Insurance":
-                    startActivity(new Intent(this, InsuranceServiceProviderActivity.class));
+                case 2:
+                    intent = new Intent(this, InsuranceServiceProviderActivity.class);
                     break;
-                case "Tuition Fees":
-                    startActivity(new Intent(this, TuitionServiceProviderActivity.class));
+                case 3:
+                    intent = new Intent(this, StreamingServiceProviderActivity.class);
                     break;
-                case "Streaming Services":
-                    startActivity(new Intent(this, StreamingServiceProviderActivity.class));
+                case 4:
+                    intent = new Intent(this, TelecomServiceProviderActivity.class);
                     break;
-                case "Telecommunication Services":
-                    startActivity(new Intent(this, TelecomServiceProviderActivity.class));
+                case 5:
+                    intent = new Intent(this, TuitionServiceProviderActivity.class);
                     break;
                 default:
-                    Toast.makeText(this, "Unknown service category", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Unknown category ID", Toast.LENGTH_SHORT).show();
+                    return;
             }
-
+            startActivity(intent);
         });
 
         editTextSearch.addTextChangedListener(new TextWatcher() {
@@ -144,16 +147,13 @@ public class MyServicesActivity extends AppCompatActivity {
                             serviceList.add(new Service(
                                     svc.getInt("service_id"),
                                     svc.getString("service_name"),
-                                    svc.getString("logo_url") // ✅
-
+                                    svc.getString("logo_url")
                             ));
-
                         }
 
                         Collections.sort(serviceList, Comparator.comparing(Service::getServiceName));
                         adapter.setOriginalList(serviceList);
                         adapter.notifyDataSetChanged();
-                        textViewEmpty.setText("No services found. Click + to add one.");
                         textViewEmpty.setVisibility(serviceList.isEmpty() ? View.VISIBLE : View.GONE);
                     } catch (Exception e) {
                         Toast.makeText(this, "Error parsing services", Toast.LENGTH_SHORT).show();
@@ -181,17 +181,6 @@ public class MyServicesActivity extends AppCompatActivity {
             }
         };
         Volley.newRequestQueue(this).add(request);
-    }
-
-    private String getCategoryLabel(int categoryId) {
-        switch (categoryId) {
-            case 1: return "Ogero";
-            case 2: return "Insurance";
-            case 3: return "Streaming";
-            case 4: return "Telecom";
-            case 5: return "Tuition";
-            default: return "General";
-        }
     }
 
     @Override

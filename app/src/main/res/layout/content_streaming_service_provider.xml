@@ -10,14 +10,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:gravity="center_horizontal"
-        android:layout_marginTop="60dp">
+        android:gravity="center_horizontal">
 
         <!-- Title -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Register Streaming Provider"
+            android:text="Register Streaming Service"
             android:textSize="20sp"
             android:textStyle="bold"
             android:textColor="@color/black"
@@ -62,25 +61,24 @@
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Streaming Company Name">
+            android:hint="Company Name">
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextCompany"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Support Number (used as description) -->
+        <!-- Support Number -->
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:hint="Customer Support Number">
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editTextCoverage"
+                android:id="@+id/editTextSupport"
                 android:layout_width="match_parent"
-                android:layout_height="120dp"
-                android:inputType="textMultiLine"
-                android:gravity="top"/>
+                android:layout_height="wrap_content"
+                android:inputType="phone" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Bank Account -->
@@ -101,14 +99,25 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:hint="Service Location">
+            android:hint="Service Region">
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextRegion"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </com.google.android.material.textfield.TextInputLayout>
 
-
+        <!-- Address -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:hint="Service Address">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextAddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPostalAddress" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Submit Button -->
         <Button

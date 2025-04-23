@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.webkit.MimeTypeMap;
 import android.widget.*;
+
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,6 +18,7 @@ import com.example.mobile_project_hza2m.databinding.ActivityTuitionServiceProvid
 
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,12 +27,14 @@ public class TuitionServiceProviderActivity extends AppCompatActivity {
 
     private ActivityTuitionServiceProviderBinding binding;
 
-    EditText editTextUniversityName, editTextUniversityDetails, editTextBankAccount;
-    EditText editTextRegion, editTextContactNumber;
-    Button buttonSaveTuitionService;
+    private EditText editTextUniversityName, editTextUniversityDetails, editTextBankAccount;
+    private EditText editTextRegion, editTextContactNumber;
+    private Button buttonSaveTuitionService;
+    private ImageView imageViewLogo, imageViewUploadLogo;
     private Uri selectedLogoUri;
+    private String uploadedFileName = "";
+
     private ProgressDialog progressDialog;
-    ImageView imageViewLogo, imageViewUploadLogo;;
     private final String UPLOAD_URL = Config.BASE_URL + "services/add_service.php";
 
     private final ActivityResultLauncher<Intent> logoPickerLauncher = registerForActivityResult(
@@ -53,10 +57,9 @@ public class TuitionServiceProviderActivity extends AppCompatActivity {
         editTextUniversityName = findViewById(R.id.editTextUniversityName);
         editTextUniversityDetails = findViewById(R.id.editTextUniversityDetails);
         editTextBankAccount = findViewById(R.id.editTextBankAccount);
+        editTextRegion = findViewById(R.id.editTextRegion);
+        editTextContactNumber = findViewById(R.id.editTextContactNumber);
         buttonSaveTuitionService = findViewById(R.id.buttonSaveTuitionService);
-         editTextRegion = findViewById(R.id.editTextRegion);
-         editTextContactNumber = findViewById(R.id.editTextContactNumber);
-
 
         imageViewUploadLogo.setOnClickListener(v -> {
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -74,14 +77,8 @@ public class TuitionServiceProviderActivity extends AppCompatActivity {
         String region = editTextRegion.getText().toString().trim();
         String contactNumber = editTextContactNumber.getText().toString().trim();
 
-        if (region.isEmpty() || contactNumber.isEmpty()) {
-            Toast.makeText(this, "Region and contact number are required", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-
-
-        if (universityName.isEmpty() || details.isEmpty() || bankAccount.isEmpty() || selectedLogoUri == null) {
+        if (universityName.isEmpty() || details.isEmpty() || bankAccount.isEmpty()
+                || region.isEmpty() || contactNumber.isEmpty() || selectedLogoUri == null) {
             Toast.makeText(this, "Please fill all fields and upload a logo", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -128,9 +125,10 @@ public class TuitionServiceProviderActivity extends AppCompatActivity {
                 params.put("category", "tuition");
                 params.put("title", universityName);
                 params.put("details", details);
-                params.put("address", "University Area");
+                params.put("address", contactNumber);
                 params.put("region", region);
                 params.put("bank_account", bankAccount);
+                params.put("logo_url", "uploads/" + uploadedFileName); // important for PHP
                 return params;
             }
 
@@ -139,10 +137,17 @@ public class TuitionServiceProviderActivity extends AppCompatActivity {
                 Map<String, DataPart> params = new HashMap<>();
                 try {
                     InputStream iStream = getContentResolver().openInputStream(selectedLogoUri);
-                    byte[] logoData = new byte[iStream.available()];
-                    iStream.read(logoData);
-                    String ext = MimeTypeMap.getSingleton().getExtensionFromMimeType(getContentResolver().getType(selectedLogoUri));
-                    params.put("logo", new DataPart("logo_" + System.currentTimeMillis() + "." + ext, logoData, "image/" + ext));
+                    ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+                    byte[] data = new byte[1024];
+                    int bytesRead;
+                    while ((bytesRead = iStream.read(data, 0, data.length)) != -1) {
+                        buffer.write(data, 0, bytesRead);
+                    }
+
+                    String ext = MimeTypeMap.getSingleton().getExtensionFromMimeType(
+                            getContentResolver().getType(selectedLogoUri));
+                    uploadedFileName = "logo_" + System.currentTimeMillis() + "." + ext;
+                    params.put("logo", new DataPart(uploadedFileName, buffer.toByteArray(), "image/" + ext));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

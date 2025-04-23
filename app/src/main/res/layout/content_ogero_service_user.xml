@@ -3,7 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="20dp"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/WhiteSmoke">
 
     <LinearLayout
@@ -13,63 +12,40 @@
         android:gravity="center_horizontal">
 
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Add New Service"
+            android:text="Pay Ogero Phone Bill"
             android:textSize="22sp"
             android:textStyle="bold"
-            android:layout_marginBottom="24dp"
-            android:textColor="@color/black" />
+            android:textColor="@android:color/black"
+            android:layout_marginBottom="24dp" />
 
-        <!-- Service Name -->
         <EditText
-            android:id="@+id/editTextServiceName"
+            android:id="@+id/editTextLineNumber"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Service Name"
-            android:inputType="textPersonName" />
+            android:hint="Enter Landline Number"
+            android:inputType="phone" />
 
-        <!-- Category -->
         <EditText
-            android:id="@+id/editTextCategory"
+            android:id="@+id/editTextReference"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Category"
+            android:hint="Reference (Optional)"
             android:inputType="text" />
 
-        <!-- Description -->
         <EditText
-            android:id="@+id/editTextDescription"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:hint="Service Description"
-            android:inputType="textMultiLine"
-            android:gravity="top" />
-
-        <!-- Price -->
-        <EditText
-            android:id="@+id/editTextPrice"
+            android:id="@+id/editTextAmount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Price (USD)"
+            android:hint="Amount (USD)"
             android:inputType="numberDecimal" />
 
-        <!-- Upload Image -->
         <Button
-            android:id="@+id/btnUploadImage"
+            android:id="@+id/buttonPayNow"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Upload Service Image"
-            android:layout_marginTop="16dp"
-            android:backgroundTint="@color/UseBlue"
-            android:textColor="@android:color/white" />
-
-        <!-- Submit Button -->
-        <Button
-            android:id="@+id/btnSubmitService"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Add Service"
+            android:text="Pay Now"
             android:layout_marginTop="24dp"
             android:backgroundTint="@color/UseBlue"
             android:textColor="@android:color/white" />

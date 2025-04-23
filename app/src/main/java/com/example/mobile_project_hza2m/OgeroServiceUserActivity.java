@@ -1,58 +1,98 @@
 package com.example.mobile_project_hza2m;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
-
-import com.google.android.material.snackbar.Snackbar;
-
+import android.text.TextUtils;
+import android.widget.*;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
-
+import com.android.volley.Request;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.mobile_project_hza2m.databinding.ActivityOgeroServiceUserBinding;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class OgeroServiceUserActivity extends AppCompatActivity {
 
-    private AppBarConfiguration appBarConfiguration;
     private ActivityOgeroServiceUserBinding binding;
+    private EditText editTextLineNumber, editTextReference, editTextAmount;
+    private Button buttonPayNow;
 
-
-    EditText editServiceId;
-    Button btnSubscribe;
-
-    String SUBSCRIBE_URL = Config.BASE_URL+"services/subscribe_service.php";
+    private final String PAY_URL = Config.BASE_URL + "services/subscribe_service.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         binding = ActivityOgeroServiceUserBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
         setSupportActionBar(binding.toolbar);
 
+        editTextLineNumber = findViewById(R.id.editTextLineNumber);
+        editTextReference = findViewById(R.id.editTextReference);
+        editTextAmount = findViewById(R.id.editTextAmount);
+        buttonPayNow = findViewById(R.id.buttonPayNow);
 
-        /*binding.fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAnchorView(R.id.fab)
-                        .setAction("Action", null).show();
+        buttonPayNow.setOnClickListener(v -> {
+            String lineNumber = editTextLineNumber.getText().toString().trim();
+            String reference = editTextReference.getText().toString().trim();
+            String amount = editTextAmount.getText().toString().trim();
+
+            if (lineNumber.isEmpty() || amount.isEmpty()) {
+                showAlert("Please enter your line number and amount.");
+                return;
             }
-        }); */
 
-       // editServiceId = findViewById(R.id.editServiceId);  // create this EditText in XML
-       // btnSubscribe = findViewById(R.id.btnSubscribe);    // create this Button in XML
+            if (!TextUtils.isDigitsOnly(amount)) {
+                showAlert("Amount must be a valid number.");
+                return;
+            }
 
-       // btnSubscribe.setOnClickListener(v -> handleSubscription());
+            int userId = getUserIdFromPrefs();
+            int serviceId = 1; // Ogero service ID
 
+            if (userId == -1) {
+                showAlert("User ID not found. Please login again.");
+                return;
+            }
+
+            buttonPayNow.setEnabled(false);
+
+            StringRequest request = new StringRequest(Request.Method.POST, PAY_URL,
+                    response -> {
+                        showAlert("Payment sent successfully!");
+                        buttonPayNow.setEnabled(true);
+                    },
+                    error -> {
+                        showAlert("Error: " + error.getMessage());
+                        buttonPayNow.setEnabled(true);
+                    }) {
+                @Override
+                protected Map<String, String> getParams() {
+                    Map<String, String> params = new HashMap<>();
+                    params.put("user_id", String.valueOf(userId));
+                    params.put("service_id", String.valueOf(serviceId));
+                    params.put("reference", reference);
+                    params.put("amount", amount);
+                    params.put("description", lineNumber);
+                    return params;
+                }
+            };
+
+            Volley.newRequestQueue(this).add(request);
+        });
     }
 
+    private int getUserIdFromPrefs() {
+        SharedPreferences prefs = getSharedPreferences("AppPrefs", MODE_PRIVATE);
+        return prefs.getInt("user_id", -1);
+    }
 
+    private void showAlert(String message) {
+        new AlertDialog.Builder(this)
+                .setMessage(message)
+                .setPositiveButton("OK", null)
+                .show();
+    }
 }

@@ -6,10 +6,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.webkit.MimeTypeMap;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.Toast;
+import android.widget.*;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -18,10 +15,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.android.volley.Request;
 import com.android.volley.toolbox.Volley;
 import com.example.mobile_project_hza2m.databinding.ActivityStreamingServiceProviderBinding;
-import com.example.mobile_project_hza2m.databinding.ActivityTelecomServiceProviderBinding;
 
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
@@ -33,6 +30,7 @@ public class StreamingServiceProviderActivity extends AppCompatActivity {
     private EditText editTextCompany, editTextCoverage, editTextBankAccount, editTextRegion;
     private Button btnSubmitStreaming;
     private Uri selectedLogoUri;
+    private String uploadedFileName = "";
     private ProgressDialog progressDialog;
     private final String UPLOAD_URL = Config.BASE_URL + "services/add_service.php";
 
@@ -51,7 +49,6 @@ public class StreamingServiceProviderActivity extends AppCompatActivity {
         binding = ActivityStreamingServiceProviderBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        // Assign UI components
         imageViewProviderLogo = findViewById(R.id.imageViewProviderLogo);
         imageViewUpload = findViewById(R.id.imageViewUpload);
         editTextCompany = findViewById(R.id.editTextCompany);
@@ -122,9 +119,10 @@ public class StreamingServiceProviderActivity extends AppCompatActivity {
                 params.put("category", "streaming");
                 params.put("title", company);
                 params.put("details", coverage);
-                params.put("address", region);
+                params.put("address", region); // reuse region as address
                 params.put("region", region);
                 params.put("bank_account", bank);
+                params.put("logo_url", "uploads/" + uploadedFileName);
                 return params;
             }
 
@@ -133,10 +131,17 @@ public class StreamingServiceProviderActivity extends AppCompatActivity {
                 Map<String, DataPart> params = new HashMap<>();
                 try {
                     InputStream iStream = getContentResolver().openInputStream(selectedLogoUri);
-                    byte[] logoData = new byte[iStream.available()];
-                    iStream.read(logoData);
-                    String ext = MimeTypeMap.getSingleton().getExtensionFromMimeType(getContentResolver().getType(selectedLogoUri));
-                    params.put("logo", new DataPart("logo_" + System.currentTimeMillis() + "." + ext, logoData, "image/" + ext));
+                    ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+                    byte[] data = new byte[1024];
+                    int bytesRead;
+                    while ((bytesRead = iStream.read(data, 0, data.length)) != -1) {
+                        buffer.write(data, 0, bytesRead);
+                    }
+
+                    String ext = MimeTypeMap.getSingleton().getExtensionFromMimeType(
+                            getContentResolver().getType(selectedLogoUri));
+                    uploadedFileName = "logo_" + System.currentTimeMillis() + "." + ext;
+                    params.put("logo", new DataPart(uploadedFileName, buffer.toByteArray(), "image/" + ext));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

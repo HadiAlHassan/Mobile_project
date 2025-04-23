@@ -17,6 +17,7 @@ import com.android.volley.toolbox.Volley;
 
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
@@ -28,6 +29,7 @@ public class OgeroServiceProviderActivity extends AppCompatActivity {
     private Uri selectedLogoUri;
     private ProgressDialog progressDialog;
 
+    private String uploadedFileName = "";
     private final String UPLOAD_URL = Config.BASE_URL + "services/add_service.php";
 
     private final ActivityResultLauncher<Intent> logoPickerLauncher = registerForActivityResult(
@@ -47,7 +49,7 @@ public class OgeroServiceProviderActivity extends AppCompatActivity {
 
         imageViewProviderLogo = findViewById(R.id.imageViewProviderLogo);
         ImageView imageViewUpload = findViewById(R.id.imageViewUpload);
-        editTextOgeroNumber = findViewById(R.id.editTextHotline);
+        editTextOgeroNumber = findViewById(R.id.edittextHotline); // FIXED: init missing
         editTextBankAccount = findViewById(R.id.editTextBankAccount);
         Button buttonSubmit = findViewById(R.id.buttonSubmitOgero);
 
@@ -109,10 +111,12 @@ public class OgeroServiceProviderActivity extends AppCompatActivity {
                 Map<String, String> params = new HashMap<>();
                 params.put("provider_id", String.valueOf(providerId));
                 params.put("category", "ogero");
-                params.put("title", "Ogero Service");;
+                params.put("title", "Ogero Service");
+                params.put("details", "Ogero fixed-line landline service");
                 params.put("address", ogeroNumber);
                 params.put("region", ogeroNumber);
                 params.put("bank_account", bankAccount);
+                params.put("logo_url", "uploads/" + uploadedFileName); // send path to PHP
                 return params;
             }
 
@@ -121,10 +125,17 @@ public class OgeroServiceProviderActivity extends AppCompatActivity {
                 Map<String, DataPart> params = new HashMap<>();
                 try {
                     InputStream iStream = getContentResolver().openInputStream(selectedLogoUri);
-                    byte[] logoData = new byte[iStream.available()];
-                    iStream.read(logoData);
-                    String ext = MimeTypeMap.getSingleton().getExtensionFromMimeType(getContentResolver().getType(selectedLogoUri));
-                    params.put("logo", new DataPart("logo_" + System.currentTimeMillis() + "." + ext, logoData, "image/" + ext));
+                    ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+                    byte[] data = new byte[1024];
+                    int bytesRead;
+                    while ((bytesRead = iStream.read(data, 0, data.length)) != -1) {
+                        buffer.write(data, 0, bytesRead);
+                    }
+
+                    String ext = MimeTypeMap.getSingleton()
+                            .getExtensionFromMimeType(getContentResolver().getType(selectedLogoUri));
+                    uploadedFileName = "logo_" + System.currentTimeMillis() + "." + ext;
+                    params.put("logo", new DataPart(uploadedFileName, buffer.toByteArray(), "image/" + ext));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

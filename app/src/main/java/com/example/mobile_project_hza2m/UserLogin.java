@@ -28,12 +28,21 @@ import java.util.Map;
 public class UserLogin extends AppCompatActivity {
 
     EditText edUser, edPass;
-    Button btnLogin, btnLogout;
+    Button btnLogin, btnLogout, btnHome;
 
     private final String LOGIN_URL = Config.BASE_URL + "auth/login.php";
     private final String LOGOUT_URL = Config.BASE_URL + "auth/logout.php";
 
     private SharedPreferences prefs;
+
+    private static final Map<String, Integer> serviceCategoryIdMap = new HashMap<>();
+    static {
+        serviceCategoryIdMap.put("Ogero", 1);
+        serviceCategoryIdMap.put("Insurance", 2);
+        serviceCategoryIdMap.put("Streaming Services", 3);
+        serviceCategoryIdMap.put("Telecommunication Services", 4);
+        serviceCategoryIdMap.put("Tuition Fees", 5);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +60,7 @@ public class UserLogin extends AppCompatActivity {
         edPass = findViewById(R.id.edPass);
         btnLogin = findViewById(R.id.btn1Login);
         btnLogout = findViewById(R.id.btnLogout);
+        btnHome = findViewById(R.id.btnHome);
 
         prefs = getSharedPreferences("AppPrefs", MODE_PRIVATE);
 
@@ -68,6 +78,13 @@ public class UserLogin extends AppCompatActivity {
         btnLogin.setOnClickListener(v -> loginUser());
         btnLogout.setOnClickListener(v -> logoutUser());
         btnLogout.setEnabled(false);
+
+        btnHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(UserLogin.this, HomeActivity.class));
+            }
+        });
     }
 
     private void loginUser() {
@@ -103,7 +120,12 @@ public class UserLogin extends AppCompatActivity {
 
                                 case "provider":
                                     int providerId = json.getInt("provider_id");
+                                    String serviceCategory = json.getString("service_category");
+                                    int categoryId = serviceCategoryIdMap.getOrDefault(serviceCategory, -1);
+
                                     editor.putInt("provider_id", providerId);
+                                    editor.putString("service_category", serviceCategory);
+                                    editor.putInt("category_id", categoryId);
                                     editor.apply();
                                     redirectToDashboard(role);
                                     break;

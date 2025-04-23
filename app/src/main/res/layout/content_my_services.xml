@@ -49,20 +49,10 @@
         android:id="@+id/recyclerViewMyServices"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_above="@id/fabAddMyService"
         android:layout_below="@id/editTextSearch"
         android:layout_marginTop="12dp" />
 
     <!-- Empty State Text -->
 
-    <!-- Floating Action Button -->
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabAddMyService"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_margin="16dp"
-        android:src="@android:drawable/ic_input_add"
-        app:backgroundTint="@color/UseBlue" />
+
 </RelativeLayout>

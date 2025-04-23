@@ -16,7 +16,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Register Insurance Provider"
+            android:text="Register Insurance Service"
             android:textSize="20sp"
             android:textStyle="bold"
             android:textColor="@color/black"
@@ -57,7 +57,7 @@
                 android:elevation="4dp" />
         </FrameLayout>
 
-        <!-- Service Name -->
+        <!-- Company Name -->
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -68,7 +68,7 @@
                 android:layout_height="wrap_content" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Description -->
+        <!-- Coverage Description -->
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -107,12 +107,22 @@
                 android:layout_height="wrap_content" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Price -->
-
+        <!-- Address -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:hint="Service Address">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextAddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPostalAddress" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Submit Button -->
         <Button
-            android:id="@+id/buttonSubmitStreaming"
+            android:id="@+id/buttonSubmitInsurance"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Submit Service"

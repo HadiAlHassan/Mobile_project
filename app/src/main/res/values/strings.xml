@@ -209,6 +209,9 @@
         vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
     </string>
     <string name="description">Description</string>
+    <string name="back_to_home">Back To Home</string>
+    <string name="logout">Logout</string>
+    <string name="login">Login</string>
 
 
 </resources>
