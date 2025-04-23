@@ -110,7 +110,7 @@ public class OgeroServiceProviderActivity extends AppCompatActivity {
             public Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
                 params.put("provider_id", String.valueOf(providerId));
-                params.put("category", "Ogero");
+                params.put("category", "ogero");
                 params.put("title", "Ogero Service");
                 params.put("details", "Ogero fixed-line landline service");
                 params.put("address", ogeroNumber);

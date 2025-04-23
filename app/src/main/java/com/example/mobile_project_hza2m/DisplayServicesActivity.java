@@ -67,7 +67,7 @@ public class DisplayServicesActivity extends AppCompatActivity {
                                 JSONObject group = groups.getJSONObject(i);
                                 String categoryName = group.getString("category");
                                 int categoryId = group.getInt("category_id");
-                                Log.e("Category ID: ", String.valueOf(categoryId));
+                                Log.e("Category33333 ID: ", String.valueOf(categoryId));
 
                                 JSONArray services = group.getJSONArray("services");
                                 List<Service> serviceGroupList = new ArrayList<>();
@@ -75,7 +75,7 @@ public class DisplayServicesActivity extends AppCompatActivity {
                                 for (int j = 0; j < services.length(); j++) {
                                     try {
                                         JSONObject s = services.getJSONObject(j);
-                                        Log.d("RawService", s.toString());
+                                        Log.d("RawService2222", s.toString());
 
                                         int serviceId = s.getInt("service_id");
                                         String name = s.optString("service_name", "Untitled");

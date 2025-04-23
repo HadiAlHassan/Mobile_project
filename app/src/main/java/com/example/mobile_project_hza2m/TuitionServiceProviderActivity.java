@@ -122,7 +122,7 @@ public class TuitionServiceProviderActivity extends AppCompatActivity {
             public Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
                 params.put("provider_id", String.valueOf(providerId));
-                params.put("category", "Tuition Fees");
+                params.put("category", "tuition ");
                 params.put("title", universityName);
                 params.put("details", details);
                 params.put("address", contactNumber);

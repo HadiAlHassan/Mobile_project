@@ -37,11 +37,11 @@ public class UserLogin extends AppCompatActivity {
 
     private static final Map<String, Integer> serviceCategoryIdMap = new HashMap<>();
     static {
-        serviceCategoryIdMap.put("Ogero", 1);
-        serviceCategoryIdMap.put("Insurance", 2);
-        serviceCategoryIdMap.put("Streaming Services", 3);
-        serviceCategoryIdMap.put("Telecommunication Services", 4);
-        serviceCategoryIdMap.put("Tuition Fees", 5);
+        serviceCategoryIdMap.put("ogero", 1);
+        serviceCategoryIdMap.put("insurance", 2);
+        serviceCategoryIdMap.put("streaming ", 3);
+        serviceCategoryIdMap.put("telecommunication", 4);
+        serviceCategoryIdMap.put("tuition", 5);
     }
 
     @Override
