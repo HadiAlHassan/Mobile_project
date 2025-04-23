@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.mobile_project_hza2m.databinding.ActivityInsuranceServiceUserBinding;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -22,11 +23,14 @@ public class InsuranceServiceUserActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private InsurancePlanAdapter adapter;
     private ArrayList<InsurancePlan> plans;
+    private ActivityInsuranceServiceUserBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_insurance_service_user);
+
+        binding = ActivityInsuranceServiceUserBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         int serviceId = getIntent().getIntExtra("service_id", -1);
         String serviceName = getIntent().getStringExtra("service_name"); // optional for UI

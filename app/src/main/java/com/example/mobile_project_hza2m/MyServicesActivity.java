@@ -59,7 +59,7 @@ public class MyServicesActivity extends AppCompatActivity {
 
         tvServiceType = findViewById(R.id.tvServiceType);
         editTextSearch = findViewById(R.id.editTextSearch);
-       // textViewEmpty = findViewById(R.id.text);
+        textViewEmpty = findViewById(R.id.textViewEmpty);
 
         SharedPreferences prefs = getSharedPreferences("AppPrefs", MODE_PRIVATE);
         categoryId = prefs.getInt("category_id", -1);

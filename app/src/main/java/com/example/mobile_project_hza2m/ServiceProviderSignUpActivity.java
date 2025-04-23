@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
 import com.android.volley.Request;
@@ -79,6 +80,8 @@ public class ServiceProviderSignUpActivity extends AppCompatActivity {
                     progressDialog.dismiss();
                     try {
                         JSONObject json = new JSONObject(response);
+                        Log.d("CATEGORY_RESPONSE", response); // Already added?
+
                         if (json.getBoolean("success")) {
                             JSONArray categories = json.getJSONArray("categories");
                             for (int i = 0; i < categories.length(); i++) {

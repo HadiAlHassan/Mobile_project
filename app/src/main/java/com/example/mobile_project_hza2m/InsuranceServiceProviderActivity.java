@@ -25,7 +25,7 @@ import java.util.Map;
 
 public class InsuranceServiceProviderActivity extends AppCompatActivity {
 
-    EditText editTextCompany, editTextDescription, editTextBankAccount, editTextRegion;
+    EditText editTextCompany, editTextCoverage, editTextBankAccount, editTextRegion, editTextAddress;
     ImageView imageViewLogo;
     Uri selectedLogoUri;
     Button buttonSubmit;
@@ -51,14 +51,16 @@ public class InsuranceServiceProviderActivity extends AppCompatActivity {
         binding = ActivityInsuranceServiceProviderBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        // Match layout IDs
         editTextCompany = findViewById(R.id.editTextCompany);
-        editTextDescription = findViewById(R.id.editTextDescription);
+        editTextCoverage = findViewById(R.id.editTextCoverage);
         editTextBankAccount = findViewById(R.id.editTextBankAccount);
         editTextRegion = findViewById(R.id.editTextRegion);
-        imageViewLogo = findViewById(R.id.imageViewLogo);
-        buttonSubmit = findViewById(R.id.buttonSubmitTelecom);
+        editTextAddress = findViewById(R.id.editTextAddress);
+        imageViewLogo = findViewById(R.id.imageViewProviderLogo);
+        buttonSubmit = findViewById(R.id.buttonSubmitInsurance);
 
-        findViewById(R.id.imageViewUploadLogo).setOnClickListener(v -> {
+        findViewById(R.id.imageViewUpload).setOnClickListener(v -> {
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
             intent.setType("image/*");
             imagePickerLauncher.launch(intent);
@@ -67,18 +69,20 @@ public class InsuranceServiceProviderActivity extends AppCompatActivity {
         buttonSubmit.setOnClickListener(v -> uploadService());
 
         binding.fabaddserviceitem.setOnClickListener(view -> {
-            Intent i = new Intent(InsuranceServiceProviderActivity.this, InsertServiceItemActivity.class);
+            Intent i = new Intent(this, InsertServiceItemActivity.class);
             startActivity(i);
         });
     }
 
     private void uploadService() {
         String company = editTextCompany.getText().toString().trim();
-        String description = editTextDescription.getText().toString().trim();
+        String description = editTextCoverage.getText().toString().trim();
         String bank = editTextBankAccount.getText().toString().trim();
         String region = editTextRegion.getText().toString().trim();
+        String address = editTextAddress.getText().toString().trim();
 
-        if (company.isEmpty() || description.isEmpty() || bank.isEmpty() || region.isEmpty() || selectedLogoUri == null) {
+        if (company.isEmpty() || description.isEmpty() || bank.isEmpty() ||
+                region.isEmpty() || address.isEmpty() || selectedLogoUri == null) {
             Toast.makeText(this, "All fields and logo are required", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -124,13 +128,13 @@ public class InsuranceServiceProviderActivity extends AppCompatActivity {
             public Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
                 params.put("provider_id", String.valueOf(providerId));
-                params.put("category", "insurance"); // FIXED
+                params.put("category", "insurance");
                 params.put("title", company);
                 params.put("details", description);
-                params.put("address", region);
+                params.put("address", address);
                 params.put("region", region);
                 params.put("bank_account", bank);
-                params.put("logo_url", "uploads/" + uploadedFileName); // ADDED
+                params.put("logo_url", "uploads/" + uploadedFileName);
                 return params;
             }
 
