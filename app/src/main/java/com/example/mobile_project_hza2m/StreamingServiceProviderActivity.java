@@ -25,13 +25,15 @@ import java.util.Map;
 
 public class StreamingServiceProviderActivity extends AppCompatActivity {
 
+    EditText editTextCompany, editTextSupport, editTextBankAccount, editTextRegion, editTextAddress;
+    ImageView imageViewProviderLogo, imageViewUpload;
+    Button btnSubmitStreaming;
+    Uri selectedLogoUri;
+    String uploadedFileName = "";
+    ProgressDialog progressDialog;
+
     private ActivityStreamingServiceProviderBinding binding;
-    private ImageView imageViewProviderLogo, imageViewUpload;
-    private EditText editTextCompany, editTextCoverage, editTextBankAccount, editTextRegion;
-    private Button btnSubmitStreaming;
-    private Uri selectedLogoUri;
-    private String uploadedFileName = "";
-    private ProgressDialog progressDialog;
+
     private final String UPLOAD_URL = Config.BASE_URL + "services/add_service.php";
 
     private final ActivityResultLauncher<Intent> logoPickerLauncher = registerForActivityResult(
@@ -49,12 +51,15 @@ public class StreamingServiceProviderActivity extends AppCompatActivity {
         binding = ActivityStreamingServiceProviderBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        imageViewProviderLogo = findViewById(R.id.imageViewProviderLogo);
-        imageViewUpload = findViewById(R.id.imageViewUpload);
+        // Properly reference all views
         editTextCompany = findViewById(R.id.editTextCompany);
-        editTextCoverage = findViewById(R.id.editTextCoverage);
+        editTextSupport = findViewById(R.id.editTextSupport);
         editTextBankAccount = findViewById(R.id.editTextBankAccount);
         editTextRegion = findViewById(R.id.editTextRegion);
+        editTextAddress = findViewById(R.id.editTextAddress);
+
+        imageViewProviderLogo = findViewById(R.id.imageViewProviderLogo);
+        imageViewUpload = findViewById(R.id.imageViewUpload);
         btnSubmitStreaming = findViewById(R.id.buttonSubmitStreaming);
 
         imageViewUpload.setOnClickListener(v -> {
@@ -68,11 +73,12 @@ public class StreamingServiceProviderActivity extends AppCompatActivity {
 
     private void uploadStreamingService() {
         String company = editTextCompany.getText().toString().trim();
-        String coverage = editTextCoverage.getText().toString().trim();
+        String support = editTextSupport.getText().toString().trim();
         String bank = editTextBankAccount.getText().toString().trim();
         String region = editTextRegion.getText().toString().trim();
+        String address = editTextAddress.getText().toString().trim();
 
-        if (company.isEmpty() || coverage.isEmpty() || bank.isEmpty() || region.isEmpty() || selectedLogoUri == null) {
+        if (company.isEmpty() || support.isEmpty() || bank.isEmpty() || region.isEmpty() || address.isEmpty() || selectedLogoUri == null) {
             Toast.makeText(this, "Please fill all fields and upload a logo", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -118,8 +124,8 @@ public class StreamingServiceProviderActivity extends AppCompatActivity {
                 params.put("provider_id", String.valueOf(providerId));
                 params.put("category", "streaming");
                 params.put("title", company);
-                params.put("details", coverage);
-                params.put("address", region); // reuse region as address
+                params.put("details", support);
+                params.put("address", address);
                 params.put("region", region);
                 params.put("bank_account", bank);
                 params.put("logo_url", "uploads/" + uploadedFileName);
