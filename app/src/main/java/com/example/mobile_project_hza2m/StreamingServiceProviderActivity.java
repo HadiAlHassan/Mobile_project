@@ -122,7 +122,7 @@ public class StreamingServiceProviderActivity extends AppCompatActivity {
             public Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
                 params.put("provider_id", String.valueOf(providerId));
-                params.put("category", "streaming");
+                params.put("category", "Streaming Services");
                 params.put("title", company);
                 params.put("details", support);
                 params.put("address", address);

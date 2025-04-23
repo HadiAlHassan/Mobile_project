@@ -128,7 +128,7 @@ public class InsuranceServiceProviderActivity extends AppCompatActivity {
             public Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
                 params.put("provider_id", String.valueOf(providerId));
-                params.put("category", "insurance");
+                params.put("category", "Insurance");
                 params.put("title", company);
                 params.put("details", description);
                 params.put("address", address);
