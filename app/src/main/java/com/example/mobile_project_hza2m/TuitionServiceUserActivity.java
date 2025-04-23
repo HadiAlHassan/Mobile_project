@@ -1,5 +1,6 @@
 package com.example.mobile_project_hza2m;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
@@ -92,7 +93,19 @@ public class TuitionServiceUserActivity extends AppCompatActivity {
             }
 
             StringRequest request = new StringRequest(Request.Method.POST, PAY_URL,
-                    response -> Toast.makeText(this, "Payment Sent!", Toast.LENGTH_SHORT).show(),
+                    response -> {
+                        // 💾 Save the paid amount for deduction in wallet
+                        SharedPreferences appPrefs = getSharedPreferences("AppPrefs", MODE_PRIVATE);
+                        SharedPreferences.Editor editor = appPrefs.edit();
+                        editor.putFloat("last_payment_amount", Float.parseFloat(amount));
+                        editor.apply();
+
+                        Toast.makeText(this, "Payment Sent!", Toast.LENGTH_SHORT).show();
+
+                        // ➡️ Go to wallet
+                        startActivity(new Intent(TuitionServiceUserActivity.this, MyWalletActivity.class));
+                        finish();
+                    },
                     error -> Toast.makeText(this, "Error: " + error.getMessage(), Toast.LENGTH_SHORT).show()
             ) {
                 @Override
@@ -109,6 +122,7 @@ public class TuitionServiceUserActivity extends AppCompatActivity {
 
             Volley.newRequestQueue(this).add(request);
         });
+
     }
 
     private void selectImage() {

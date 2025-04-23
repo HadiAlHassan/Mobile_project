@@ -80,7 +80,7 @@ public class MyBillingActivity extends AppCompatActivity {
 
         progressDialog = ProgressDialog.show(this, "Processing", "Adding money to wallet...", true);
 
-        String url = Config.BASE_URL+"wallet/add_money_to_wallet.php";
+        String url = Config.BASE_URL+"wallet/add_money.php";
 
         StringRequest request = new StringRequest(Request.Method.POST, url,
                 response -> {

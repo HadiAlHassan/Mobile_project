@@ -1,5 +1,6 @@
 package com.example.mobile_project_hza2m;
 
+
 public class UserSubscription {
     public int service_id;
     public String title;

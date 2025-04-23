@@ -1,29 +1,45 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="12dp"
-    android:layout_height="wrap_content">
+    android:background="?android:selectableItemBackground">
 
-    <TextView android:id="@+id/subTitle"
+    <TextView
+        android:id="@+id/subTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Service Name"
         android:textSize="16sp"
-        android:textStyle="bold"
-        android:text="Service Name"  android:layout_height="wrap_content"
-        android:layout_width="wrap_content"/>
+        android:textStyle="bold" />
 
-    <TextView android:id="@+id/subPrice"
-        android:text="Price: $"
+    <TextView
+        android:id="@+id/subCategory"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_width="wrap_content"/>
+        android:text="Category"
+        android:textColor="#555"
+        android:textSize="14sp" />
 
-    <TextView android:id="@+id/subStatus"
+    <TextView
+        android:id="@+id/subPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Price: $0.00"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/subStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="Status: active"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"/>
+        android:textSize="14sp" />
 
-    <TextView android:id="@+id/subDate"
-        android:text="Renew: date"
-        android:textSize="12sp"
-        android:textColor="#777"
+    <TextView
+        android:id="@+id/subDate"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_width="wrap_content"/>
+        android:text="Renew: YYYY-MM-DD"
+        android:textSize="12sp"
+        android:textColor="#777" />
 </LinearLayout>

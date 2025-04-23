@@ -214,4 +214,32 @@
     <string name="login">Login</string>
 
 
-</resources>
+        <!-- Privacy -->
+        <string name="privacy_title">Privacy Policy</string>
+        <string name="privacy_content">
+        We respect your privacy and are committed to protecting your personal information.
+        Any data you share, such as your email, profile image, or payment info, is securely stored and never shared with third parties without your consent.
+
+        We use your information solely to provide services, improve your user experience, and maintain account security.
+        You have full control over your data and can request updates or deletion at any time.
+
+        By using our app, you agree to this policy. Updates will be notified directly in the app or via email.
+    </string>
+
+        <!-- Security -->
+        <string name="security_title">Security Information</string>
+        <string name="security_content">
+        Your security is our top priority. We use encryption, secure servers, and verification layers to protect your account and transactions.
+
+        Passwords are never stored in plain text and sensitive actions like payments are handled through secure connections.
+
+        For your protection:
+        - Use strong, unique passwords.
+        - Avoid sharing credentials.
+        - Enable updates to receive security patches.
+
+        If you suspect suspicious activity, contact our support immediately.
+    </string>
+    </resources>
+
+
