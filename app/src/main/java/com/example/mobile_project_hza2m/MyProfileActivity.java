@@ -11,6 +11,7 @@ import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.bumptech.glide.Glide;
 import com.example.mobile_project_hza2m.databinding.ActivityMyProfileBinding;
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
@@ -108,6 +109,17 @@ public class MyProfileActivity extends AppCompatActivity {
                                 email.setText(user.getString("email"));
                                 phone.setText(user.getString("phone_number"));
                                 gender.setText(user.getString("gender"));
+                                String imageUrl = user.optString("profile_image_url", "");
+                                ImageView profilePic = findViewById(R.id.imageViewProfile);
+
+                                if (!imageUrl.isEmpty()) {
+                                    Glide.with(this)
+                                            .load(imageUrl)
+                                            .placeholder(R.drawable.khadmatiico)
+                                            .error(R.drawable.khadmatiico)
+                                            .into(profilePic);
+                                }
+
 
                                 String ageGroup = user.getString("age_group");
                                 if ("above".equals(ageGroup)) {
