@@ -8,12 +8,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.mobile_project_hza2m.databinding.ActivityTelecomServiceUserBinding;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,8 +25,8 @@ public class TelecomServiceUserActivity extends AppCompatActivity {
 
     private ActivityTelecomServiceUserBinding binding;
     private RecyclerView recyclerView;
-    private TelecomPlanAdapter adapter;
-    private ArrayList<TelecomPlan> plans;
+    private TelecomCardAdapter adapter;
+    private ArrayList<TelecomCard> cardList;
     private int serviceId;
 
     private final String PAY_URL = Config.BASE_URL + "services/subscribe_service.php";
@@ -56,8 +59,8 @@ public class TelecomServiceUserActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerViewTelecomCards);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        plans = new ArrayList<>();
-        adapter = new TelecomPlanAdapter(this, plans, plan -> {
+        cardList = new ArrayList<>();
+        adapter = new TelecomCardAdapter(this, cardList, plan -> {
             int userId = getSharedPreferences("AppPrefs", MODE_PRIVATE).getInt("user_id", -1);
             if (userId == -1) {
                 Toast.makeText(this, "User ID not found", Toast.LENGTH_SHORT).show();
@@ -79,11 +82,11 @@ public class TelecomServiceUserActivity extends AppCompatActivity {
                         JSONObject json = new JSONObject(response);
                         if (json.getBoolean("success")) {
                             JSONArray items = json.getJSONArray("items");
-                            plans.clear();
+                            cardList.clear();
 
                             for (int i = 0; i < items.length(); i++) {
                                 JSONObject obj = items.getJSONObject(i);
-                                plans.add(new TelecomPlan(
+                                cardList.add(new TelecomCard(
                                         obj.getInt("item_id"),
                                         serviceId,
                                         obj.getString("item_name"),
@@ -107,7 +110,7 @@ public class TelecomServiceUserActivity extends AppCompatActivity {
         Volley.newRequestQueue(this).add(request);
     }
 
-    private void checkBalanceAndSubscribe(int userId, int serviceId, TelecomPlan plan) {
+    private void checkBalanceAndSubscribe(int userId, int serviceId, TelecomCard plan) {
         String url = BALANCE_URL + userId;
 
         StringRequest balanceRequest = new StringRequest(Request.Method.GET, url,

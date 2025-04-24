@@ -1,7 +1,5 @@
 package com.example.mobile_project_hza2m;
 
-
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,8 +7,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
 import java.util.List;
 
 public class StreamingPlanAdapter extends RecyclerView.Adapter<StreamingPlanAdapter.StreamingViewHolder> {
@@ -32,7 +33,7 @@ public class StreamingPlanAdapter extends RecyclerView.Adapter<StreamingPlanAdap
     @NonNull
     @Override
     public StreamingViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_telecom_plan, parent, false); // reusing telecom layout
+        View view = LayoutInflater.from(context).inflate(R.layout.item_telecom_plan, parent, false);
         return new StreamingViewHolder(view);
     }
 
@@ -42,7 +43,7 @@ public class StreamingPlanAdapter extends RecyclerView.Adapter<StreamingPlanAdap
         holder.title.setText(plan.getName());
         holder.desc.setText(plan.getDescription());
         holder.price.setText(plan.getPrice());
-        holder.icon.setImageResource(plan.getImageRes());
+        holder.icon.setImageResource(plan.getImageResId());
 
         holder.subscribeBtn.setOnClickListener(v -> {
             if (listener != null) {
@@ -66,8 +67,8 @@ public class StreamingPlanAdapter extends RecyclerView.Adapter<StreamingPlanAdap
             title = itemView.findViewById(R.id.textViewPlanTitle);
             desc = itemView.findViewById(R.id.textViewPlanDescription);
             price = itemView.findViewById(R.id.textViewPlanPrice);
-            icon = itemView.findViewById(R.id.imageViewInsuranceIcon);
-            subscribeBtn = itemView.findViewById(R.id.buttonRequestInsurance);
+            icon = itemView.findViewById(R.id.imageViewTelecomIcon);
+            subscribeBtn = itemView.findViewById(R.id.buttonRequestTelecom);
         }
     }
 }

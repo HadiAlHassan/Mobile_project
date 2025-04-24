@@ -4,10 +4,13 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 import java.util.List;
 
 public class TelecomCardAdapter extends RecyclerView.Adapter<TelecomCardAdapter.CardViewHolder> {
@@ -17,7 +20,7 @@ public class TelecomCardAdapter extends RecyclerView.Adapter<TelecomCardAdapter.
     private OnCardClickListener listener;
 
     public interface OnCardClickListener {
-        void onCardClick(TelecomCard card);
+        void onCardClick(TelecomCard plan);
     }
 
     public TelecomCardAdapter(Context context, List<TelecomCard> telecomCardList, OnCardClickListener listener) {
@@ -35,13 +38,16 @@ public class TelecomCardAdapter extends RecyclerView.Adapter<TelecomCardAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull CardViewHolder holder, int position) {
-        TelecomCard card = telecomCardList.get(position);
-        holder.textViewValue.setText(card.getValue());
-        holder.imageViewCard.setImageResource(card.getImageResId());
+        TelecomCard plan = telecomCardList.get(position);
 
-        holder.itemView.setOnClickListener(v -> {
+        holder.textViewTitle.setText(plan.getTitle());
+        holder.textViewDescription.setText(plan.getDescription());
+        holder.textViewPrice.setText(plan.getPrice());
+        holder.imageViewIcon.setImageResource(plan.getImageResId());
+
+        holder.buttonRequest.setOnClickListener(v -> {
             if (listener != null) {
-                listener.onCardClick(card);
+                listener.onCardClick(plan);
             }
         });
     }
@@ -52,14 +58,17 @@ public class TelecomCardAdapter extends RecyclerView.Adapter<TelecomCardAdapter.
     }
 
     static class CardViewHolder extends RecyclerView.ViewHolder {
-        ImageView imageViewCard;
-        TextView textViewValue;
+        ImageView imageViewIcon;
+        TextView textViewTitle, textViewDescription, textViewPrice;
+        Button buttonRequest;
 
         public CardViewHolder(@NonNull View itemView) {
             super(itemView);
-            imageViewCard = itemView.findViewById(R.id.imageViewRechargeCard);
-            textViewValue = itemView.findViewById(R.id.textViewCardValue);
+            textViewTitle = itemView.findViewById(R.id.textViewPlanTitle);
+            textViewDescription = itemView.findViewById(R.id.textViewPlanDescription);
+            textViewPrice = itemView.findViewById(R.id.textViewPlanPrice);
+            imageViewIcon = itemView.findViewById(R.id.imageViewTelecomIcon);
+            buttonRequest = itemView.findViewById(R.id.buttonRequestTelecom);
         }
     }
 }
-
