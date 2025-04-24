@@ -102,12 +102,15 @@ public class MyWalletActivity extends AppCompatActivity {
                         for (int i = 0; i < array.length(); i++) {
                             JSONObject obj = array.getJSONObject(i);
                             WalletTransaction txn = new WalletTransaction();
-                            txn.transaction_id = obj.getInt("transaction_id");
+
+                            // ✅ Safely handle nullable transaction_id
+                            txn.transaction_id = obj.isNull("transaction_id") ? -1 : obj.getInt("transaction_id");
+
                             txn.type = obj.getString("type");
                             txn.amount = obj.getString("amount");
                             txn.description = obj.optString("description", "");
 
-                            // Gracefully fallback if service_name is null or missing
+                            // ✅ Fallback for missing service_name
                             if (obj.has("service_name") && !obj.isNull("service_name")) {
                                 txn.service_name = obj.getString("service_name");
                             } else {
@@ -116,6 +119,8 @@ public class MyWalletActivity extends AppCompatActivity {
 
                             txn.created_at = obj.getString("created_at");
                             list.add(txn);
+
+                            Log.d("MyWallet2222", "Transaction: " + txn.service_name);
                         }
 
                         RecyclerView rv = findViewById(R.id.transactionRecycler);
@@ -134,6 +139,7 @@ public class MyWalletActivity extends AppCompatActivity {
 
         Volley.newRequestQueue(this).add(request);
     }
+
 
 
 

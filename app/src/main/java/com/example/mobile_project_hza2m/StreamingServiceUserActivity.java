@@ -1,118 +1,154 @@
 package com.example.mobile_project_hza2m;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
-
-import java.io.InputStream;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.Executors;
+import java.util.HashMap;
+import java.util.Map;
 
 public class StreamingServiceUserActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
-    private TextView textViewProviderName;
-    private ImageView imageViewProviderLogo;
+    private StreamingPlanAdapter adapter;
+    private ArrayList<StreamingPlan> plans;
+    private int serviceId;
 
-    private List<Service> serviceList;
-    private ServiceAdapter adapter;
+    private final String BALANCE_URL = Config.BASE_URL + "wallet/get_wallet_balance.php?user_id=";
+    private final String PAY_URL = Config.BASE_URL + "services/subscribe_service.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_streaming_service_user);
+        setContentView(R.layout.activity_telecom_service_user); // ✅ reuse telecom layout
 
-        recyclerView = findViewById(R.id.recyclerViewPlans);
-        textViewProviderName = findViewById(R.id.textViewProviderName);
-        imageViewProviderLogo = findViewById(R.id.imageViewProviderLogo);
-
-        serviceList = new ArrayList<>();
-        adapter = new ServiceAdapter(this, serviceList);
-
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(adapter);
-
-        String category = getIntent().getStringExtra("category");
-        if (category != null) {
-            fetchServicesByCategory(category);
-            textViewProviderName.setText("Streaming Services - " + category);
-        } else {
-            textViewProviderName.setText("Available Streaming Services");
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle("Streaming Plans");
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+        toolbar.setNavigationOnClickListener(v -> onBackPressed());
+
+        recyclerView = findViewById(R.id.recyclerViewTelecomCards);
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+
+        serviceId = getIntent().getIntExtra("service_id", -1);
+        if (serviceId == -1) {
+            Toast.makeText(this, "Missing service ID", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
+
+        plans = new ArrayList<>();
+        adapter = new StreamingPlanAdapter(this, plans, plan -> {
+            int userId = getSharedPreferences("AppPrefs", MODE_PRIVATE).getInt("user_id", -1);
+            if (userId == -1) {
+                Toast.makeText(this, "User ID not found", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            checkBalanceAndSubscribe(userId, serviceId, plan);
+        });
+
+        recyclerView.setAdapter(adapter);
+        fetchStreamingPlans(serviceId);
     }
 
-    private void fetchServicesByCategory(String category) {
-        String url = Config.BASE_URL + "services/get_services_by_category.php?category=" + Uri.encode(category);
+    private void fetchStreamingPlans(int serviceId) {
+        String url = Config.BASE_URL + "services/get_service_items.php?service_id=" + serviceId;
 
         StringRequest request = new StringRequest(Request.Method.GET, url,
                 response -> {
                     try {
                         JSONObject json = new JSONObject(response);
                         if (json.getBoolean("success")) {
-                            JSONArray services = json.getJSONArray("services");
-                            serviceList.clear();
+                            JSONArray items = json.getJSONArray("items");
+                            plans.clear();
 
-                            for (int i = 0; i < services.length(); i++) {
-                                JSONObject obj = services.getJSONObject(i);
-                                Service service = new Service(
-                                        obj.getInt("service_id"),
-                                        obj.getString("service_name"),
-                                        obj.getString("logo_url"),
-                                        obj.getString("category")
-                                );
-                                serviceList.add(service);
-                            }
-
-                            if (services.length() > 0) {
-                                String firstLogoUrl = services.getJSONObject(0).getString("logo_url");
-                                loadImageFromUrl(Config.BASE_URL + firstLogoUrl, imageViewProviderLogo);
+                            for (int i = 0; i < items.length(); i++) {
+                                JSONObject obj = items.getJSONObject(i);
+                                plans.add(new StreamingPlan(
+                                        serviceId,
+                                        obj.getString("item_name"),
+                                        obj.getString("item_description"),
+                                        obj.getString("item_price"),
+                                        R.drawable.khadmatiico // ✅ or use obj.getString("item_image")
+                                ));
                             }
 
                             adapter.notifyDataSetChanged();
                         } else {
-                            Toast.makeText(this, "No services found", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, "No streaming plans found", Toast.LENGTH_SHORT).show();
                         }
                     } catch (Exception e) {
-                        Toast.makeText(this, "Error parsing services", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Parse error", Toast.LENGTH_SHORT).show();
                     }
                 },
-                error -> Toast.makeText(this, "Fetch failed", Toast.LENGTH_SHORT).show());
+                error -> Toast.makeText(this, "Network error", Toast.LENGTH_SHORT).show()
+        );
 
         Volley.newRequestQueue(this).add(request);
     }
 
-    private void loadImageFromUrl(String imageUrl, ImageView imageView) {
-        Executors.newSingleThreadExecutor().execute(() -> {
-            try {
-                InputStream input = new URL(imageUrl).openStream();
-                Bitmap bitmap = BitmapFactory.decodeStream(input);
-                new Handler(Looper.getMainLooper()).post(() -> imageView.setImageBitmap(bitmap));
-            } catch (Exception e) {
-                e.printStackTrace();
-                new Handler(Looper.getMainLooper()).post(() ->
-                        imageView.setImageResource(R.drawable.khadmatiico)
-                );
+    private void checkBalanceAndSubscribe(int userId, int serviceId, StreamingPlan plan) {
+        StringRequest request = new StringRequest(Request.Method.GET, BALANCE_URL + userId,
+                response -> {
+                    try {
+                        JSONObject json = new JSONObject(response);
+                        float balance = Float.parseFloat(json.optString("balance", "0.00"));
+                        float price = Float.parseFloat(plan.getPrice());
+
+                        if (!json.getBoolean("success")) {
+                            Toast.makeText(this, "Failed to check balance", Toast.LENGTH_SHORT).show();
+                        } else if (balance < price) {
+                            Toast.makeText(this, "Insufficient balance. Balance: $" + balance, Toast.LENGTH_SHORT).show();
+                        } else {
+                            subscribe(userId, serviceId, plan.getName(), plan.getDescription(), price);
+                        }
+                    } catch (Exception e) {
+                        Toast.makeText(this, "Balance check error", Toast.LENGTH_SHORT).show();
+                    }
+                },
+                error -> Toast.makeText(this, "Network error", Toast.LENGTH_SHORT).show()
+        );
+
+        Volley.newRequestQueue(this).add(request);
+    }
+
+    private void subscribe(int userId, int serviceId, String reference, String description, float amount) {
+        StringRequest request = new StringRequest(Request.Method.POST, PAY_URL,
+                response -> {
+                    SharedPreferences walletPrefs = getSharedPreferences("wallet_prefs", MODE_PRIVATE);
+                    walletPrefs.edit().putFloat("last_payment_amount", amount).apply();
+
+                    Toast.makeText(this, "Subscribed successfully!", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(this, MyWalletActivity.class));
+                    finish();
+                },
+                error -> Toast.makeText(this, "Subscription failed", Toast.LENGTH_SHORT).show()
+        ) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("user_id", String.valueOf(userId));
+                params.put("service_id", String.valueOf(serviceId));
+                params.put("reference", reference);
+                params.put("description", description);
+                params.put("amount", String.valueOf(amount));
+                return params;
             }
-        });
+        };
+
+        Volley.newRequestQueue(this).add(request);
     }
 }

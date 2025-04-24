@@ -39,7 +39,7 @@ public class HomeActivity extends AppCompatActivity {
         });
 
         btnTest.setOnClickListener(v -> {
-            Intent intent = new Intent(HomeActivity.this, InsuranceServiceProviderActivity.class);
+            Intent intent = new Intent(HomeActivity.this, TuitionServiceUserActivity.class);
             startActivity(intent);
         });
     }
