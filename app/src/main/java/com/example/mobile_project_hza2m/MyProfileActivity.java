@@ -203,39 +203,49 @@ public class MyProfileActivity extends AppCompatActivity {
     }
 
     private void deleteAccount() {
-        ProgressDialog dialog = ProgressDialog.show(this, "", "Deleting...", true);
+        ProgressDialog dialog = ProgressDialog.show(this, "", "Deleting account...", true);
 
         StringRequest request = new StringRequest(Request.Method.POST, DELETE_URL,
                 response -> {
                     dialog.dismiss();
                     try {
+                        Log.d("DELETE_RESPONSE", response);
                         JSONObject json = new JSONObject(response);
                         if (json.getBoolean("success")) {
-                            Toast.makeText(this, "Account deleted", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, "Account deleted successfully", Toast.LENGTH_SHORT).show();
+
+                            // Clear session data
                             getSharedPreferences("AppPrefs", MODE_PRIVATE).edit().clear().apply();
-                            startActivity(new Intent(this, UserLogin.class));
+
+                            // Navigate to login screen
+                            Intent intent = new Intent(this, UserLogin.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
                             finish();
                         } else {
-                            Toast.makeText(this, json.getString("message"), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, json.getString("message"), Toast.LENGTH_LONG).show();
                         }
                     } catch (Exception e) {
                         Toast.makeText(this, "Error parsing server response", Toast.LENGTH_SHORT).show();
+                        Log.e("PARSE_ERROR", e.toString());
                     }
                 },
                 error -> {
                     dialog.dismiss();
                     Toast.makeText(this, "Failed to connect to server", Toast.LENGTH_SHORT).show();
+                    Log.e("DELETE_ERROR", error.toString());
                 }) {
             @Override
             protected Map<String, String> getParams() {
-                Map<String, String> map = new HashMap<>();
-                map.put("user_id", String.valueOf(userId));
-                map.put("role", role);
-                return map;
+                Map<String, String> params = new HashMap<>();
+                params.put("user_id", String.valueOf(userId));
+                params.put("role", role); // "user" or "provider"
+                return params;
             }
         };
 
         Volley.newRequestQueue(this).add(request);
     }
+
 }
 

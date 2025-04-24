@@ -1,4 +1,3 @@
-// OgeroServiceUserActivity.java
 package com.example.mobile_project_hza2m;
 
 import android.content.Intent;
@@ -9,6 +8,7 @@ import android.util.Log;
 import android.widget.*;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
@@ -24,8 +24,8 @@ public class OgeroServiceUserActivity extends AppCompatActivity {
     private EditText editTextLineNumber, editTextReference, editTextAmount;
     private Button buttonPayNow;
 
-    private final String PAY_URL = Config.BASE_URL + "services/subscribe_service.php";
-    private final String BALANCE_URL = Config.BASE_URL + "wallet/get_wallet_balance.php?user_id=";
+    private static final String PAY_URL = Config.BASE_URL + "services/subscribe_service.php";
+    private static final String BALANCE_URL = Config.BASE_URL + "wallet/get_wallet_balance.php?user_id=";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +49,7 @@ public class OgeroServiceUserActivity extends AppCompatActivity {
                 return;
             }
 
-            if (!TextUtils.isDigitsOnly(amountStr)) {
+            if (!TextUtils.isDigitsOnly(amountStr.replace(".", ""))) {
                 showAlert("Amount must be a valid number.");
                 return;
             }
@@ -68,6 +68,7 @@ public class OgeroServiceUserActivity extends AppCompatActivity {
                 return;
             }
 
+            // Ogero service_id assumed to be 1 (could be made dynamic)
             checkBalanceAndPay(userId, 1, reference, lineNumber, amount);
         });
     }
@@ -85,7 +86,7 @@ public class OgeroServiceUserActivity extends AppCompatActivity {
                         }
                     } catch (Exception e) {
                         showAlert("Error checking balance.");
-                        Log.e("BAL_ERR", e.getMessage());
+                        Log.e("BALANCE_ERROR", e.getMessage());
                     }
                 },
                 error -> showAlert("Network error while checking balance")
@@ -97,15 +98,29 @@ public class OgeroServiceUserActivity extends AppCompatActivity {
     private void proceedToPayment(int userId, int serviceId, String reference, String lineNumber, float amount) {
         StringRequest request = new StringRequest(Request.Method.POST, PAY_URL,
                 response -> {
-                    SharedPreferences prefs = getSharedPreferences("wallet_prefs", MODE_PRIVATE);
-                    prefs.edit().putFloat("last_payment_amount", amount).apply();
+                    Log.d("PAYMENT_RESPONSE", response);
+                    try {
+                        Log.d("PAYMENT_RESPONSE", response);
+                        JSONObject json = new JSONObject(response);
+                        if (json.getBoolean("success")) {
+                            SharedPreferences prefs = getSharedPreferences("wallet_prefs", MODE_PRIVATE);
+                            prefs.edit().putFloat("last_payment_amount", amount).apply();
 
-                    showAlert("Payment sent successfully!");
-                    startActivity(new Intent(OgeroServiceUserActivity.this, MyWalletActivity.class));
-                    finish();
+                            Toast.makeText(this, "Payment successful!", Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(this, MyWalletActivity.class));
+                            finish();
+                        } else {
+                            showAlert(json.optString("message", "Payment failed"));
+                        }
+                    } catch (Exception e) {
+                        Log.e("PAYMENT_ERROR", "Parse error: " + e.getMessage());
+                        showAlert("Server response error.");
+                    }
                 },
-                error -> showAlert("Error: " + error.getMessage())
-        ) {
+                error -> {
+                    Log.e("PAYMENT_REQUEST_FAIL", error.toString());
+                    showAlert("Failed to connect to payment service");
+                }) {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
@@ -113,7 +128,7 @@ public class OgeroServiceUserActivity extends AppCompatActivity {
                 params.put("service_id", String.valueOf(serviceId));
                 params.put("reference", reference);
                 params.put("amount", String.valueOf(amount));
-                params.put("description", lineNumber);
+                params.put("description", lineNumber); // logged in wallet_transactions
                 return params;
             }
         };
@@ -133,4 +148,3 @@ public class OgeroServiceUserActivity extends AppCompatActivity {
                 .show();
     }
 }
-

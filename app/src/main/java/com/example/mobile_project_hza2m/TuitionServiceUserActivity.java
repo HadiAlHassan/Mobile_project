@@ -1,4 +1,3 @@
-// TuitionServiceUserActivity.java
 package com.example.mobile_project_hza2m;
 
 import android.content.Intent;
@@ -65,28 +64,30 @@ public class TuitionServiceUserActivity extends AppCompatActivity {
         btnUploadScreenshot = findViewById(R.id.btnUploadScreenshot);
         buttonPayIt = findViewById(R.id.buttonPayIt);
 
-
-
         btnUploadScreenshot.setOnClickListener(v -> selectImage());
 
         buttonPayIt.setOnClickListener(v -> {
+            buttonPayIt.setEnabled(false);
+            buttonPayIt.postDelayed(() -> buttonPayIt.setEnabled(true), 3000); // Re-enable after 3s
+
             String university = editTextUniversity.getText().toString().trim();
             String reference = editTextReference.getText().toString().trim();
             String amountStr = editTextAmount.getText().toString().trim();
+            String cleanedAmountStr = amountStr.replace(",", "").replace(" ", "");
 
-            if (university.isEmpty() || amountStr.isEmpty()) {
+            if (university.isEmpty() || cleanedAmountStr.isEmpty()) {
                 showAlert("Please enter university name and amount.");
                 return;
             }
 
-            if (!TextUtils.isDigitsOnly(amountStr.replace(".", ""))) {
+            if (!TextUtils.isDigitsOnly(cleanedAmountStr.replace(".", ""))) {
                 showAlert("Amount must be a valid number.");
                 return;
             }
 
             float amount;
             try {
-                amount = Float.parseFloat(amountStr);
+                amount = Float.parseFloat(cleanedAmountStr);
             } catch (NumberFormatException e) {
                 showAlert("Invalid amount format.");
                 return;
@@ -105,6 +106,7 @@ public class TuitionServiceUserActivity extends AppCompatActivity {
                 return;
             }
 
+            Log.d("PAYMENT_PARAMS", "userId=" + userId + ", serviceId=" + serviceId + ", ref=" + reference + ", amount=" + amount);
             checkBalanceAndPay(userId, serviceId, reference, university, amount);
         });
     }
@@ -113,7 +115,8 @@ public class TuitionServiceUserActivity extends AppCompatActivity {
         StringRequest balanceRequest = new StringRequest(Request.Method.GET, BALANCE_URL + userId,
                 response -> {
                     try {
-                        JSONObject json = new JSONObject(response);
+                        Log.d("BALANCE_RESPONSE", response);
+                        JSONObject json = new JSONObject(response.trim());
                         float balance = Float.parseFloat(json.optString("balance", "0.00"));
                         if (!json.getBoolean("success") || balance < amount) {
                             showAlert("Insufficient balance. Wallet: $" + balance);
@@ -135,8 +138,9 @@ public class TuitionServiceUserActivity extends AppCompatActivity {
         StringRequest request = new StringRequest(Request.Method.POST, PAY_URL,
                 response -> {
                     try {
-                        JSONObject json = new JSONObject(response);
-                        if (json.getBoolean("success")) {
+                        Log.d("PAYMENT_RESPONSE", response);
+                        JSONObject json = new JSONObject(response.trim());
+                        if (json.optBoolean("success")) {
                             SharedPreferences walletPrefs = getSharedPreferences("WalletPrefs", MODE_PRIVATE);
                             walletPrefs.edit()
                                     .putFloat("last_payment_amount", amount)
@@ -146,17 +150,19 @@ public class TuitionServiceUserActivity extends AppCompatActivity {
                             SharedPreferences prefs = getSharedPreferences("AppPrefs", MODE_PRIVATE);
                             prefs.edit().remove("tuition_image_uri").apply();
 
+                            Toast.makeText(this, "Payment successful!", Toast.LENGTH_SHORT).show();
+
+                            clearInputs();
                             startActivity(new Intent(this, MyWalletActivity.class));
                             finish();
                         } else {
                             showAlert("Payment failed: " + json.optString("message", "Unknown error"));
                         }
                     } catch (Exception e) {
+                        Log.e("JSON_PARSE", "Raw: " + response);
                         showAlert("Response error: " + e.getMessage());
                     }
-                }
-
-                ,
+                },
                 error -> showAlert("Error: " + error.getMessage())
         ) {
             @Override
@@ -172,6 +178,14 @@ public class TuitionServiceUserActivity extends AppCompatActivity {
         };
 
         Volley.newRequestQueue(this).add(request);
+    }
+
+    private void clearInputs() {
+        editTextUniversity.setText("");
+        editTextReference.setText("");
+        editTextAmount.setText("");
+        imageViewProof.setImageDrawable(null);
+        selectedImageUri = null;
     }
 
     private void selectImage() {

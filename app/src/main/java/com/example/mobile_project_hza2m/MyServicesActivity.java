@@ -1,6 +1,7 @@
 package com.example.mobile_project_hza2m;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -166,12 +167,28 @@ public class MyServicesActivity extends AppCompatActivity {
 
     private void deleteService(int serviceId) {
         String url = Config.BASE_URL + "services/delete_service.php";
+
+        ProgressDialog dialog = ProgressDialog.show(this, "", "Deleting...", true);
+
         StringRequest request = new StringRequest(Request.Method.POST, url,
                 response -> {
-                    Toast.makeText(this, "Service deleted", Toast.LENGTH_SHORT).show();
-                    fetchProviderServices();
+                    dialog.dismiss();
+                    try {
+                        JSONObject json = new JSONObject(response);
+                        if (json.getBoolean("success")) {
+                            Toast.makeText(this, "Service deleted", Toast.LENGTH_SHORT).show();
+                            fetchProviderServices(); // refresh list
+                        } else {
+                            Toast.makeText(this, "Error: " + json.getString("message"), Toast.LENGTH_LONG).show();
+                        }
+                    } catch (Exception e) {
+                        Toast.makeText(this, "Parse error", Toast.LENGTH_SHORT).show();
+                    }
                 },
-                error -> Toast.makeText(this, "Delete failed", Toast.LENGTH_SHORT).show()
+                error -> {
+                    dialog.dismiss();
+                    Toast.makeText(this, "Server error", Toast.LENGTH_SHORT).show();
+                }
         ) {
             @Override
             protected Map<String, String> getParams() {
@@ -180,8 +197,10 @@ public class MyServicesActivity extends AppCompatActivity {
                 return params;
             }
         };
+
         Volley.newRequestQueue(this).add(request);
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
