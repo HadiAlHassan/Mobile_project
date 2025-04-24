@@ -32,22 +32,22 @@ public class TelecomCardAdapter extends RecyclerView.Adapter<TelecomCardAdapter.
     @NonNull
     @Override
     public CardViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_telecom_card, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_telecom_plan, parent, false);
         return new CardViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull CardViewHolder holder, int position) {
-        TelecomCard plan = telecomCardList.get(position);
+        TelecomCard card = telecomCardList.get(position);
 
-        holder.textViewTitle.setText(plan.getTitle());
-        holder.textViewDescription.setText(plan.getDescription());
-        holder.textViewPrice.setText(plan.getPrice());
-        holder.imageViewIcon.setImageResource(plan.getImageResId());
+        holder.textViewTitle.setText(card.getTitle());
+        holder.textViewDescription.setText(card.getDescription());
+        holder.textViewPrice.setText(card.getPrice());
+        holder.imageViewIcon.setImageResource(card.getImageResId());
 
         holder.buttonRequest.setOnClickListener(v -> {
             if (listener != null) {
-                listener.onCardClick(plan);
+                listener.onCardClick(card);
             }
         });
     }

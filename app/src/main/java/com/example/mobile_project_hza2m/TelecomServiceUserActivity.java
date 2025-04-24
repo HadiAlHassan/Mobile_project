@@ -3,6 +3,7 @@ package com.example.mobile_project_hza2m;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -86,7 +87,10 @@ public class TelecomServiceUserActivity extends AppCompatActivity {
 
                             for (int i = 0; i < items.length(); i++) {
                                 JSONObject obj = items.getJSONObject(i);
+                                Log.d("DEBUG", "Fetched: " + obj.getString("item_id"));
+
                                 cardList.add(new TelecomCard(
+
                                         obj.getInt("item_id"),
                                         serviceId,
                                         obj.getString("item_name"),
