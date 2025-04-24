@@ -3,16 +3,21 @@ package com.example.mobile_project_hza2m;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.mobile_project_hza2m.databinding.ActivityStreamingServiceUserBinding;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -23,6 +28,7 @@ public class StreamingServiceUserActivity extends AppCompatActivity {
     private StreamingPlanAdapter adapter;
     private ArrayList<StreamingPlan> plans;
     private int serviceId;
+    private ActivityStreamingServiceUserBinding binding;
 
     private final String BALANCE_URL = Config.BASE_URL + "wallet/get_wallet_balance.php?user_id=";
     private final String PAY_URL = Config.BASE_URL + "services/subscribe_service.php";
@@ -30,20 +36,15 @@ public class StreamingServiceUserActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_telecom_service_user); // ✅ reuse telecom layout
+        binding = ActivityStreamingServiceUserBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        binding.toolbar.setTitle("Streaming Plans");
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle("Streaming Plans");
-        setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
-        toolbar.setNavigationOnClickListener(v -> onBackPressed());
-
-        recyclerView = findViewById(R.id.recyclerViewTelecomCards);
+        recyclerView = findViewById(R.id.recyclerViewPlans);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
 
         serviceId = getIntent().getIntExtra("service_id", -1);
+        Toast.makeText(this, " service ID"+serviceId, Toast.LENGTH_SHORT).show();
         if (serviceId == -1) {
             Toast.makeText(this, "Missing service ID", Toast.LENGTH_SHORT).show();
             finish();
@@ -75,14 +76,27 @@ public class StreamingServiceUserActivity extends AppCompatActivity {
                             JSONArray items = json.getJSONArray("items");
                             plans.clear();
 
+
                             for (int i = 0; i < items.length(); i++) {
                                 JSONObject obj = items.getJSONObject(i);
+
+                                // Debug log to see values
+                                String name = obj.getString("item_name");
+                                String desc = obj.getString("item_description");
+                                String price = obj.getString("item_price");
+                                int id = obj.getInt("item_id");
+                                String imageFile = obj.optString("item_image", "default.jpg");
+
+                                // Optional log
+                                Log.d("StreamingPlan", "Name: " + name + ", Description: " + desc + ", Price: " + price + ", Image: " + imageFile);
+
                                 plans.add(new StreamingPlan(
+                                        id,
                                         serviceId,
-                                        obj.getString("item_name"),
-                                        obj.getString("item_description"),
-                                        obj.getString("item_price"),
-                                        R.drawable.khadmatiico // ✅ or use obj.getString("item_image")
+                                        name,
+                                        desc,
+                                        price,
+                                        R.drawable.khadmatiico // hardcoded image for now
                                 ));
                             }
 
@@ -91,14 +105,20 @@ public class StreamingServiceUserActivity extends AppCompatActivity {
                             Toast.makeText(this, "No streaming plans found", Toast.LENGTH_SHORT).show();
                         }
                     } catch (Exception e) {
-                        Toast.makeText(this, "Parse error", Toast.LENGTH_SHORT).show();
+                        e.printStackTrace(); // See full error in logcat
+                        Toast.makeText(this, "Parse error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 },
-                error -> Toast.makeText(this, "Network error", Toast.LENGTH_SHORT).show()
-        );
+                error -> {
+                    error.printStackTrace(); // See network error in logcat
+                    Toast.makeText(this, "Network error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                });
 
         Volley.newRequestQueue(this).add(request);
     }
+
+
+
 
     private void checkBalanceAndSubscribe(int userId, int serviceId, StreamingPlan plan) {
         StringRequest request = new StringRequest(Request.Method.GET, BALANCE_URL + userId,
