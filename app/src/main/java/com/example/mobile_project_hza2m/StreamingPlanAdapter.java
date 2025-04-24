@@ -1,0 +1,73 @@
+package com.example.mobile_project_hza2m;
+
+
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+import java.util.List;
+
+public class StreamingPlanAdapter extends RecyclerView.Adapter<StreamingPlanAdapter.StreamingViewHolder> {
+
+    public interface OnStreamingClickListener {
+        void onClick(StreamingPlan plan);
+    }
+
+    private Context context;
+    private List<StreamingPlan> plans;
+    private OnStreamingClickListener listener;
+
+    public StreamingPlanAdapter(Context context, List<StreamingPlan> plans, OnStreamingClickListener listener) {
+        this.context = context;
+        this.plans = plans;
+        this.listener = listener;
+    }
+
+    @NonNull
+    @Override
+    public StreamingViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(context).inflate(R.layout.item_telecom_plan, parent, false); // reusing telecom layout
+        return new StreamingViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull StreamingViewHolder holder, int position) {
+        StreamingPlan plan = plans.get(position);
+        holder.title.setText(plan.getName());
+        holder.desc.setText(plan.getDescription());
+        holder.price.setText(plan.getPrice());
+        holder.icon.setImageResource(plan.getImageRes());
+
+        holder.subscribeBtn.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onClick(plan);
+            }
+        });
+    }
+
+    @Override
+    public int getItemCount() {
+        return plans.size();
+    }
+
+    static class StreamingViewHolder extends RecyclerView.ViewHolder {
+        TextView title, desc, price;
+        ImageView icon;
+        Button subscribeBtn;
+
+        public StreamingViewHolder(@NonNull View itemView) {
+            super(itemView);
+            title = itemView.findViewById(R.id.textViewPlanTitle);
+            desc = itemView.findViewById(R.id.textViewPlanDescription);
+            price = itemView.findViewById(R.id.textViewPlanPrice);
+            icon = itemView.findViewById(R.id.imageViewInsuranceIcon);
+            subscribeBtn = itemView.findViewById(R.id.buttonRequestInsurance);
+        }
+    }
+}

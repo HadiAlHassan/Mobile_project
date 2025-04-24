@@ -1,6 +1,7 @@
 package com.example.mobile_project_hza2m;
 
-public class InsurancePlan {
+
+public class TelecomPlan {
     private int itemId;
     private int serviceId;
     private String title;
@@ -8,7 +9,7 @@ public class InsurancePlan {
     private String price;
     private int imageResId;
 
-    public InsurancePlan(int itemId, int serviceId, String title, String description, String price, int imageResId) {
+    public TelecomPlan(int itemId, int serviceId, String title, String description, String price, int imageResId) {
         this.itemId = itemId;
         this.serviceId = serviceId;
         this.title = title;
