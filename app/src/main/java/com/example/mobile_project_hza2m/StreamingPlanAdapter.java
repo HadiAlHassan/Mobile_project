@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+
 import java.util.List;
 
 public class StreamingPlanAdapter extends RecyclerView.Adapter<StreamingPlanAdapter.StreamingViewHolder> {
@@ -43,7 +44,13 @@ public class StreamingPlanAdapter extends RecyclerView.Adapter<StreamingPlanAdap
         holder.title.setText(plan.getName());
         holder.desc.setText(plan.getDescription());
         holder.price.setText(plan.getPrice());
-        holder.icon.setImageResource(plan.getImageResId());
+
+        // ✅ Glide loads image from Firebase Storage URL
+        Glide.with(context)
+                .load(plan.getImageUrl())
+                .placeholder(R.drawable.khadmatiico)
+                .error(R.drawable.khadmatiico)
+                .into(holder.icon);
 
         holder.subscribeBtn.setOnClickListener(v -> {
             if (listener != null) {

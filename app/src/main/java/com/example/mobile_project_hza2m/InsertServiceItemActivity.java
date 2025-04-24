@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import com.android.volley.Request;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -26,6 +27,8 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.mobile_project_hza2m.databinding.ActivityInsertServiceItemBinding;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -93,69 +96,61 @@ public class InsertServiceItemActivity extends AppCompatActivity {
             return;
         }
 
-        SharedPreferences prefs = getSharedPreferences("AppPrefs", MODE_PRIVATE); // named preferences
-        int serviceId = prefs.getInt("service_id", -1); // MUST be service_id, not provider_id
+        SharedPreferences prefs = getSharedPreferences("AppPrefs", MODE_PRIVATE);
+        int serviceId = prefs.getInt("service_id", -1);
 
         if (serviceId == -1) {
             Toast.makeText(this, "Service ID not found in AppPrefs", Toast.LENGTH_SHORT).show();
             return;
         }
 
+        // ✅ Firebase Storage upload
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReference();
 
-        VolleyMultipartRequest multipartRequest = new VolleyMultipartRequest(Request.Method.POST, UPLOAD_URL,
+        String extension = MimeTypeMap.getSingleton()
+                .getExtensionFromMimeType(getContentResolver().getType(selectedImageUri));
+        if (extension == null) extension = "jpg";
+
+        String filename = "svc_" + System.currentTimeMillis() + "." + extension;
+        StorageReference imageRef = storageRef.child("service_icons/" + filename);
+
+        imageRef.putFile(selectedImageUri)
+                .addOnSuccessListener(taskSnapshot -> {
+                    imageRef.getDownloadUrl().addOnSuccessListener(downloadUri -> {
+                        String downloadUrl = downloadUri.toString();
+                        sendMetadataToBackend(serviceId, name, price, description, downloadUrl);
+                    });
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(this, "Image upload failed: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                });
+    }
+    private void sendMetadataToBackend(int serviceId, String name, String price, String description, String imageUrl) {
+        StringRequest request = new StringRequest(Request.Method.POST, Config.BASE_URL + "services/add_service_item.php",
                 response -> {
                     Toast.makeText(this, "Service item added successfully", Toast.LENGTH_SHORT).show();
-                    setResult(RESULT_OK); // ✅ tell parent to refresh
+                    setResult(RESULT_OK);
                     finish();
-
                 },
                 error -> {
                     Toast.makeText(this, "Upload failed: " + error.getMessage(), Toast.LENGTH_LONG).show();
                 }) {
-
             @Override
-            public Map<String, String> getParams() {
+            protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
-                String mime = getContentResolver().getType(selectedImageUri);
-                String extension = MimeTypeMap.getSingleton().getExtensionFromMimeType(mime);
-                if (extension == null) extension = "jpg"; // fallback
-
-                String filename = "svc_" + System.currentTimeMillis() + "." + extension;
-
                 params.put("service_id", String.valueOf(serviceId));
-                params.put("item_name", name); // 🔄 match PHP field
-                params.put("item_description", description); // 🔄 match PHP field
-                params.put("item_price", price); // 🔄 match PHP field
-                params.put("icon_url", filename); // ✅ send image filename
+                params.put("item_name", name);
+                params.put("item_description", description);
+                params.put("item_price", price);
+                params.put("icon_url", imageUrl); // ✅ full Firebase image URL
                 return params;
             }
-
-
-            @Override
-            public Map<String, DataPart> getByteData() {
-                Map<String, DataPart> imageParams = new HashMap<>();
-                try {
-                    InputStream iStream = getContentResolver().openInputStream(selectedImageUri);
-                    byte[] inputData = new byte[iStream.available()];
-                    iStream.read(inputData);
-
-                    String mime = getContentResolver().getType(selectedImageUri);
-                    String extension = MimeTypeMap.getSingleton().getExtensionFromMimeType(mime);
-                    if (extension == null) extension = "jpg"; // fallback
-
-                    String filename = "svc_" + System.currentTimeMillis() + "." + extension;
-
-                    imageParams.put("service_icon", new DataPart(filename, inputData, "image/" + extension));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                return imageParams;
-            }
-
         };
 
-        Volley.newRequestQueue(this).add(multipartRequest);
+        Volley.newRequestQueue(this).add(request);
     }
+
 
 
 }

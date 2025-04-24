@@ -13,8 +13,11 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.Request;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.mobile_project_hza2m.databinding.ActivityTelecomServiceProviderBinding;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import org.json.JSONObject;
 
@@ -81,12 +84,10 @@ public class TelecomServiceProviderActivity extends AppCompatActivity {
         String description = editTextDescription.getText().toString().trim();
         String bank = editTextBankAccount.getText().toString().trim();
         String region = editTextRegion.getText().toString().trim();
-        // In uploadService():
         String category = editTextCategory.getText().toString().trim();
         String address = editTextAddress.getText().toString().trim();
 
-
-        if (company.isEmpty() || description.isEmpty() || bank.isEmpty() || region.isEmpty()  || selectedLogoUri == null) {
+        if (company.isEmpty() || description.isEmpty() || bank.isEmpty() || region.isEmpty() || category.isEmpty() || address.isEmpty() || selectedLogoUri == null) {
             Toast.makeText(this, "Please fill all fields and upload a logo", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -98,21 +99,41 @@ public class TelecomServiceProviderActivity extends AppCompatActivity {
             return;
         }
 
-        progressDialog = ProgressDialog.show(this, "", "Submitting...", true);
+        progressDialog = ProgressDialog.show(this, "", "Uploading logo...", true);
 
-        VolleyMultipartRequest request = new VolleyMultipartRequest(Request.Method.POST, UPLOAD_URL,
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReference();
+
+        String ext = MimeTypeMap.getSingleton().getExtensionFromMimeType(getContentResolver().getType(selectedLogoUri));
+        if (ext == null) ext = "jpg";
+
+        String filename = "logo_" + System.currentTimeMillis() + "." + ext;
+        StorageReference logoRef = storageRef.child("provider_logos/" + filename);
+
+        logoRef.putFile(selectedLogoUri)
+                .addOnSuccessListener(taskSnapshot ->
+                        logoRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                            progressDialog.setMessage("Submitting form...");
+                            sendTelecomForm(providerId, company, description, bank, region, category, address, uri.toString());
+                        }))
+                .addOnFailureListener(e -> {
+                    progressDialog.dismiss();
+                    Toast.makeText(this, "Upload failed: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                });
+    }
+
+    private void sendTelecomForm(int providerId, String company, String description, String bank, String region,
+                                 String category, String address, String logoUrl) {
+        StringRequest request = new StringRequest(Request.Method.POST, UPLOAD_URL,
                 response -> {
                     progressDialog.dismiss();
                     try {
-                        String json = new String(response.data);
-                        JSONObject obj = new JSONObject(json);
+                        JSONObject obj = new JSONObject(response);
                         if (obj.getBoolean("success")) {
                             int serviceId = obj.getInt("service_id");
-
                             SharedPreferences.Editor editor = getSharedPreferences("AppPrefs", MODE_PRIVATE).edit();
                             editor.putInt("service_id", serviceId);
                             editor.apply();
-
                             Toast.makeText(this, obj.getString("message"), Toast.LENGTH_SHORT).show();
                             finish();
                         } else {
@@ -125,15 +146,11 @@ public class TelecomServiceProviderActivity extends AppCompatActivity {
                 },
                 error -> {
                     progressDialog.dismiss();
-                    Toast.makeText(this, "Upload failed: " + error.getMessage(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "Submission failed: " + error.getMessage(), Toast.LENGTH_LONG).show();
                 }) {
-
             @Override
-            public Map<String, String> getParams() {
+            protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
-                String ext = MimeTypeMap.getSingleton().getExtensionFromMimeType(getContentResolver().getType(selectedLogoUri));
-                String filename = "logo_" + System.currentTimeMillis() + "." + ext;
-
                 params.put("provider_id", String.valueOf(providerId));
                 params.put("category", category);
                 params.put("title", company);
@@ -141,31 +158,13 @@ public class TelecomServiceProviderActivity extends AppCompatActivity {
                 params.put("address", address);
                 params.put("region", region);
                 params.put("bank_account", bank);
-                params.put("logo_url", filename); // ✅ Added logo_url here
+                params.put("logo_url", logoUrl); // ✅ Firebase URL
                 return params;
             }
-
-
-
-            @Override
-            public Map<String, DataPart> getByteData() {
-                Map<String, DataPart> params = new HashMap<>();
-                try {
-                    InputStream iStream = getContentResolver().openInputStream(selectedLogoUri);
-                    byte[] logoData = new byte[iStream.available()];
-                    iStream.read(logoData);
-                    String ext = MimeTypeMap.getSingleton().getExtensionFromMimeType(getContentResolver().getType(selectedLogoUri));
-                    String filename = "logo_" + System.currentTimeMillis() + "." + ext;
-
-                    params.put("logo", new DataPart(filename, logoData, "image/" + ext));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                return params;
-            }
-
         };
 
         Volley.newRequestQueue(this).add(request);
     }
+
+
 }

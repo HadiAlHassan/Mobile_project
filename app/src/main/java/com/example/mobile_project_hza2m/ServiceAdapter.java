@@ -17,6 +17,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+
 import java.io.InputStream;
 import java.net.URL;
 import java.util.List;
@@ -44,68 +46,39 @@ public class ServiceAdapter extends RecyclerView.Adapter<ServiceAdapter.ServiceV
         Service service = serviceList.get(position);
         holder.serviceName.setText(service.getServiceName());
 
-        // Load image without Glide
-        loadImageFromUrl(Config.BASE_URL + service.getLogoUrl(), holder.serviceIcon);
+        // ✅ Load Firebase-hosted image using Glide
+        Glide.with(context)
+                .load(service.getLogoUrl())
+                .placeholder(R.drawable.khadmatiico)
+                .error(R.drawable.khadmatiico)
+                .into(holder.serviceIcon);
 
         holder.itemView.setOnClickListener(v -> {
             Intent intent;
-            String category = service.getCategory().trim(); // use trim for safety
-
-            int categoryId = service.getCategoryId(); // safer and cleaner
-            Log.d("ServiceAdapter", "Category ID: " + categoryId);
-
+            int categoryId = service.getCategoryId();
             switch (categoryId) {
-                case 1: // Ogero
-                    intent = new Intent(context, OgeroServiceUserActivity.class);
-                    break;
-                case 2: // Insurance
-                    intent = new Intent(context, InsuranceServiceUserActivity.class);
-                    break;
-                case 3: // Streaming
-                    intent = new Intent(context, StreamingServiceUserActivity.class);
-                    break;
-                case 4: // Telecom
-                    intent = new Intent(context, TelecomServiceUserActivity.class);
-                    break;
-                case 5: // Tuition
-                    intent = new Intent(context, TuitionServiceUserActivity.class);
-                    break;
+                case 1: intent = new Intent(context, OgeroServiceUserActivity.class); break;
+                case 2: intent = new Intent(context, InsuranceServiceUserActivity.class); break;
+                case 3: intent = new Intent(context, StreamingServiceUserActivity.class); break;
+                case 4: intent = new Intent(context, TelecomServiceUserActivity.class); break;
+                case 5: intent = new Intent(context, TuitionServiceUserActivity.class); break;
                 default:
                     Toast.makeText(context, "No activity found for category ID: " + categoryId, Toast.LENGTH_SHORT).show();
                     return;
             }
 
-
-
             intent.putExtra("service_id", service.getServiceId());
             intent.putExtra("service_name", service.getServiceName());
             context.startActivity(intent);
         });
-
-
-
-
     }
+
 
     @Override
     public int getItemCount() {
         return serviceList.size();
     }
 
-    private void loadImageFromUrl(String imageUrl, ImageView imageView) {
-        Executors.newSingleThreadExecutor().execute(() -> {
-            try {
-                InputStream input = new URL(imageUrl).openStream();
-                Bitmap bitmap = BitmapFactory.decodeStream(input);
-                new Handler(Looper.getMainLooper()).post(() -> imageView.setImageBitmap(bitmap));
-            } catch (Exception e) {
-                e.printStackTrace();
-                new Handler(Looper.getMainLooper()).post(() ->
-                        imageView.setImageResource(R.drawable.khadmatiico) // fallback icon
-                );
-            }
-        });
-    }
 
     static class ServiceViewHolder extends RecyclerView.ViewHolder {
         ImageView serviceIcon;

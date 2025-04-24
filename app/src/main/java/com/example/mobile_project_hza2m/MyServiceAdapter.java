@@ -16,6 +16,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
@@ -72,8 +74,12 @@ public class MyServiceAdapter extends RecyclerView.Adapter<MyServiceAdapter.View
         Service service = serviceList.get(position);
         holder.serviceName.setText(service.getServiceName());
 
-        // ✅ Load logo from URL
-        loadImageFromUrl(Config.BASE_URL + service.getLogoUrl(), holder.serviceIcon);
+        Glide.with(context)
+                .load(service.getLogoUrl()) // logo_url already contains full Firebase URL
+                .placeholder(R.drawable.khadmatiico)
+                .error(R.drawable.khadmatiico)
+                .into(holder.serviceIcon);
+
 
         holder.deleteBtn.setOnClickListener(v -> {
             if (deleteClickListener != null) {
@@ -91,21 +97,6 @@ public class MyServiceAdapter extends RecyclerView.Adapter<MyServiceAdapter.View
     @Override
     public int getItemCount() {
         return serviceList.size();
-    }
-
-    private void loadImageFromUrl(String url, ImageView imageView) {
-        Executors.newSingleThreadExecutor().execute(() -> {
-            try {
-                InputStream input = new URL(url).openStream();
-                Bitmap bitmap = BitmapFactory.decodeStream(input);
-                new Handler(Looper.getMainLooper()).post(() -> imageView.setImageBitmap(bitmap));
-            } catch (Exception e) {
-                e.printStackTrace();
-                new Handler(Looper.getMainLooper()).post(() ->
-                        imageView.setImageResource(R.drawable.khadmatiico)
-                );
-            }
-        });
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

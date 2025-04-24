@@ -13,8 +13,11 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.Request;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.mobile_project_hza2m.databinding.ActivityTuitionServiceProviderBinding;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import org.json.JSONObject;
 
@@ -90,17 +93,40 @@ public class TuitionServiceProviderActivity extends AppCompatActivity {
             return;
         }
 
-        progressDialog = ProgressDialog.show(this, "", "Submitting...", true);
+        progressDialog = ProgressDialog.show(this, "", "Uploading logo...", true);
 
-        VolleyMultipartRequest request = new VolleyMultipartRequest(Request.Method.POST, UPLOAD_URL,
+        // Firebase Storage upload
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReference();
+
+        String ext = MimeTypeMap.getSingleton()
+                .getExtensionFromMimeType(getContentResolver().getType(selectedLogoUri));
+        if (ext == null) ext = "jpg";
+
+        uploadedFileName = "logo_" + System.currentTimeMillis() + "." + ext;
+        StorageReference logoRef = storageRef.child("provider_logos/" + uploadedFileName);
+
+        logoRef.putFile(selectedLogoUri)
+                .addOnSuccessListener(taskSnapshot ->
+                        logoRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                            progressDialog.setMessage("Submitting form...");
+                            sendTuitionServiceForm(providerId, universityName, details, bankAccount, region, contactNumber, uri.toString());
+                        }))
+                .addOnFailureListener(e -> {
+                    progressDialog.dismiss();
+                    Toast.makeText(this, "Upload failed: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                });
+    }
+    private void sendTuitionServiceForm(int providerId, String universityName, String details, String bankAccount,
+                                        String region, String contactNumber, String logoUrl) {
+        StringRequest request = new StringRequest(Request.Method.POST, UPLOAD_URL,
                 response -> {
                     progressDialog.dismiss();
                     try {
-                        String json = new String(response.data);
-                        JSONObject obj = new JSONObject(json);
+                        JSONObject obj = new JSONObject(response);
                         if (obj.getBoolean("success")) {
                             int serviceId = obj.optInt("service_id", -1);
-                            SharedPreferences.Editor editor = prefs.edit();
+                            SharedPreferences.Editor editor = getSharedPreferences("AppPrefs", MODE_PRIVATE).edit();
                             editor.putInt("service_id", serviceId);
                             editor.apply();
                             Toast.makeText(this, obj.getString("message"), Toast.LENGTH_SHORT).show();
@@ -115,11 +141,10 @@ public class TuitionServiceProviderActivity extends AppCompatActivity {
                 },
                 error -> {
                     progressDialog.dismiss();
-                    Toast.makeText(this, "Upload failed: " + error.getMessage(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "Submission failed: " + error.getMessage(), Toast.LENGTH_LONG).show();
                 }) {
-
             @Override
-            public Map<String, String> getParams() {
+            protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
                 params.put("provider_id", String.valueOf(providerId));
                 params.put("category", "tuition ");
@@ -128,33 +153,13 @@ public class TuitionServiceProviderActivity extends AppCompatActivity {
                 params.put("address", contactNumber);
                 params.put("region", region);
                 params.put("bank_account", bankAccount);
-                params.put("logo_url", "uploads/" + uploadedFileName); // important for PHP
-                return params;
-            }
-
-            @Override
-            public Map<String, DataPart> getByteData() {
-                Map<String, DataPart> params = new HashMap<>();
-                try {
-                    InputStream iStream = getContentResolver().openInputStream(selectedLogoUri);
-                    ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-                    byte[] data = new byte[1024];
-                    int bytesRead;
-                    while ((bytesRead = iStream.read(data, 0, data.length)) != -1) {
-                        buffer.write(data, 0, bytesRead);
-                    }
-
-                    String ext = MimeTypeMap.getSingleton().getExtensionFromMimeType(
-                            getContentResolver().getType(selectedLogoUri));
-                    uploadedFileName = "logo_" + System.currentTimeMillis() + "." + ext;
-                    params.put("logo", new DataPart(uploadedFileName, buffer.toByteArray(), "image/" + ext));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                params.put("logo_url", logoUrl); // ✅ Use Firebase URL
                 return params;
             }
         };
 
         Volley.newRequestQueue(this).add(request);
     }
+
+
 }

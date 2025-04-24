@@ -11,6 +11,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.List;
 
 public class TelecomCardAdapter extends RecyclerView.Adapter<TelecomCardAdapter.CardViewHolder> {
@@ -43,7 +45,11 @@ public class TelecomCardAdapter extends RecyclerView.Adapter<TelecomCardAdapter.
         holder.textViewTitle.setText(card.getTitle());
         holder.textViewDescription.setText(card.getDescription());
         holder.textViewPrice.setText(card.getPrice());
-        holder.imageViewIcon.setImageResource(card.getImageResId());
+        Glide.with(context)
+                .load(card.getImageUrl())
+                .placeholder(R.drawable.khadmatiico)
+                .error(R.drawable.khadmatiico)
+                .into(holder.imageViewIcon);
 
         holder.buttonRequest.setOnClickListener(v -> {
             if (listener != null) {

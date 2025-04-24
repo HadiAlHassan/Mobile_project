@@ -6,21 +6,38 @@ public class StreamingPlan {
     private String name;
     private String description;
     private String price;
-    private int imageResId; // ✅ drawable resource ID
+    private String imageUrl; // ✅ Replaces drawable resource
 
-    public StreamingPlan(int itemId, int serviceId, String name, String description, String price, int imageResId) {
+    public StreamingPlan(int itemId, int serviceId, String name, String description, String price, String imageUrl) {
         this.itemId = itemId;
         this.serviceId = serviceId;
         this.name = name;
         this.description = description;
         this.price = price;
-        this.imageResId = imageResId;
+        this.imageUrl = imageUrl;
     }
 
-    public int getItemId() { return itemId; }
-    public int getServiceId() { return serviceId; }
-    public String getName() { return name; }
-    public String getDescription() { return description; }
-    public String getPrice() { return price; }
-    public int getImageResId() { return imageResId; }
+    public int getItemId() {
+        return itemId;
+    }
+
+    public int getServiceId() {
+        return serviceId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getPrice() {
+        return price;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
 }

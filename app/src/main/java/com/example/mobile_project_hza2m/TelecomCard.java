@@ -6,38 +6,22 @@ public class TelecomCard {
     private String title;
     private String description;
     private String price;
-    private int imageResId;
+    private String imageUrl; // 🔄 was imageResId
 
-    public TelecomCard(int itemId, int serviceId, String title, String description, String price, int imageResId) {
+    public TelecomCard(int itemId, int serviceId, String title, String description, String price, String imageUrl) {
         this.itemId = itemId;
         this.serviceId = serviceId;
         this.title = title;
         this.description = description;
         this.price = price;
-        this.imageResId = imageResId;
+        this.imageUrl = imageUrl;
     }
 
-    public int getItemId() {
-        return itemId;
-    }
-
-    public int getServiceId() {
-        return serviceId;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public String getPrice() {
-        return price;
-    }
-
-    public int getImageResId() {
-        return imageResId;
-    }
+    public int getItemId() { return itemId; }
+    public int getServiceId() { return serviceId; }
+    public String getTitle() { return title; }
+    public String getDescription() { return description; }
+    public String getPrice() { return price; }
+    public String getImageUrl() { return imageUrl; }
 }
+

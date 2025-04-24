@@ -122,12 +122,12 @@ public class UserLogin extends AppCompatActivity {
                                     int providerId = json.getInt("provider_id");
                                     String serviceCategory = json.getString("service_category");
                                     int categoryId = serviceCategoryIdMap.getOrDefault(serviceCategory, -1);
-                                    int serviceId = json.optInt("service_id", -1); // 👈 safe fallback
+                                    int serviceId = json.optInt("service_id", -1);
 
                                     editor.putInt("provider_id", providerId);
                                     editor.putString("service_category", serviceCategory);
                                     editor.putInt("category_id", categoryId);
-                                    editor.putInt("service_id", serviceId); // ✅ now added
+                                    editor.putInt("service_id", serviceId);
                                     editor.apply();
                                     redirectToDashboard(role);
                                     break;

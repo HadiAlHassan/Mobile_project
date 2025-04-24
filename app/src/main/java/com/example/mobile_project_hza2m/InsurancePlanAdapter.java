@@ -7,8 +7,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
+
 import java.util.List;
 
 public class InsurancePlanAdapter extends RecyclerView.Adapter<InsurancePlanAdapter.PlanViewHolder> {
@@ -40,7 +44,13 @@ public class InsurancePlanAdapter extends RecyclerView.Adapter<InsurancePlanAdap
         holder.textViewTitle.setText(plan.getTitle());
         holder.textViewDescription.setText(plan.getDescription());
         holder.textViewPrice.setText(plan.getPrice());
-        holder.imageViewIcon.setImageResource(plan.getImageResId());
+
+        // ✅ Load Firebase image with Glide
+        Glide.with(context)
+                .load(plan.getImageUrl()) // make sure plan.getImageUrl() returns full Firebase URL
+                .placeholder(R.drawable.khadmatiico)
+                .error(R.drawable.khadmatiico)
+                .into(holder.imageViewIcon);
 
         holder.buttonRequest.setOnClickListener(v -> {
             if (listener != null) {

@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -44,7 +43,6 @@ public class StreamingServiceUserActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
 
         serviceId = getIntent().getIntExtra("service_id", -1);
-        Toast.makeText(this, " service ID"+serviceId, Toast.LENGTH_SHORT).show();
         if (serviceId == -1) {
             Toast.makeText(this, "Missing service ID", Toast.LENGTH_SHORT).show();
             finish();
@@ -76,27 +74,22 @@ public class StreamingServiceUserActivity extends AppCompatActivity {
                             JSONArray items = json.getJSONArray("items");
                             plans.clear();
 
-
                             for (int i = 0; i < items.length(); i++) {
                                 JSONObject obj = items.getJSONObject(i);
 
-                                // Debug log to see values
+                                int itemId = obj.getInt("item_id");
                                 String name = obj.getString("item_name");
                                 String desc = obj.getString("item_description");
                                 String price = obj.getString("item_price");
-                                int id = obj.getInt("item_id");
-                                String imageFile = obj.optString("item_image", "default.jpg");
-
-                                // Optional log
-                                Log.d("StreamingPlan", "Name: " + name + ", Description: " + desc + ", Price: " + price + ", Image: " + imageFile);
+                                String imageUrl = obj.optString("item_image", ""); // Firebase URL
 
                                 plans.add(new StreamingPlan(
-                                        id,
+                                        itemId,
                                         serviceId,
                                         name,
                                         desc,
                                         price,
-                                        R.drawable.khadmatiico // hardcoded image for now
+                                        imageUrl
                                 ));
                             }
 
@@ -105,20 +98,14 @@ public class StreamingServiceUserActivity extends AppCompatActivity {
                             Toast.makeText(this, "No streaming plans found", Toast.LENGTH_SHORT).show();
                         }
                     } catch (Exception e) {
-                        e.printStackTrace(); // See full error in logcat
                         Toast.makeText(this, "Parse error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 },
-                error -> {
-                    error.printStackTrace(); // See network error in logcat
-                    Toast.makeText(this, "Network error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-                });
+                error -> Toast.makeText(this, "Network error: " + error.getMessage(), Toast.LENGTH_SHORT).show()
+        );
 
         Volley.newRequestQueue(this).add(request);
     }
-
-
-
 
     private void checkBalanceAndSubscribe(int userId, int serviceId, StreamingPlan plan) {
         StringRequest request = new StringRequest(Request.Method.GET, BALANCE_URL + userId,
@@ -139,7 +126,8 @@ public class StreamingServiceUserActivity extends AppCompatActivity {
                         Toast.makeText(this, "Balance check error", Toast.LENGTH_SHORT).show();
                     }
                 },
-                error -> Toast.makeText(this, "Network error", Toast.LENGTH_SHORT).show()
+                error -> {Toast.makeText(this, "Network error", Toast.LENGTH_SHORT).show();
+        Log.e("NetworkError", "Network error (Streaming Service User): " + error.getMessage());}
         );
 
         Volley.newRequestQueue(this).add(request);

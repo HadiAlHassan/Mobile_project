@@ -6,15 +6,15 @@ public class InsurancePlan {
     private String title;
     private String description;
     private String price;
-    private int imageResId;
+    private String imageUrl; // 🔄 Replaces imageResId
 
-    public InsurancePlan(int itemId, int serviceId, String title, String description, String price, int imageResId) {
+    public InsurancePlan(int itemId, int serviceId, String title, String description, String price, String imageUrl) {
         this.itemId = itemId;
         this.serviceId = serviceId;
         this.title = title;
         this.description = description;
         this.price = price;
-        this.imageResId = imageResId;
+        this.imageUrl = imageUrl;
     }
 
     public int getItemId() {
@@ -37,7 +37,7 @@ public class InsurancePlan {
         return price;
     }
 
-    public int getImageResId() {
-        return imageResId;
+    public String getImageUrl() {
+        return imageUrl;
     }
 }

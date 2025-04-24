@@ -89,15 +89,16 @@ public class TelecomServiceUserActivity extends AppCompatActivity {
                                 JSONObject obj = items.getJSONObject(i);
                                 Log.d("DEBUG", "Fetched: " + obj.getString("item_id"));
 
+                                String imageUrl = obj.optString("item_image", "");
                                 cardList.add(new TelecomCard(
-
                                         obj.getInt("item_id"),
                                         serviceId,
                                         obj.getString("item_name"),
                                         obj.getString("item_description"),
                                         obj.getString("item_price"),
-                                        R.drawable.khadamatlogo
+                                        imageUrl
                                 ));
+
                             }
 
                             adapter.notifyDataSetChanged();

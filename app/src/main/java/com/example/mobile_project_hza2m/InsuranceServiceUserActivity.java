@@ -88,14 +88,17 @@ public class InsuranceServiceUserActivity extends AppCompatActivity {
 
                             for (int i = 0; i < items.length(); i++) {
                                 JSONObject obj = items.getJSONObject(i);
+                                String imageUrl = obj.optString("item_image", ""); // Firebase image URL
+
                                 plans.add(new InsurancePlan(
                                         obj.getInt("item_id"),
                                         serviceId,
                                         obj.getString("item_name"),
                                         obj.getString("item_description"),
                                         obj.getString("item_price"),
-                                        R.drawable.khadamatlogo
+                                        imageUrl
                                 ));
+
                             }
 
                             adapter.notifyDataSetChanged();
