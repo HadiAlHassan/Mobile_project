@@ -1,6 +1,7 @@
 package com.example.mobile_project_hza2m;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -35,8 +36,9 @@ public class AdminViewProviderActivity extends AppCompatActivity {
 
         binding = ActivityAdminViewProviderBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-        setSupportActionBar(binding.toolbar);
+
+        setSupportActionBar(binding.toolbar); // ✅ Set toolbar first
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true); // ✅ Then use it
 
         recyclerView = findViewById(R.id.recyclerViewProviders);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -47,37 +49,46 @@ public class AdminViewProviderActivity extends AppCompatActivity {
     }
 
     private void fetchProviders() {
-        String url = Config.BASE_URL+"admin/admin_get_all_providers.php";
+        String url = Config.BASE_URL + "admin/admin_get_all_providers.php";
 
         providerList.clear();
 
         StringRequest request = new StringRequest(Request.Method.GET, url,
                 response -> {
                     try {
-                        JSONArray array = new JSONArray(response);
+                        JSONObject jsonObject = new JSONObject(response); // ✅ parse full object
+                        JSONArray array = jsonObject.getJSONArray("providers"); // ✅ get providers array
+
                         for (int i = 0; i < array.length(); i++) {
                             JSONObject obj = array.getJSONObject(i);
-                            int id = obj.getInt("id");
-                            String name = obj.getString("business_name");
+                            int id = obj.getInt("provider_id"); // ✅ correct key name
+                            String name = obj.getString("username"); // ✅ correct key name
                             providerList.add(new Provider(id, name));
                         }
-                        if (providerList.isEmpty()) {
-                            Toast.makeText(this, "No service providers yet.", Toast.LENGTH_SHORT).show();
+                        if (!isFinishing() && !isDestroyed()) {
+                            if (providerList.isEmpty()) {
+                                Toast.makeText(this, "No service providers yet.", Toast.LENGTH_SHORT).show();
+                            }
+                            adapter.notifyDataSetChanged();
                         }
-                        adapter.notifyDataSetChanged();
                     } catch (Exception e) {
-                        e.printStackTrace(); // Debug
-                        Toast.makeText(this, "Parse error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                        e.printStackTrace();
+                        if (!isFinishing() && !isDestroyed()) {
+                            Log.e("PARSE_ERROR", "Parse error: " + e.getMessage());
+                            Toast.makeText(this, "Parse error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                        }
                     }
                 },
                 error -> {
-                    error.printStackTrace(); // Debug
-                    Toast.makeText(this, "Network error: " + error.getMessage(), Toast.LENGTH_LONG).show();
+                    error.printStackTrace();
+                    if (!isFinishing() && !isDestroyed()) {
+                        Log.e("NETWORK_ERROR", "Network error: " + error.getMessage());
+                        Toast.makeText(this, "Network error: " + error.getMessage(), Toast.LENGTH_LONG).show();
+                    }
                 }
-
         );
 
         Volley.newRequestQueue(this).add(request);
     }
-}
 
+}

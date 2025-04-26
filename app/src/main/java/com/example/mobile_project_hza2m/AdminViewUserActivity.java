@@ -1,6 +1,7 @@
 package com.example.mobile_project_hza2m;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -35,8 +36,9 @@ public class AdminViewUserActivity extends AppCompatActivity {
 
         binding = ActivityAdminViewUserBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-        setSupportActionBar(binding.toolbar);
+
+        setSupportActionBar(binding.toolbar); // ✅ First set the toolbar
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true); // ✅ Then use it
 
         recyclerView = findViewById(R.id.recyclerViewUsers);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -46,29 +48,43 @@ public class AdminViewUserActivity extends AppCompatActivity {
         fetchUsers();
     }
 
+
     private void fetchUsers() {
-        String url = Config.BASE_URL+"admin/admin_get_all_users.php";
+        String url = Config.BASE_URL + "admin/admin_get_all_users.php";
 
         userList.clear();
 
         StringRequest request = new StringRequest(Request.Method.GET, url,
                 response -> {
                     try {
-                        JSONArray array = new JSONArray(response);
+                        JSONObject jsonObject = new JSONObject(response); // ✅ parse full response
+                        JSONArray array = jsonObject.getJSONArray("users"); // ✅ get users array
+
                         for (int i = 0; i < array.length(); i++) {
                             JSONObject obj = array.getJSONObject(i);
-                            int id = obj.getInt("id");
-                            String name = obj.getString("name");
+                            int id = obj.getInt("user_id"); // ✅ correct key
+                            String name = obj.getString("username"); // ✅ correct key
                             userList.add(new UserAdmin(id, name));
                         }
-                        adapter.notifyDataSetChanged();
+
+                        if (!isFinishing() && !isDestroyed()) {
+                            adapter.notifyDataSetChanged();
+                        }
                     } catch (Exception e) {
-                        Toast.makeText(this, "Parse error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        if (!isFinishing() && !isDestroyed()) {
+                            Log.e("PARSE_ERROR", e.toString());
+                            Toast.makeText(this, "Parse error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
                     }
                 },
-                error -> Toast.makeText(this, "Network error", Toast.LENGTH_SHORT).show()
+                error -> {
+                    if (!isFinishing() && !isDestroyed()) {
+                        Toast.makeText(this, "Network error", Toast.LENGTH_SHORT).show();
+                    }
+                }
         );
 
         Volley.newRequestQueue(this).add(request);
     }
+
 }
