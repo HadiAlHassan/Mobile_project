@@ -7,6 +7,8 @@ import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
@@ -38,14 +40,14 @@ public class AdminDashboardActivity extends AppCompatActivity {
         setSupportActionBar(binding.toolbar);
 
 
-        binding.fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAnchorView(R.id.fab)
-                        .setAction("Action", null).show();
-            }
-        });
+//        binding.fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAnchorView(R.id.fab)
+//                        .setAction("Action", null).show();
+//            }
+//        });
         AdminAddServiceType = findViewById(R.id.btnAdminAddServiceType);
         AdminViewUsers = findViewById(R.id.btnAdminViewUsers);
         AdminViewProviders = findViewById(R.id.btnAdminViewProviders);
@@ -87,4 +89,27 @@ public class AdminDashboardActivity extends AppCompatActivity {
 
         });
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_admin_dashboard, menu);
+        return true;
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_logout) {
+            // Clear saved login info
+            getSharedPreferences("AppPrefs", MODE_PRIVATE).edit().clear().apply();
+
+            // Redirect to Login page
+            Intent intent = new Intent(AdminDashboardActivity.this, UserLogin.class); // Assuming you have AdminLogin activity
+            startActivity(intent);
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
+}

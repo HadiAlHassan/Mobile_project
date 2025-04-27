@@ -240,6 +240,7 @@
 
         If you suspect suspicious activity, contact our support immediately.
     </string>
-    </resources>
+    <string name="admin_logout">Logout</string>
+</resources>
 
 
