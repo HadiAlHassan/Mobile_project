@@ -1,0 +1,29 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <item
+        android:id="@+id/action_settings"
+        android:icon="@drawable/settings"
+        android:orderInCategory="100"
+        android:title="@string/action_settings"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_mywallet"
+        android:icon="@drawable/wallet"
+        android:orderInCategory="100"
+        android:title="@string/action_mywallet"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_myprofile"
+        android:icon="@drawable/profile"
+        android:orderInCategory="100"
+        android:title="@string/action_profile"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_homepage"
+        android:icon="@android:drawable/ic_menu_myplaces"
+        android:orderInCategory="100"
+        android:title="@string/action_profile"
+        app:showAsAction="always" />
+</menu>

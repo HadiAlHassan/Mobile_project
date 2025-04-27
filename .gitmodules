@@ -1,0 +1,3 @@
+[submodule "Mobile_submodule_backend"]
+	path = Mobile_submodule_backend
+	url = https://github.com/zeina-merchad/Mobile_submodule_backend.git

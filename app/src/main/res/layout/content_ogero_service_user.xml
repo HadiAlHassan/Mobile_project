@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="20dp"
+    android:background="@color/WhiteSmoke">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pay Ogero Phone Bill"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/black"
+            android:layout_marginBottom="24dp" />
+
+        <EditText
+            android:id="@+id/editTextLineNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter Landline Number"
+            android:inputType="phone" />
+
+        <EditText
+            android:id="@+id/editTextReference"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Reference (Optional)"
+            android:inputType="text" />
+
+        <EditText
+            android:id="@+id/editTextAmount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Amount (USD)"
+            android:inputType="numberDecimal" />
+
+        <Button
+            android:id="@+id/buttonPayNow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Pay Now"
+            android:layout_marginTop="24dp"
+            android:backgroundTint="@color/UseBlue"
+            android:textColor="@android:color/white" />
+    </LinearLayout>
+</ScrollView>
