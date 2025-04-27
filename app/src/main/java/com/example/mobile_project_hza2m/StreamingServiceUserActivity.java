@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -12,7 +14,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
 import com.example.mobile_project_hza2m.databinding.ActivityStreamingServiceUserBinding;
+import com.example.mobile_project_hza2m.databinding.ContentStreamingServiceUserBinding;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -28,6 +32,8 @@ public class StreamingServiceUserActivity extends AppCompatActivity {
     private ArrayList<StreamingPlan> plans;
     private int serviceId;
     private ActivityStreamingServiceUserBinding binding;
+    TextView ServiceName;
+    ImageView ProviderLogo;
 
     private final String BALANCE_URL = Config.BASE_URL + "wallet/get_wallet_balance.php?user_id=";
     private final String PAY_URL = Config.BASE_URL + "services/subscribe_service.php";
@@ -37,7 +43,6 @@ public class StreamingServiceUserActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityStreamingServiceUserBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        binding.toolbar.setTitle("Streaming Plans");
 
         recyclerView = findViewById(R.id.recyclerViewPlans);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
@@ -48,6 +53,20 @@ public class StreamingServiceUserActivity extends AppCompatActivity {
             finish();
             return;
         }
+
+        // 🆕 Set the Provider Name
+        String serviceName = getIntent().getStringExtra("service_name");
+        ServiceName = findViewById(R.id.textViewProviderName);
+        ServiceName.setText(serviceName);
+
+        // 🆕 Set the Provider Logo
+        String logoUrl = getIntent().getStringExtra("service_logo");
+        ProviderLogo = findViewById(R.id.imageViewProviderLogo);
+        Glide.with(this)
+                .load(logoUrl)
+                .placeholder(R.drawable.khadmatiico)
+                .error(R.drawable.khadmatiico)
+                .into(ProviderLogo);
 
         plans = new ArrayList<>();
         adapter = new StreamingPlanAdapter(this, plans, plan -> {
@@ -81,7 +100,7 @@ public class StreamingServiceUserActivity extends AppCompatActivity {
                                 String name = obj.getString("item_name");
                                 String desc = obj.getString("item_description");
                                 String price = obj.getString("item_price");
-                                String imageUrl = obj.optString("item_image", ""); // Firebase URL
+                                String imageUrl = obj.optString("item_image", "");
 
                                 plans.add(new StreamingPlan(
                                         itemId,
@@ -126,8 +145,10 @@ public class StreamingServiceUserActivity extends AppCompatActivity {
                         Toast.makeText(this, "Balance check error", Toast.LENGTH_SHORT).show();
                     }
                 },
-                error -> {Toast.makeText(this, "Network error", Toast.LENGTH_SHORT).show();
-        Log.e("NetworkError", "Network error (Streaming Service User): " + error.getMessage());}
+                error -> {
+                    Toast.makeText(this, "Network error", Toast.LENGTH_SHORT).show();
+                    Log.e("NetworkError", "Network error (Streaming Service User): " + error.getMessage());
+                }
         );
 
         Volley.newRequestQueue(this).add(request);

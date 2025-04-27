@@ -11,7 +11,7 @@ import com.example.mobile_project_hza2m.databinding.ActivityHomeBinding;
 
 public class HomeActivity extends AppCompatActivity {
 
-    Button btnSignUp, btnLogin, btnTest;
+    Button btnSignUp, btnLogin;
     private ActivityHomeBinding binding;
 
     @Override
@@ -26,7 +26,6 @@ public class HomeActivity extends AppCompatActivity {
 
         btnLogin = findViewById(R.id.btnLogin);
         btnSignUp = findViewById(R.id.btnSignUp);
-        btnTest = findViewById(R.id.btntest);
 
         btnSignUp.setOnClickListener(v -> {
             Intent intent = new Intent(HomeActivity.this, UserOrProvider.class);
@@ -36,11 +35,6 @@ public class HomeActivity extends AppCompatActivity {
         btnLogin.setOnClickListener(v -> {
             Intent intent = new Intent(HomeActivity.this, UserLogin.class);
             startActivityForResult(intent, 12);
-        });
-
-        btnTest.setOnClickListener(v -> {
-            Intent intent = new Intent(HomeActivity.this, TelecomServiceUserActivity.class);
-            startActivity(intent);
         });
     }
 

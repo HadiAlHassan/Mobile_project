@@ -1,0 +1,9 @@
+<resources>
+    <color name="black">#FFFFFF</color> <!-- black becomes white in dark mode -->
+    <color name="white">#000000</color> <!-- white becomes black -->
+    <color name="WhiteSmoke">#1E1E1E</color> <!-- background color for dark mode -->
+    <color name="UseBlue">#4B6EA9</color> <!-- keep same, if you want -->
+    <color name="gray">#B0BEC5</color>
+    <color name="dark_gray">#90A4AE</color>
+    <color name="grey">#B0BEC5</color>
+</resources>

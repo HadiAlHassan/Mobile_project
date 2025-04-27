@@ -69,6 +69,7 @@ public class ServiceAdapter extends RecyclerView.Adapter<ServiceAdapter.ServiceV
 
             intent.putExtra("service_id", service.getServiceId());
             intent.putExtra("service_name", service.getServiceName());
+            intent.putExtra("service_logo", service.getLogoUrl()); // 🆕 Pass the logo URL
             context.startActivity(intent);
         });
     }
