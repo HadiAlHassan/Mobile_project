@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="24dp"
-    android:background="@color/white">
+    android:background="@color/grey">
 
     <LinearLayout
         android:layout_marginTop="60dp"
@@ -26,7 +26,9 @@
             android:id="@+id/editTextUniversity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/black"
             android:hint="University Name"
+            android:textColorHint="@color/black"
             android:inputType="textCapWords" />
 
         <!-- Reference Number / Description -->
@@ -34,7 +36,9 @@
             android:id="@+id/editTextReference"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/black"
             android:hint="Reference / Notes"
+            android:textColorHint="@color/black"
             android:inputType="text"
             android:layout_marginTop="12dp" />
 
@@ -43,6 +47,8 @@
             android:id="@+id/editTextAmount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textColorHint="@color/black"
             android:hint="Tuition Amount"
             android:inputType="numberDecimal"
             android:layout_marginTop="12dp" />
@@ -54,6 +60,7 @@
             android:text="Upload Payment Screenshot"
             android:textSize="16sp"
             android:textStyle="bold"
+            android:textColor="@color/black"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="8dp" />
 
