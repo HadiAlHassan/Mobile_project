@@ -2,6 +2,7 @@ package com.example.mobile_project_hza2m;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
@@ -204,6 +205,13 @@ public class MyBillingActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        return item.getItemId() == R.id.action_settings || super.onOptionsItemSelected(item);
+
+
+        if (item.getItemId() == R.id.action_settings) {
+            startActivity(new Intent(this, Settings.class));
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

@@ -26,6 +26,7 @@ public class OgeroServiceUserActivity extends AppCompatActivity {
 
     private static final String PAY_URL = Config.BASE_URL + "services/subscribe_service.php";
     private static final String BALANCE_URL = Config.BASE_URL + "wallet/get_wallet_balance.php?user_id=";
+    private static final String OGERO_SERVICE_URL = Config.BASE_URL + "services/get_ogero_service.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,14 +69,40 @@ public class OgeroServiceUserActivity extends AppCompatActivity {
                 return;
             }
 
-            // Ogero service_id assumed to be 1 (could be made dynamic)
-            checkBalanceAndPay(userId, 1, reference, lineNumber, amount);
+            // Fetch Ogero service_id dynamically before proceeding
+            fetchOgeroServiceIdAndPay(userId, reference, lineNumber, amount);
         });
+    }
+
+    private void fetchOgeroServiceIdAndPay(int userId, String reference, String lineNumber, float amount) {
+        StringRequest getServiceRequest = new StringRequest(Request.Method.GET, OGERO_SERVICE_URL,
+                response -> {
+                    try {
+                        JSONObject json = new JSONObject(response);
+                        if (json.getBoolean("success")) {
+                            int serviceId = json.getInt("service_id");
+                            Log.d("OGERO_SERVICE", "Fetched service_id: " + serviceId);
+                            checkBalanceAndPay(userId, serviceId, reference, lineNumber, amount);
+                        } else {
+                            showAlert("Ogero service not available. Try again later.");
+                        }
+                    } catch (Exception e) {
+                        Log.e("OGERO_SERVICE_ERROR", e.getMessage());
+                        showAlert("Error fetching Ogero service.");
+                    }
+                },
+                error -> {
+                    Log.e("OGERO_SERVICE_FAIL", error.toString());
+                    showAlert("Network error while fetching service.");
+                });
+
+        Volley.newRequestQueue(this).add(getServiceRequest);
     }
 
     private void checkBalanceAndPay(int userId, int serviceId, String reference, String lineNumber, float amount) {
         StringRequest balanceRequest = new StringRequest(Request.Method.GET, BALANCE_URL + userId,
                 response -> {
+                    Log.d("PAY_PARAMS", "user_id=" + userId + " service_id=" + serviceId + " ref=" + reference + " amt=" + amount);
                     try {
                         JSONObject json = new JSONObject(response);
                         float balance = Float.parseFloat(json.optString("balance", "0.00"));
@@ -100,7 +127,6 @@ public class OgeroServiceUserActivity extends AppCompatActivity {
                 response -> {
                     Log.d("PAYMENT_RESPONSE", response);
                     try {
-                        Log.d("PAYMENT_RESPONSE", response);
                         JSONObject json = new JSONObject(response);
                         if (json.getBoolean("success")) {
                             SharedPreferences prefs = getSharedPreferences("wallet_prefs", MODE_PRIVATE);

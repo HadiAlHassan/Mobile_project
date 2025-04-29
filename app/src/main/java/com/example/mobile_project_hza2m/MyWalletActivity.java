@@ -212,6 +212,17 @@ public class MyWalletActivity extends AppCompatActivity {
             startActivity(new Intent(this, MyProfileActivity.class));
             return true;
         }
+
+        if (id == R.id.action_homepage) {
+            startActivity(new Intent(this, HomeActivity.class));
+            return true;
+        }
+
+        if (id == R.id.action_settings) {
+            startActivity(new Intent(this, Settings.class));
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
 }

@@ -138,6 +138,11 @@ public class DisplayServicesActivity extends AppCompatActivity {
             return true;
         }
 
+        if (id == R.id.action_homepage) {
+            startActivity(new Intent(this, HomeActivity.class));
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
 }

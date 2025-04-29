@@ -135,24 +135,71 @@ public class StreamingServiceUserActivity extends AppCompatActivity {
                         float price = Float.parseFloat(plan.getPrice());
 
                         if (!json.getBoolean("success")) {
-                            Toast.makeText(this, "Failed to check balance", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, "Failed to check balance.", Toast.LENGTH_SHORT).show();
                         } else if (balance < price) {
                             Toast.makeText(this, "Insufficient balance. Balance: $" + balance, Toast.LENGTH_SHORT).show();
                         } else {
-                            subscribe(userId, serviceId, plan.getName(), plan.getDescription(), price);
+                            attemptStreamingSubscription(userId, serviceId, plan.getName(), plan.getDescription(), price);
                         }
                     } catch (Exception e) {
-                        Toast.makeText(this, "Balance check error", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Balance check error.", Toast.LENGTH_SHORT).show();
                     }
                 },
                 error -> {
-                    Toast.makeText(this, "Network error", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Network error.", Toast.LENGTH_SHORT).show();
                     Log.e("NetworkError", "Network error (Streaming Service User): " + error.getMessage());
                 }
         );
 
         Volley.newRequestQueue(this).add(request);
     }
+
+    // 🆕 New function to attempt subscription
+    private void attemptStreamingSubscription(int userId, int serviceId, String name, String description, float amount) {
+        StringRequest subscribeRequest = new StringRequest(Request.Method.POST, PAY_URL,
+                response -> {
+                    try {
+                        JSONObject json = new JSONObject(response);
+                        boolean success = json.optBoolean("success", false);
+                        String message = json.optString("message", "Unknown error");
+
+                        if (success) {
+                            Toast.makeText(this, "Subscription successful!", Toast.LENGTH_SHORT).show();
+                            SharedPreferences prefs = getSharedPreferences("wallet_prefs", MODE_PRIVATE);
+                            prefs.edit().putFloat("last_payment_amount", amount).apply();
+                            startActivity(new Intent(this, MyWalletActivity.class));
+                            finish();
+                        } else {
+                            if (message.equalsIgnoreCase("User already subscribed to this service")) {
+                                Toast.makeText(this, "You are already subscribed to this service.", Toast.LENGTH_LONG).show();
+                            } else {
+                                Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    } catch (Exception e) {
+                        Toast.makeText(this, "Subscription error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                },
+                error -> {
+                    Toast.makeText(this, "Network error while subscribing.", Toast.LENGTH_SHORT).show();
+                    Log.e("NetworkError", "Subscription network error (Streaming): " + error.getMessage());
+                }
+        ) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("user_id", String.valueOf(userId));
+                params.put("service_id", String.valueOf(serviceId));
+                params.put("reference", ""); // You can fill reference if needed
+                params.put("amount", String.valueOf(amount));
+                params.put("description", name + " - " + description);
+                return params;
+            }
+        };
+
+        Volley.newRequestQueue(this).add(subscribeRequest);
+    }
+
 
     private void subscribe(int userId, int serviceId, String reference, String description, float amount) {
         StringRequest request = new StringRequest(Request.Method.POST, PAY_URL,

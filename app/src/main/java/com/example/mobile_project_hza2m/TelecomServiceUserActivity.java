@@ -136,9 +136,11 @@ public class TelecomServiceUserActivity extends AppCompatActivity {
                             return;
                         }
 
-                        proceedToPayment(userId, serviceId, plan.getTitle(), plan.getDescription(), price);
+                        // 🆕 Instead of directly paying, attempt subscription
+                        attemptTelecomSubscription(userId, serviceId, plan.getTitle(), plan.getDescription(), price);
+
                     } catch (Exception e) {
-                        Toast.makeText(this, "Balance check error", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Balance check error.", Toast.LENGTH_SHORT).show();
                     }
                 },
                 error -> Toast.makeText(this, "Network error while checking balance", Toast.LENGTH_SHORT).show()
@@ -146,6 +148,50 @@ public class TelecomServiceUserActivity extends AppCompatActivity {
 
         Volley.newRequestQueue(this).add(balanceRequest);
     }
+
+    // 🆕 New function to attempt telecom subscription
+    private void attemptTelecomSubscription(int userId, int serviceId, String title, String description, float amount) {
+        StringRequest subscribeRequest = new StringRequest(Request.Method.POST, PAY_URL,
+                response -> {
+                    try {
+                        JSONObject json = new JSONObject(response);
+                        boolean success = json.optBoolean("success", false);
+                        String message = json.optString("message", "Unknown error");
+
+                        if (success) {
+                            Toast.makeText(this, "Subscription successful!", Toast.LENGTH_SHORT).show();
+                            SharedPreferences prefs = getSharedPreferences("wallet_prefs", MODE_PRIVATE);
+                            prefs.edit().putFloat("last_payment_amount", amount).apply();
+                            startActivity(new Intent(this, MyWalletActivity.class));
+                            finish();
+                        } else {
+                            if (message.equalsIgnoreCase("User already subscribed to this service")) {
+                                Toast.makeText(this, "You are already subscribed to this service.", Toast.LENGTH_LONG).show();
+                            } else {
+                                Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    } catch (Exception e) {
+                        Toast.makeText(this, "Subscription error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                },
+                error -> Toast.makeText(this, "Network error while processing subscription", Toast.LENGTH_SHORT).show()
+        ) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("user_id", String.valueOf(userId));
+                params.put("service_id", String.valueOf(serviceId));
+                params.put("reference", ""); // Optional: could add reference field if needed
+                params.put("amount", String.valueOf(amount));
+                params.put("description", title + " - " + description);
+                return params;
+            }
+        };
+
+        Volley.newRequestQueue(this).add(subscribeRequest);
+    }
+
 
     private void proceedToPayment(int userId, int serviceId, String reference, String description, float amount) {
         StringRequest request = new StringRequest(Request.Method.POST, PAY_URL,
