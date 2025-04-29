@@ -78,7 +78,7 @@ public class ContactUsActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main2, menu);
+        getMenuInflater().inflate(R.menu.menu_empty, menu);
         return true;
     }
 
@@ -86,9 +86,7 @@ public class ContactUsActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.action_settings) {
-            startActivity(new Intent(this, Settings.class));
-        }
+
 
 
         return super.onOptionsItemSelected(item);

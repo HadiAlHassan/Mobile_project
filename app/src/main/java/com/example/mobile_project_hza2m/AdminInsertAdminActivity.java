@@ -36,9 +36,6 @@ public class AdminInsertAdminActivity extends AppCompatActivity {
 
         setSupportActionBar(binding.toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-        binding.fab.setOnClickListener(view -> Snackbar.make(view, "Admin Tools", Snackbar.LENGTH_LONG)
-                .setAnchorView(R.id.fab)
-                .setAction("Action", null).show());
 
         editTextName = findViewById(R.id.editTextAdminName);
         editTextEmail = findViewById(R.id.editTextAdminEmail);
